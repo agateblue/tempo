@@ -1,18 +1,28 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <main>
+    <aside>
+      <entry-form @added="entries.unshift($event)" />
+    </aside>
+    <section>
+      <h1>Latest entries</h1>
+      <entry v-for="entry in entries" :entry="entry" :key="entry._id"></entry>
+    </section>
+  </main>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import EntryForm from '@/components/EntryForm.vue'
+import Entry from '@/components/Entry.vue'
 
 export default {
-  name: 'Home',
   components: {
-    HelloWorld
+    EntryForm,
+    Entry,
+  },
+  data () {
+    return {
+      entries: []
+    }
   }
 }
 </script>
