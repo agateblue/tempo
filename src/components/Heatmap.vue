@@ -27,6 +27,7 @@ export default {
   },
   computed: {
     initArgs () {
+      let self = this
       const points = {...this.chartData.dataPoints}
       return {
         nextSelector: this.$refs.next,
@@ -65,6 +66,9 @@ export default {
         },
         subDomainTitleFormat: {
           filled: 'Mood: {count} {connector} {date}'
+        },
+        onClick: function(date) {
+          self.$emit('selected-date', date)
         }
       }
     }

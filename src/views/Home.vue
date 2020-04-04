@@ -28,6 +28,7 @@
 
         <heatmap
           v-if="showGraph"
+          @selected-date="filterByDate"
           :key="JSON.stringify(moodData)"
           :chart-data="moodData">
         </heatmap>
@@ -81,6 +82,14 @@ export default {
     }
   },
   methods: {
+    filterByDate (d) {
+      let day = (d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2))
+      if (this.query === `@${day}`) {
+        this.$router.push({name: 'Home'})
+      } else {
+        this.$router.push({name: 'Home', query: {q: `@${day}` }})
+      }
+    },
     async addNew (text) {
       let data = {
         ...getNewEntryData(text),
