@@ -1,14 +1,19 @@
 <template>
   <article>
-    <entry-form
-      v-if="editing"
-      :show-delete="true"
-      @input="update"
-      @delete="$emit('delete', currentEntry)"
-      :value="currentEntry.text"
-      :name="`how-${currentEntry._id}`">
-      Edit Entry
-    </entry-form>
+    <template v-if="editing">
+      <h3>
+        <button class="right floated link" @click.stop.prevent="$emit('delete', currentEntry)">Delete</button>
+        <label :for="`how-${currentEntry._id}`">Edit Entry</label>
+      </h3>
+      <entry-form
+        v-if="editing"
+        :show-delete="true"
+        @input="update"
+        :value="currentEntry.text"
+        :name="`how-${currentEntry._id}`">
+      </entry-form>
+
+    </template>
     <VueShowdown v-else :vue-template="true" class="content" :markdown="prerenderedText" />
     <footer>
       <div>

@@ -31,7 +31,6 @@ main > * {
 }
 main > aside {
   flex-grow: 1;
-  padding-top : 4em;
   max-width: 400px;
 }
 main > section {
@@ -68,7 +67,6 @@ time {
 }
 label {
   margin-bottom: 1em;
-  display: block;
 }
 .link {
   padding: 0;
@@ -77,9 +75,10 @@ label {
   text-decoration: underline;
   color: white;
 }
-form {
+.widget, form {
   margin-bottom: 1em;
   clear: both;
+  overflow: hidden;
 }
 input[type="text"], textarea {
   width: 100%;
@@ -87,5 +86,24 @@ input[type="text"], textarea {
 }
 .right.floated {
   float: right;
+}
+h1:first-child, h2:first-child, h3:first-child {
+  margin-top: 0;
+}
+
+.cal-heatmap-container .q1 {
+  fill: #E35F75 !important;
+}
+.cal-heatmap-container .q2 {
+  fill: #F3BAC3 !important;
+}
+.cal-heatmap-container .q3 {
+  fill: white !important;
+}
+.cal-heatmap-container .q4 {
+  fill: #79C698 !important;
+}
+.cal-heatmap-container .q5 {
+  fill: #398557 !important;
 }
 </style>
