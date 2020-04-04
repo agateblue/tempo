@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import {getNewEntryData} from '@/utils'
+
 export default {
   data () {
     return {
@@ -18,13 +20,13 @@ export default {
   methods: {
     async submit () {
       let data = {
-        text: this.text,
-        type: "entry",
+        ...getNewEntryData(this.text),
         date: (new Date ()).toISOString(),
       }
       data._id = data.date
       let result = await this.$store.dispatch('addEntry', data)
       this.$emit('added', result)
+      this.text = ''
     }
   }
 }
