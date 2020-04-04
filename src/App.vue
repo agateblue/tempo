@@ -32,6 +32,7 @@ main > * {
 main > aside {
   flex-grow: 1;
   padding-top : 4em;
+  max-width: 400px;
 }
 main > section {
   flex-grow: 2;
@@ -76,8 +77,13 @@ label {
   text-decoration: underline;
   color: white;
 }
-input[type="submit"] {
-  margin: 1em 0;
+form {
+  margin-bottom: 1em;
+  clear: both;
+}
+input[type="text"], textarea {
+  width: 100%;
+  margin-bottom: 1em;
 }
 .right.floated {
   float: right;

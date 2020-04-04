@@ -1,5 +1,6 @@
 <template>
   <form @submit.prevent="submit">
+    <button class="right floated link" @click.stop.prevent="$emit('delete')" v-if="showDelete">Delete</button>
     <label :for="name">
       <strong>
         <slot>
@@ -9,13 +10,12 @@
     </label>
     <textarea
       :name="name"
-      required
       :id="name"
       rows="10"
+      ref="textarea"
       placeholder="I feel quite +happy today, my #friends are amazing <3"
       @input="text = $event.target.value"
       :value="value"></textarea>
-    <button class="left floated link" @click.stop.prevent="$emit('delete')" v-if="showDelete">Delete</button>
     <input class="right floated" type="submit">
   </form>
 </template>
@@ -35,8 +35,12 @@ export default {
   },
   methods: {
     async submit () {
-      this.$emit('input', this.text)
-      this.text = ''
+      if (!this.text) {
+        return
+      }
+      let v = this.text
+      this.$refs.textarea.value = ''
+      this.$emit('input', v)
     }
   }
 }
