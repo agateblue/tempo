@@ -11,6 +11,8 @@ pages:
   script:
     - yarn test:unit
     - yarn build
+    - rm -rf public
+    - mv dist public
   cache:
     key: front_node_modules
     paths:
