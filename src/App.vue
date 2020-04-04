@@ -106,4 +106,23 @@ h1:first-child, h2:first-child, h3:first-child {
 .cal-heatmap-container .q5 {
   fill: #398557 !important;
 }
+.cal-heatmap-container .graph-label {
+  font-size: 1em !important;
+  font-weight: bold;
+  fill: white;
+}
+
+.cal-heatmap-container .subdomain-text {
+  fill: black !important;
+  font-size: 0.8em !important;
+}
+
+.cal-heatmap-container .graph, .cal-heatmap-container .graph-legend rect {
+  shape-rendering: auto !important;
+}
+.cal-heatmap-container rect.highlight-now {
+    stroke: black !important;
+    shape-rendering: auto;
+    stroke-width: 2;
+}
 </style>
