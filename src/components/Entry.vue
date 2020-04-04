@@ -61,6 +61,7 @@ export default {
         ...getNewEntryData(text),
         _rev: this.currentEntry._rev,
         _id: this.currentEntry._id,
+        date: this.currentEntry.date || (new Date ()).toISOString(),
       }
       this.currentEntry = await this.$store.dispatch('updateEntry', data)
       this.editing = false
