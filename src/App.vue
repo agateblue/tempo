@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <h1 class="center aligned">
+      <router-link :to="{name: 'Home'}">Tempo</router-link>
+    </h1>
     <router-view/>
   </div>
 </template>
@@ -155,5 +158,8 @@ hr {
   border: none;
   display: block;
   padding: 0.5em 0;
+}
+.center.aligned {
+  text-align: center;
 }
 </style>
