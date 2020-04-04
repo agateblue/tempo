@@ -1,13 +1,5 @@
 <template>
   <form @submit.prevent="submit">
-    <button class="right floated link" @click.stop.prevent="$emit('delete')" v-if="showDelete">Delete</button>
-    <label :for="name">
-      <strong>
-        <slot>
-          How do you feel?
-        </slot>
-      </strong>
-    </label>
     <textarea
       :name="name"
       :id="name"
@@ -25,7 +17,6 @@
 export default {
   props: {
     value: {type: String, default: ''},
-    showDelete: {type: Boolean, default: false},
     name: {type: String, default: 'how'},
   },
   data () {

@@ -1,15 +1,36 @@
 <template>
   <main>
     <aside>
-      <entry-form @input="addNew" />
-      <form @submit.prevent="submitSearch">
-        <label for="search">
-          <strong>Filter entries</strong>
-        </label>
-        <input type="text" ref="search" :value="query" name="search" id="search" placeholder="#work +">
-        <input type="submit" class="right floated" value="Search">
-        <button class="link" @click.stop.prevent="clearSearch">Clear</button>
-      </form>
+      <div class="widget">
+        <h2>
+          <label for="how">How do you feel?</label>
+        </h2>
+        <entry-form @input="addNew" />
+      </div>
+      <div class="widget">
+        <h2>
+          <label for="search">Filter entries</label>
+        </h2>
+        <form @submit.prevent="submitSearch">
+          <input type="text" ref="search" :value="query" name="search" id="search" placeholder="#work +">
+          <input type="submit" class="right floated" value="Search">
+          <button class="link" @click.stop.prevent="clearSearch">Clear</button>
+        </form>
+      </div>
+      <div class="widget">
+        <h2>
+          <button class="right floated link" @click.stop.prevent="showGraph = !showGraph">
+            <template v-if="showGraph">Hide</template>
+            <template v-else>Show</template>
+          </button>
+          Daily mood
+        </h2>
+
+        <heatmap
+          v-if="showGraph"
+          :data="moodData">
+        </heatmap>
+      </div>
     </aside>
     <section>
       <h1>Your notes</h1>
@@ -21,6 +42,8 @@
 <script>
 import EntryForm from '@/components/EntryForm.vue'
 import Entry from '@/components/Entry.vue'
+import Heatmap from '@/components/Heatmap.vue'
+
 
 import {getNewEntryData, parseQuery, matchTokens} from '@/utils'
 
@@ -31,14 +54,30 @@ export default {
   components: {
     EntryForm,
     Entry,
+    Heatmap,
   },
   data () {
     return {
       entries: [],
+      showGraph: true,
     }
   },
   async created () {
     this.search()
+  },
+  computed: {
+    moodData () {
+      let start = new Date()
+      return {
+        dataPoints: {
+          "1585995016": 6,
+          "1585795016": 13,
+          "1585595016": -3,
+          "1585495016": -8,
+        },
+        start,
+      }
+    }
   },
   methods: {
     async addNew (text) {
