@@ -23,6 +23,10 @@ export default new Vuex.Store({
     async addEntry ({state}, entryData) {
       await state.db.put(entryData)
       return await state.db.get(entryData._id)
+    },
+    async updateEntry ({state}, entryData) {
+      await state.db.put(entryData)
+      return await state.db.get(entryData._id)
     }
   },
   modules: {

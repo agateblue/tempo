@@ -1,31 +1,41 @@
 <template>
   <form @submit.prevent="submit">
-    <h2>
-      <label for="how">How do you feel?</label>
-    </h2>
-    <textarea name="how" required id="how" rows="10" placeholder="I feel quite +happy today, my #friends are amazing <3" v-model="text"></textarea>
-    <input type="submit">
+    <label :for="name">
+      <strong>
+        <slot>
+          How do you feel?
+        </slot>
+      </strong>
+    </label>
+    <textarea
+      :name="name"
+      required
+      :id="name"
+      rows="10"
+      placeholder="I feel quite +happy today, my #friends are amazing <3"
+      @input="text = $event.target.value"
+      :value="value"></textarea>
+    <button class="left floated link" @click.stop.prevent="$emit('delete')" v-if="showDelete">Delete</button>
+    <input class="right floated" type="submit">
   </form>
 </template>
 
 <script>
-import {getNewEntryData} from '@/utils'
 
 export default {
+  props: {
+    value: {type: String, default: ''},
+    showDelete: {type: Boolean, default: false},
+    name: {type: String, default: 'how'},
+  },
   data () {
     return {
-      text: ''
+      text: this.value
     }
   },
   methods: {
     async submit () {
-      let data = {
-        ...getNewEntryData(this.text),
-        date: (new Date ()).toISOString(),
-      }
-      data._id = data.date
-      let result = await this.$store.dispatch('addEntry', data)
-      this.$emit('added', result)
+      this.$emit('input', this.text)
       this.text = ''
     }
   }
