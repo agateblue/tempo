@@ -5,7 +5,7 @@
       :id="name"
       rows="10"
       ref="textarea"
-      placeholder="I feel quite +happy today, my #friends are amazing <3"
+      placeholder="What's going on in your life?"
       @input="text = $event.target.value"
       :value="value"></textarea>
     <input class="right floated" type="submit">

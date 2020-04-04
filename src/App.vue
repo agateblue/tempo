@@ -10,10 +10,12 @@
 }
 body {
   background-color: #422D62;
-  color: hsl(0,0%,100%);
+  color: rgba(255, 255, 255, 0.904);
+  font-size: 110%;
+  line-height: 1.5;
 }
 a {
-  color: white;
+  color: rgba(255, 255, 255, 0.904);
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -22,7 +24,7 @@ a {
 }
 main {
   display: flex;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   justify-content: center;
 }
@@ -42,6 +44,16 @@ textarea {
   display: block;
   width: 100%;
   border-radius: 5px;
+}
+blockquote {
+
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 1em;
+  margin: 0;
+}
+code {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0 0.25em;
 }
 article {
   margin-bottom: 3em;
@@ -73,7 +85,7 @@ label {
   background: transparent;
   border: none;
   text-decoration: underline;
-  color: white;
+  color: rgba(255, 255, 255, 0.904);
 }
 .widget, form {
   margin-bottom: 1em;
@@ -98,7 +110,7 @@ h1:first-child, h2:first-child, h3:first-child {
   fill: #F3BAC3 !important;
 }
 .cal-heatmap-container .q3 {
-  fill: white !important;
+  fill: rgba(255, 255, 255, 0.904) !important;
 }
 .cal-heatmap-container .q4 {
   fill: #79C698 !important;
@@ -109,7 +121,7 @@ h1:first-child, h2:first-child, h3:first-child {
 .cal-heatmap-container .graph-label {
   font-size: 1em !important;
   font-weight: bold;
-  fill: white;
+  fill: rgba(255, 255, 255, 0.904);
 }
 
 .cal-heatmap-container .subdomain-text {
@@ -124,5 +136,10 @@ h1:first-child, h2:first-child, h3:first-child {
     stroke: black !important;
     shape-rendering: auto;
     stroke-width: 2;
+}
+hr {
+  border: none;
+  display: block;
+  padding: 0.5em 0;
 }
 </style>

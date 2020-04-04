@@ -36,6 +36,8 @@
     </aside>
     <section>
       <h1>Your notes</h1>
+      <router-link :to="{name: 'About'}">Help and settings</router-link>
+      <hr>
       <entry v-for="entry in entries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
     </section>
   </main>

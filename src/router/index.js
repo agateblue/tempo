@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import About from '../views/About.vue'
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,11 @@ const routes = [
     name: 'Home',
     component: Home,
     props: (route) => ({ query: route.query.q }),
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: About,
   }
 ]
 
