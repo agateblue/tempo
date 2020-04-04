@@ -23,30 +23,48 @@ a {
   -moz-osx-font-smoothing: grayscale;
 }
 main {
-  display: flex;
-  max-width: 1000px;
   margin: 0 auto;
-  justify-content: center;
+}
+@media screen and (min-width: 700px) {
+  main {
+    display: flex;
+    justify-content: center;
+    max-width: 1000px;
+  }
+  main > aside {
+    justify-content: center;
+    max-width: 400px;
+  }
 }
 main > * {
   padding: 2em;
 }
 main > aside {
   flex-grow: 1;
-  max-width: 400px;
 }
 main > section {
   flex-grow: 2;
 }
 
 textarea {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   padding: 0.5em;
   display: block;
   width: 100%;
   border-radius: 5px;
+  font-size: 110%;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  margin-bottom: 1em;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.904);
+  border-radius: 5px;
+  font-size: 110%;
+  padding: 0.25em;
 }
 blockquote {
-
   background-color: rgba(255, 255, 255, 0.1);
   padding: 1em;
   margin: 0;
@@ -91,10 +109,6 @@ label {
   margin-bottom: 1em;
   clear: both;
   overflow: hidden;
-}
-input[type="text"], textarea {
-  width: 100%;
-  margin-bottom: 1em;
 }
 .right.floated {
   float: right;
