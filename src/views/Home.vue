@@ -28,7 +28,8 @@
 
         <heatmap
           v-if="showGraph"
-          :data="moodData">
+          :key="JSON.stringify(moodData)"
+          :chart-data="moodData">
         </heatmap>
       </div>
     </aside>
@@ -68,13 +69,13 @@ export default {
   computed: {
     moodData () {
       let start = new Date()
+      let points = {}
+      this.entries.forEach((e) =>  {
+        let timestamp = (new Date(e._id).getTime()) / 1000
+        points[String(parseInt(timestamp))] = e.mood
+      })
       return {
-        dataPoints: {
-          "1585995016": 6,
-          "1585795016": 13,
-          "1585595016": -3,
-          "1585495016": -8,
-        },
+        dataPoints: {...points},
         start,
       }
     }

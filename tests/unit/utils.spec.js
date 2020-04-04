@@ -5,9 +5,9 @@ describe('utils', () => {
   it('can extract tags from text', () => {
     const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
     const expected = [
-      {text: "+happy", id: "happy", type: "feeling", effect: 1, sign: '+'},
-      {text: "~tired", id: "tired", type: "feeling", effect: 0, sign: '~'},
-      {text: "#work", id: "work", type: "tag", effect: null, sign: '#'},
+      {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
+      {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+      {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
     ]
     expect(parseTags(msg)).to.deep.equal(expected)
   })
@@ -16,12 +16,12 @@ describe('utils', () => {
     const expected = {
       type: 'entry',
       tags: [
-        {text: "+happy", id: "happy", type: "feeling", effect: 1, sign: '+'},
-        {text: "~tired", id: "tired", type: "feeling", effect: 0, sign: '~'},
-        {text: "#work", id: "work", type: "tag", effect: null, sign: '#'},
+        {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
+        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+        {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
       ],
       text: msg,
-      effect: 1
+      mood: 1
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -50,8 +50,8 @@ describe('utils', () => {
     const entry = {
       text: 'this is hello world',
       tags: [
-        {text: "+happy", id: "happy", type: "feeling", effect: 1, sign: '+'},
-        {text: "~tired", id: "tired", type: "feeling", effect: 0, sign: '~'},
+        {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
+        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
       ]
     }
     const result = matchTokens(entry, tokens)
@@ -66,8 +66,8 @@ describe('utils', () => {
     const entry = {
       text: 'this is hello world',
       tags: [
-        {text: "+happy", id: "happy", type: "feeling", effect: 1, sign: '+'},
-        {text: "~tired", id: "tired", type: "feeling", effect: 0, sign: '~'},
+        {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
+        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
       ]
     }
     const result = matchTokens(entry, tokens)
@@ -81,7 +81,7 @@ describe('utils', () => {
     const entry = {
       text: 'text',
       tags: [
-        {text: "-tired", id: "tired", type: "feeling", effect: 0, sign: '-'},
+        {text: "-tired", id: "tired", type: "feeling", mood: 0, sign: '-'},
       ]
     }
     const result = matchTokens(entry, tokens)

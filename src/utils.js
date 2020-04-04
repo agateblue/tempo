@@ -1,5 +1,5 @@
 
-const signToEffect = {
+const signToMood = {
   '+': 1,
   '-': -1,
   '~': 0,
@@ -25,7 +25,7 @@ export function parseTags (text) {
       id: match[4],
     }
     tag.type = signToType[tag.sign]
-    tag.effect = signToEffect[tag.sign]
+    tag.mood = signToMood[tag.sign]
     tags.push(tag)
     match = regex.exec(text)
   }
@@ -42,12 +42,12 @@ export function getNewEntryData(text) {
   let entryData = {
     text,
     tags: parseTags(text),
-    effect: 0,
+    mood: 0,
     type: 'entry',
   }
   entryData.tags.forEach(t => {
-    if (t.effect != null && t.effect != undefined) {
-      entryData.effect += t.effect
+    if (t.mood != null && t.mood != undefined) {
+      entryData.mood += t.mood
     }
   })
   return entryData
@@ -64,7 +64,7 @@ export function parseQuery(query) {
     if (!stripped) {
       return
     }
-    if (Object.keys(signToEffect).indexOf(stripped[0]) > -1) {
+    if (Object.keys(signToMood).indexOf(stripped[0]) > -1) {
       if (stripped.length === 1) {
         tokens.push({sign: stripped[0]})
       } else {
