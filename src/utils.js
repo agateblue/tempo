@@ -70,6 +70,8 @@ export function parseQuery(query) {
       } else {
         tokens.push({tag: stripped})
       }
+    } else if (stripped[0] == '@') {
+      tokens.push({date: stripped.slice(1)})
     } else {
       tokens.push({text: stripped})
     }
@@ -98,6 +100,9 @@ export function matchTokens(entry, tokens) {
       if (matching.length === 0) {
         return false
       }
+    }
+    if (token.date && !entry._id.startsWith(token.date)) {
+      return false
     }
   }
   return true

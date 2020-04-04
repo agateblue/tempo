@@ -32,12 +32,13 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'hello #world + -'
+    const query = 'hello #world + - @2020'
     const expected = [
       {text: 'hello'},
       {tag: '#world'},
       {sign: '+'},
       {sign: '-'},
+      {date: '2020'},
     ]
     const result = parseQuery(query)
     expect(result).to.deep.equal(expected)
@@ -53,6 +54,18 @@ describe('utils', () => {
         {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
         {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
       ]
+    }
+    const result = matchTokens(entry, tokens)
+    expect(result).equal(true)
+  })
+  it('match tokens date true', () => {
+    const tokens = [
+      {date: '2020'},
+    ]
+    const entry = {
+      text: 'this is hello world',
+      _id: "2020-02-01",
+      tags: []
     }
     const result = matchTokens(entry, tokens)
     expect(result).equal(true)
