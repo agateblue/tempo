@@ -13,10 +13,11 @@ const signToType = {
   '?': 'feeling',
   '#': 'tag',
 }
+const tagRegex = /(^|\s)((#|\+|-|~|\?)([a-z\d-]+))/gi
 export function parseTags (text) {
   const tags = []
-  const tagRegex = /(^|\s)((#|\+|-|~|\?)([a-z\d-]+))/gi
-  let match = tagRegex.exec(text);
+  const regex = new RegExp(tagRegex)
+  let match = regex.exec(text);
   while (match != null) {
     let tag = {
       text: match[2],
@@ -26,9 +27,15 @@ export function parseTags (text) {
     tag.type = signToType[tag.sign]
     tag.effect = signToEffect[tag.sign]
     tags.push(tag)
-    match = tagRegex.exec(text)
+    match = regex.exec(text)
   }
   return tags
+}
+
+export function insertTagMarkup (text) {
+  return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
+    return ` <router-link :to="{name: 'Home', query: {tag: '${m2}'}}">${m2}</router-link>`
+  })
 }
 
 export function getNewEntryData(text) {

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import {parseTags, getNewEntryData} from '@/utils'
+import {parseTags, getNewEntryData, insertTagMarkup} from '@/utils'
 
 describe('utils', () => {
   it('can extract tags from text', () => {
@@ -24,5 +24,11 @@ describe('utils', () => {
       effect: 1
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
+  })
+  it('insert tag markup', () => {
+    const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
+    const expected = `Today was quite <router-link :to="{name: 'Home', query: {tag: '+happy'}}">+happy</router-link>, but I feel <router-link :to="{name: 'Home', query: {tag: '~tired'}}">~tired</router-link> because of <router-link :to="{name: 'Home', query: {tag: '#work'}}">#work</router-link>.`
+    const result = insertTagMarkup(msg)
+    expect(result).to.deep.equal(expected)
   })
 })
