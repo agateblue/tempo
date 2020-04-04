@@ -1,0 +1,24 @@
+stages:
+  - build
+
+pages:
+  stage: build
+  image: node:latest
+  variables:
+    GIT_STRATEGY: clone
+  before_script:
+    - yarn install
+  script:
+    - yarn test:unit
+    - yarn build
+  cache:
+    key: front_node_modules
+    paths:
+      - "node_modules"
+  artifacts:
+    paths:
+      - public/
+  only:
+    - master
+  tags:
+    - docker
