@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
@@ -22,6 +19,7 @@ a {
 }
 main {
   display: flex;
+  max-width: 900px;
   margin: 0 auto;
   justify-content: center;
 }
@@ -29,7 +27,10 @@ main > * {
   padding: 2em;
 }
 main > aside {
-  min-width: 250px;
+  flex-grow: 1;
+}
+main > section {
+  flex-grow: 2;
 }
 
 textarea {

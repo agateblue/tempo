@@ -23,6 +23,20 @@ export default {
     return {
       entries: []
     }
+  },
+  async created () {
+    this.entries = await this.getEntries()
+  },
+  methods: {
+    async getEntries () {
+      let result = await this.$store.state.db.find({
+        selector: {
+          type: 'entry',
+        }
+      })
+      return result.docs
+
+    }
   }
 }
 </script>
