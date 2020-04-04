@@ -34,7 +34,7 @@ export function parseTags (text) {
 
 export function insertTagMarkup (text) {
   return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-    return ` <router-link :to="{name: 'Home', query: {tag: '${m2}'}}">${m2}</router-link>`
+    return ` <router-link :to="{name: 'Home', query: {q: '${m2}'}}">${m2}</router-link>`
   })
 }
 
@@ -51,4 +51,54 @@ export function getNewEntryData(text) {
     }
   })
   return entryData
+}
+
+export function parseQuery(query) {
+  let tokens = []
+  if (!query) {
+    return []
+  }
+  let words = query.split(' ')
+  words.forEach((w) => {
+    let stripped = w.trim()
+    if (!stripped) {
+      return
+    }
+    if (Object.keys(signToEffect).indexOf(stripped[0]) > -1) {
+      if (stripped.length === 1) {
+        tokens.push({sign: stripped[0]})
+      } else {
+        tokens.push({tag: stripped})
+      }
+    } else {
+      tokens.push({text: stripped})
+    }
+  })
+  return tokens
+}
+
+export function matchTokens(entry, tokens) {
+  for (let index = 0; index < tokens.length; index++) {
+    const token = tokens[index];
+    if (token.text && !entry.text.toLowerCase().includes(token.text.toLowerCase())) {
+      return false
+    }
+    if (token.tag) {
+      let matching = entry.tags.filter((t) => {
+        return t.text.toLowerCase() === token.tag.toLowerCase()
+      })
+      if (matching.length === 0) {
+        return false
+      }
+    }
+    if (token.sign) {
+      let matching = entry.tags.filter((t) => {
+        return t.sign === token.sign
+      })
+      if (matching.length === 0) {
+        return false
+      }
+    }
+  }
+  return true
 }

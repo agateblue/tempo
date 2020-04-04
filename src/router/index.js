@@ -8,8 +8,9 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
-  },
+    component: Home,
+    props: (route) => ({ query: route.query.q }),
+  }
 ]
 
 const router = new VueRouter({
