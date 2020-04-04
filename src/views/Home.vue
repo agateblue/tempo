@@ -98,8 +98,8 @@ export default {
         date: (new Date ()).toISOString(),
       }
       data._id = data.date
-      let result = await this.$store.dispatch('addEntry', data)
-      this.entries.unshift(result)
+      await this.$store.dispatch('addEntry', data)
+      await this.search()
     },
     async getEntries () {
       let result = await this.$store.state.db.find({
