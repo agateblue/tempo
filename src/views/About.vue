@@ -20,7 +20,7 @@
       </ul>
 
       <button @click.prevent="$modal.show('sync')">Setup sync…</button> &nbsp;
-      <modal name="sync" height="auto" :scrollable="true" :adaptative="true">
+      <modal name="sync" height="auto" :scrollable="true">
         <a href="" class="right floated" @click.prevent="$modal.hide('sync')">Close</a>
         <form>
           <p>Setup synchronisation through CouchDB</p>
