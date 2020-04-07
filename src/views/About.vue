@@ -15,6 +15,8 @@
         <li>Private by design</li>
         <li>Mood tracking</li>
         <li>Powerful tagging and filtering</li>
+        <li><a href="https://code.eliotberriot.com/eliotberriot/tempo">Free and Open Source</a></li>
+
       </ul>
 
       <button @click.prevent="$modal.show('sync')">Setup sync…</button> &nbsp;
