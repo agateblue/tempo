@@ -19,6 +19,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     db: initDb(),
+    pageSize: 50
   },
   mutations: {
     setDb (state, db) {
