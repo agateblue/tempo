@@ -37,11 +37,19 @@
     <section>
       <h1 class="left floated">Your notes</h1>
       <span class="right floated">{{ entries.length }} matching entries</span>
-      <router-link :to="{name: 'About'}">Help and settings</router-link>
+      <router-link :to="{name: 'About'}">Help and settings</router-link> ·
+      <a href="" @click.prevent="showExport">Export…</a>
       <hr>
       <entry v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
       <button v-if="shownEntries.length < entries.length" @click.prevent="count += $store.state.pageSize">Show more</button>
     </section>
+    <modal name="export">
+      <a href="" class="right floated" @click.prevent="hideExport">Close</a>
+      <p>Export the selected {{ entries.length }} entries as a Markdown file.</p>
+      <button @click="downloadMarkdown">Download as markdown</button>
+      <p>Export the selected {{ entries.length }} entries as JSON file. Can be imported in Tempo.</p>
+      <button @click="downloadJSON">Download as JSON</button>
+    </modal>
   </main>
 </template>
 
@@ -90,6 +98,47 @@ export default {
     }
   },
   methods: {
+    showExport () {
+      this.$modal.show('export');
+    },
+    hideExport () {
+      this.$modal.hide('export');
+    },
+    downloadMarkdown () {
+      let markdownParts = this.entries.map((e) => {
+        return `---
+date: ${e.date}
+mood: ${e.mood}
+---
+
+${e.text}
+
+`
+      })
+
+      this.downloadFile(markdownParts.join('\n'), 'text/markdown', 'tempo.md')
+    },
+    downloadJSON () {
+      this.downloadFile(JSON.stringify(this.entries), 'application/json', 'tempo.json')
+    },
+    downloadFile (text, mimetype, name) {
+      let f = this.makeFile(text, mimetype)
+      var link = document.createElement('a')
+      link.setAttribute('download', name)
+      link.href = f
+      document.body.appendChild(link)
+
+      window.requestAnimationFrame(function () {
+        var event = new MouseEvent('click')
+        link.dispatchEvent(event)
+        document.body.removeChild(link)
+      })
+    },
+    makeFile (text, mimetype) {
+      let data = new Blob([text], {type: mimetype})
+      let textFile = window.URL.createObjectURL(data)
+      return textFile
+    },
     filterByDate (d) {
       let day = (d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2))
       if (this.query === `@${day}`) {

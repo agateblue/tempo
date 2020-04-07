@@ -17,6 +17,10 @@ body {
   font-size: 110%;
   line-height: 1.5;
 }
+body .v--modal {
+  background-color: #422D62;
+  padding: 1em;
+}
 a {
   color: rgba(255, 255, 255, 0.904);
 }
