@@ -62,7 +62,7 @@ textarea {
   font-size: 110%;
 }
 
-input[type="text"], textarea {
+input[type="text"], textarea, input[type="url"], input[type="password"] {
   width: 100%;
   margin-bottom: 1em;
   background-color: rgba(255, 255, 255, 0.1);

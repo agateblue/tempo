@@ -19,5 +19,18 @@ Vue.use(VueShowdown, {
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+
+	beforeCreate() {
+		this.$store.commit('loadCachedState')
+		this.$store.commit('initDb')
+		this.$store.dispatch(
+      'setupSync',
+      {
+        url: this.$store.state.couchDbUrl,
+        username: this.$store.state.couchDbUsername,
+        password: this.$store.state.couchDbPassword,
+      }
+    )
+	}
 }).$mount('#app')
