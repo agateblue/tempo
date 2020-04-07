@@ -17,6 +17,28 @@
         <li>Powerful tagging and filtering</li>
       </ul>
 
+      <button @click.prevent="$modal.show('sync')">Setup sync…</button> &nbsp;
+      <modal name="sync" height="auto" :scrollable="true" :adaptative="true">
+        <a href="" class="right floated" @click.prevent="$modal.hide('sync')">Close</a>
+        <form>
+          <p>Setup synchronisation through CouchDB</p>
+          <div>
+            <label for="dbUrl">CouchDB URL</label>
+            <input type="url" placeholder="http://localhost:5984/tempo" id="dbUrl" name="dbUrl" ref="dbUrl" :value="$store.state.couchDbUrl">
+          </div>
+          <div>
+            <label for="dbUsername">CouchDB Username</label>
+            <input type="text" placeholder="admin" id="dbUsername" name="dbUsername" ref="dbUsername" :value="$store.state.couchDbUsername">
+          </div>
+          <div>
+            <label for="dbPassword">CouchDB Password</label>
+            <input type="password" placeholder="secret" id="dbPassword" name="dbPassword" ref="dbPassword" :value="$store.state.couchDbPassword">
+          </div>
+          <hr>
+          <input type="submit" @click.stop.prevent="$store.dispatch('setupSync', {url: $refs.dbUrl.value, username: $refs.dbUsername.value, password: $refs.dbPassword.value })" value="Setup sync">
+        </form>
+      </modal>
+
       <button @click.prevent="$modal.show('import')">Import entries…</button>
       <modal name="import">
         <a href="" class="right floated" @click.prevent="$modal.hide('import')">Close</a>

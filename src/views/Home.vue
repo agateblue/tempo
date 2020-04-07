@@ -195,7 +195,12 @@ ${e.text}
   watch: {
     async query () {
       await this.search()
+    },
+    "$store.state.lastSync": {
+      async handler () {
+        await this.search()
+      }
     }
-  }
+  },
 }
 </script>
