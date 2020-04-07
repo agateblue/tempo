@@ -35,10 +35,12 @@
       </div>
     </aside>
     <section>
-      <h1>Your notes</h1>
+      <h1 class="left floated">Your notes</h1>
+      <span class="right floated">{{ entries.length }} matching entries</span>
       <router-link :to="{name: 'About'}">Help and settings</router-link>
       <hr>
-      <entry v-for="entry in entries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
+      <entry v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
+      <button v-if="shownEntries.length < entries.length" @click.prevent="count += $store.state.pageSize">Show more</button>
     </section>
   </main>
 </template>
@@ -63,6 +65,7 @@ export default {
   data () {
     return {
       entries: [],
+      count: this.$store.state.pageSize,
       showGraph: true,
     }
   },
@@ -81,6 +84,9 @@ export default {
         dataPoints: {...points},
         start,
       }
+    },
+    shownEntries () {
+      return this.entries.slice(0, this.count)
     }
   },
   methods: {
@@ -135,6 +141,8 @@ export default {
       }
     },
     async search () {
+
+      this.count = this.$store.state.pageSize,
       this.entries = this.filterEntries(
         await this.getEntries(),
         parseQuery(this.query),
