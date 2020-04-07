@@ -16,7 +16,21 @@
         <li>Mood tracking</li>
         <li>Powerful tagging and filtering</li>
       </ul>
-      <button @click="deleteConfirm">Delete my data</button>
+
+      <button @click.prevent="$modal.show('import')">Import entries…</button>
+      <modal name="import">
+        <a href="" class="right floated" @click.prevent="$modal.hide('import')">Close</a>
+        <form>
+          <p>Import entries from a JSON file exported from another Tempo session.</p>
+          <input type="file" name="import" accept=".json,application/json" @change="toImport = $event.target.files[0]">
+          <hr>
+          <input :disabled="!toImport" type="submit" @click.stop.prevent="importEntries" value="Import">
+          <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
+          <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
+        </form>
+      </modal>
+      <hr>
+      <button @click="deleteConfirm">Delete my data…</button>
     </aside>
     <section>
       <h2>
@@ -163,10 +177,44 @@
 <script>
 
 export default {
+  data () {
+    return {
+      toImport: null,
+      importedEntries: 0,
+      failedEntries: 0,
+    }
+  },
   methods: {
+    async importEntries () {
+      if (!this.toImport) {
+        console.log('No file to import')
+        return
+      }
+      this.importedEntries = 0
+      this.failedEntries = 0
+      console.log('Importing entries…')
+      let text = await this.toImport.text()
+      let entries = JSON.parse(text)
+      entries.forEach((e) => {
+        delete e._rev
+      })
+      let result = await this.$store.state.db.bulkDocs(entries)
+      console.log(result)
+      this.importedEntries = result.filter((e) => {
+        return e.ok
+      }).length
+      this.failedEntries = result.filter((e) => {
+        return !e.ok
+      }).length
+      console.log(this.importedEntries, this.failedEntries)
+
+
+    },
     deleteConfirm () {
       if (confirm("This will remove all your notes. This action is irreversible.")) {
         this.$store.dispatch('reset')
+        this.importedEntries = 0
+        this.failedEntries = 0
       }
     }
   }

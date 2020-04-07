@@ -38,13 +38,13 @@
       <h1 class="left floated">Your notes</h1>
       <span class="right floated">{{ entries.length }} matching entries</span>
       <router-link :to="{name: 'About'}">Help and settings</router-link> ·
-      <a href="" @click.prevent="showExport">Export…</a>
+      <a href="" @click.prevent="$modal.show('export')">Export…</a>
       <hr>
       <entry v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
       <button v-if="shownEntries.length < entries.length" @click.prevent="count += $store.state.pageSize">Show more</button>
     </section>
     <modal name="export">
-      <a href="" class="right floated" @click.prevent="hideExport">Close</a>
+      <a href="" class="right floated" @click.prevent="$modal.hide('export')">Close</a>
       <p>Export the selected {{ entries.length }} entries as a Markdown file.</p>
       <button @click="downloadMarkdown">Download as markdown</button>
       <p>Export the selected {{ entries.length }} entries as JSON file. Can be imported in Tempo.</p>
@@ -98,12 +98,6 @@ export default {
     }
   },
   methods: {
-    showExport () {
-      this.$modal.show('export');
-    },
-    hideExport () {
-      this.$modal.hide('export');
-    },
     downloadMarkdown () {
       let markdownParts = this.entries.map((e) => {
         return `---
