@@ -32,8 +32,8 @@ const cssVars = [
   },
   {
     id: "secondary-bg-color",
-    default: '#422D62',
-    label: 'Secondary background color (inputs, entries)',
+    default: 'rgba(66, 45, 98, 1)',
+    label: 'Secondary background color',
   },
   {
     id: "very-negative-color",
