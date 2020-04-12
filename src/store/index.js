@@ -19,6 +19,80 @@ const store = new Vuex.Store({
     couchDbPassword: null,
     lastSync: new Date(),
     version,
+    cssVars: [
+      {
+        id: "main-bg",
+        value: null,
+        default: '#422D62',
+        label: 'Background color or image (CSS supported)',
+      },
+      {
+        id: "main-text-color",
+        value: null,
+        default: 'rgba(255, 255, 255, 0.904)',
+        label: 'Text color',
+      },
+      {
+        id: "content-bg",
+        value: null,
+        default: 'rgba(39, 22, 58, 0.3)',
+        label: 'Background color for sidebar and main content',
+      },
+      {
+        id: "modal-bg",
+        value: null,
+        default: 'rgba(39, 22, 58, 1)',
+        label: 'Background color for modal windows',
+      },
+      {
+        id: "secondary-bg-color",
+        value: null,
+        default: '#422D62',
+        label: 'Secondary background color (inputs, entries)',
+      },
+      {
+        id: "very-negative-color",
+        value: null,
+        default: '#E35F75',
+        label: 'Very negative mood color',
+      },
+      {
+        id: "accent-color",
+        value: null,
+        default: '#FF65A0',
+        label: 'Accent color used for links and tags',
+      },
+      {
+        id: "negative-color",
+        value: null,
+        default: '#F3BAC3',
+        label: 'Negative mood color',
+      },
+      {
+        id: "neutral-color",
+        value: null,
+        default: 'rgba(255, 255, 255, 0.1)',
+        label: 'Neutral mood color',
+      },
+      {
+        id: "positive-color",
+        value: null,
+        default: '#79C698',
+        label: 'Positive mood color',
+      },
+      {
+        id: "very-positive-color",
+        value: null,
+        default: '#398557',
+        label: 'Very positive mood color',
+      },
+      {
+        id: "graph-label-color",
+        value: null,
+        default: 'black',
+        label: 'Mood widget text color',
+      },
+    ]
   },
   mutations: {
     handleSync (state, info) {

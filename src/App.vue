@@ -8,86 +8,8 @@
 </template>
 <script>
 export default {
-  data () {
-    return {
-      cssVars: [
-        {
-          id: "main-bg",
-          value: null,
-          // default: '#422D62',
-          default: '#422D62',
-          label: 'Background color or image (CSS supported)',
-        },
-        {
-          id: "main-text-color",
-          value: null,
-          default: 'rgba(255, 255, 255, 0.904)',
-          label: 'Text color',
-        },
-        {
-          id: "content-bg",
-          value: null,
-          default: 'transparent',
-          label: 'Background color for sidebar and main content',
-        },
-        {
-          id: "secondary-bg-color",
-          value: null,
-          default: 'rgba(255, 255, 255, 0.1)',
-          label: 'Secondary background color (inputs, entries)',
-        },
-        {
-          id: "very-negative-color",
-          value: null,
-          default: '#E35F75',
-          label: 'Very negative mood color',
-        },
-        {
-          id: "negative-color",
-          value: null,
-          default: '#F3BAC3',
-          label: 'Negative mood color',
-        },
-        {
-          id: "neutral-color",
-          value: null,
-          default: 'rgba(255, 255, 255, 0.1)',
-          label: 'Neutral mood color',
-        },
-        {
-          id: "positive-color",
-          value: null,
-          default: '#79C698',
-          label: 'Positive mood color',
-        },
-        {
-          id: "very-positive-color",
-          value: null,
-          default: '#398557',
-          label: 'Very positive mood color',
-        },
-        {
-          id: "graph-label-color",
-          value: null,
-          default: 'black',
-          label: 'Mood widget text color',
-        },
-      ]
-    }
-  },
-  created () {
-    this.setDefaultVars()
-  },
-  methods: {
-    setDefaultVars () {
-      let style = getComputedStyle(document.documentElement)
-      this.cssVars.forEach(v => {
-        v.value = style.getPropertyValue(`--${v.id}`)
-      })
-    }
-  },
   watch: {
-    cssVars: {
+    "$store.state.cssVars": {
       handler (vars) {
         let style = document.documentElement.style
         vars.forEach(v => {
@@ -114,12 +36,24 @@ body {
   line-height: 1.5;
 }
 body .v--modal {
-  background-color: var(--main-bg-color);
+  background-color: var(--modal-bg);
   padding: 1em;
 }
 a {
-  color: var(--main-text-color);
+  color: var(--accent-color);
 }
+button, input[type="submit"] {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  border: none;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+button:hover, input[type="submit"]:hover {
+  translate: 1px;
+  opacity: 0.8;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -131,6 +65,7 @@ main {
 @media screen and (min-width: 700px) {
   main {
     display: flex;
+    align-items: flex-start;
     justify-content: center;
     max-width: 1000px;
   }
@@ -138,6 +73,13 @@ main {
     justify-content: center;
     max-width: 400px;
     margin-right: 2em;
+  }
+}
+@media screen and (max-width: 700px) {
+  .v--modal-box {
+    left: 2.5vw !important;
+    right: 2.5vw !important;
+    width: 95vw !important;
   }
 }
 main > * {
@@ -180,7 +122,7 @@ code {
   padding: 0 0.25em;
 }
 article {
-  margin-bottom: 3em;
+  margin-bottom: 2em;
   padding: 1em;
   background-color: var(--secondary-bg-color);
 }
