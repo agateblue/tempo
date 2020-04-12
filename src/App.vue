@@ -9,11 +9,11 @@
 <script>
 export default {
   watch: {
-    "$store.state.cssVars": {
-      handler (vars) {
+    "$store.state.theme": {
+      handler (theme) {
         let style = document.documentElement.style
-        vars.forEach(v => {
-          style.setProperty(`--${v.id}`, v.value || v.default)
+        this.$store.state.cssVars.forEach(v => {
+          style.setProperty(`--${v.id}`, theme[v.id] || v.default)
         })
       },
       deep: true,
@@ -48,7 +48,10 @@ button, input[type="submit"] {
   border: none;
   padding: 0.5em 1em;
   cursor: pointer;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
 }
+
 button:hover, input[type="submit"]:hover {
   translate: 1px;
   opacity: 0.8;
@@ -74,6 +77,18 @@ main {
     max-width: 400px;
     margin-right: 2em;
   }
+
+  .theme-var {
+    display: inline-block;
+    width: 48%;
+  }
+  .theme-var:nth-child(odd) {
+    margin-right: 2%;
+  }
+  .theme-var input[type="text"] {
+    display: inline-block;
+    width: 80%;
+  }
 }
 @media screen and (max-width: 700px) {
   .v--modal-box {
@@ -82,8 +97,14 @@ main {
     width: 95vw !important;
   }
 }
+.v--modal-box {
+  max-height: 90vh !important;
+  top: 5vh !important;
+  overflow-y: auto !important;
+}
 main > * {
   padding: 2em;
+  margin-bottom: 1em;
 }
 main > aside {
   flex-grow: 1;
@@ -206,5 +227,17 @@ hr {
 }
 .center.aligned {
   text-align: center;
+}
+.color-preview {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  margin-left: 1em;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.theme-var .field {
+  display: flex;
+  justify-content: space-between;
+  vertical-align: center;
 }
 </style>
