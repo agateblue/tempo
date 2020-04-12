@@ -8,27 +8,107 @@
 </template>
 <script>
 export default {
-
+  data () {
+    return {
+      cssVars: [
+        {
+          id: "main-bg",
+          value: null,
+          // default: '#422D62',
+          default: '#422D62',
+          label: 'Background color or image (CSS supported)',
+        },
+        {
+          id: "main-text-color",
+          value: null,
+          default: 'rgba(255, 255, 255, 0.904)',
+          label: 'Text color',
+        },
+        {
+          id: "content-bg",
+          value: null,
+          default: 'transparent',
+          label: 'Background color for sidebar and main content',
+        },
+        {
+          id: "secondary-bg-color",
+          value: null,
+          default: 'rgba(255, 255, 255, 0.1)',
+          label: 'Secondary background color (inputs, entries)',
+        },
+        {
+          id: "very-negative-color",
+          value: null,
+          default: '#E35F75',
+          label: 'Very negative mood color',
+        },
+        {
+          id: "negative-color",
+          value: null,
+          default: '#F3BAC3',
+          label: 'Negative mood color',
+        },
+        {
+          id: "neutral-color",
+          value: null,
+          default: 'rgba(255, 255, 255, 0.1)',
+          label: 'Neutral mood color',
+        },
+        {
+          id: "positive-color",
+          value: null,
+          default: '#79C698',
+          label: 'Positive mood color',
+        },
+        {
+          id: "very-positive-color",
+          value: null,
+          default: '#398557',
+          label: 'Very positive mood color',
+        },
+        {
+          id: "graph-label-color",
+          value: null,
+          default: 'black',
+          label: 'Mood widget text color',
+        },
+      ]
+    }
+  },
+  created () {
+    this.setDefaultVars()
+  },
+  methods: {
+    setDefaultVars () {
+      let style = getComputedStyle(document.documentElement)
+      this.cssVars.forEach(v => {
+        v.value = style.getPropertyValue(`--${v.id}`)
+      })
+    }
+  },
+  watch: {
+    cssVars: {
+      handler (vars) {
+        let style = document.documentElement.style
+        vars.forEach(v => {
+          style.setProperty(`--${v.id}`, v.value || v.default)
+        })
+      },
+      deep: true,
+      immediate: true,
+    }
+  }
 }
 </script>
 <style>
-:root {
-  --main-bg-color: #422D62;
-  --main-text-color: rgba(255, 255, 255, 0.904);
-  --secondary-bg-color: rgba(255, 255, 255, 0.1);
-  --very-negative-color: #E35F75;
-  --negative-color: #F3BAC3;
-  --neutral-color: rgba(255, 255, 255, 0.1);
-  --positive-color: #79C698;
-  --very-positive-color: #398557;
-  --graph-label-color: black;
-}
-
 * {
   box-sizing: border-box;
 }
 body {
-  background-color: var(--main-bg-color);
+  background: var(--main-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-size: cover;
   color: var(--main-text-color);
   font-size: 110%;
   line-height: 1.5;
@@ -57,6 +137,7 @@ main {
   main > aside {
     justify-content: center;
     max-width: 400px;
+    margin-right: 2em;
   }
 }
 main > * {
@@ -64,9 +145,11 @@ main > * {
 }
 main > aside {
   flex-grow: 1;
+  background: var(--content-bg);
 }
 main > section {
   flex-grow: 2;
+  background: var(--content-bg);
 }
 
 textarea {
