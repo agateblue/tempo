@@ -5,7 +5,7 @@
       :id="name"
       rows="10"
       ref="textarea"
-      @keydown.prevent.ctrl.enter="submit"
+      @keydown.ctrl.enter.exact="submit"
       placeholder="What's going on in your life?"
       @input="text = $event.target.value"
       :value="value"></textarea>
