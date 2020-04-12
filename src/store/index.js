@@ -9,6 +9,72 @@ PouchDB.plugin(PouchDBAuthentication)
 Vue.use(Vuex)
 
 const version = 1
+const cssVars = [
+  {
+    id: "main-bg",
+    default: '#422D62',
+    label: 'Background color or image (CSS supported)',
+  },
+  {
+    id: "main-text-color",
+    default: 'rgba(255, 255, 255, 0.904)',
+    label: 'Text color',
+  },
+  {
+    id: "content-bg",
+    default: 'rgba(39, 22, 58, 0.3)',
+    label: 'Background color for sidebar and main content',
+  },
+  {
+    id: "modal-bg",
+    default: 'rgba(39, 22, 58, 1)',
+    label: 'Background color for modal windows',
+  },
+  {
+    id: "secondary-bg-color",
+    default: '#422D62',
+    label: 'Secondary background color (inputs, entries)',
+  },
+  {
+    id: "very-negative-color",
+    default: '#E35F75',
+    label: 'Very negative mood color',
+  },
+  {
+    id: "accent-color",
+    default: '#FF65A0',
+    label: 'Accent color used for links and tags',
+  },
+  {
+    id: "negative-color",
+    default: '#F3BAC3',
+    label: 'Negative mood color',
+  },
+  {
+    id: "neutral-color",
+    default: 'rgba(255, 255, 255, 0.1)',
+    label: 'Neutral mood color',
+  },
+  {
+    id: "positive-color",
+    default: '#79C698',
+    label: 'Positive mood color',
+  },
+  {
+    id: "very-positive-color",
+    default: '#398557',
+    label: 'Very positive mood color',
+  },
+  {
+    id: "graph-label-color",
+    default: 'black',
+    label: 'Mood widget text color',
+  },
+]
+let theme = {}
+cssVars.forEach(v => {
+  theme[v.id] = null
+})
 const store = new Vuex.Store({
   state: {
     db: null,
@@ -18,81 +84,9 @@ const store = new Vuex.Store({
     couchDbUsername: null,
     couchDbPassword: null,
     lastSync: new Date(),
+    theme,
+    cssVars,
     version,
-    cssVars: [
-      {
-        id: "main-bg",
-        value: null,
-        default: '#422D62',
-        label: 'Background color or image (CSS supported)',
-      },
-      {
-        id: "main-text-color",
-        value: null,
-        default: 'rgba(255, 255, 255, 0.904)',
-        label: 'Text color',
-      },
-      {
-        id: "content-bg",
-        value: null,
-        default: 'rgba(39, 22, 58, 0.3)',
-        label: 'Background color for sidebar and main content',
-      },
-      {
-        id: "modal-bg",
-        value: null,
-        default: 'rgba(39, 22, 58, 1)',
-        label: 'Background color for modal windows',
-      },
-      {
-        id: "secondary-bg-color",
-        value: null,
-        default: '#422D62',
-        label: 'Secondary background color (inputs, entries)',
-      },
-      {
-        id: "very-negative-color",
-        value: null,
-        default: '#E35F75',
-        label: 'Very negative mood color',
-      },
-      {
-        id: "accent-color",
-        value: null,
-        default: '#FF65A0',
-        label: 'Accent color used for links and tags',
-      },
-      {
-        id: "negative-color",
-        value: null,
-        default: '#F3BAC3',
-        label: 'Negative mood color',
-      },
-      {
-        id: "neutral-color",
-        value: null,
-        default: 'rgba(255, 255, 255, 0.1)',
-        label: 'Neutral mood color',
-      },
-      {
-        id: "positive-color",
-        value: null,
-        default: '#79C698',
-        label: 'Positive mood color',
-      },
-      {
-        id: "very-positive-color",
-        value: null,
-        default: '#398557',
-        label: 'Very positive mood color',
-      },
-      {
-        id: "graph-label-color",
-        value: null,
-        default: 'black',
-        label: 'Mood widget text color',
-      },
-    ]
   },
   mutations: {
     handleSync (state, info) {
@@ -105,6 +99,18 @@ const store = new Vuex.Store({
         state.syncHandler.cancel()
       }
       state.syncHandler = newValue
+    },
+    theme (state, vars) {
+      state.cssVars.forEach((v) => {
+        if (vars[v.id] != undefined) {
+          state.theme[v.id] = vars[v.id]
+        }
+      })
+    },
+    resetTheme (state) {
+      state.cssVars.forEach((v) => {
+        state.theme[v.id] = null
+      })
     },
     couchDbConfig (state, {url, username, password}) {
       state.couchDbUrl = url
@@ -134,6 +140,14 @@ const store = new Vuex.Store({
       state.db.createIndex({
         index: {fields: ['type']}
       })
+    }
+  },
+  getters: {
+    cssVarValue: (state) => (id) => {
+      let v = state.cssVars.filter(v => {
+        return v.id === id
+      })[0]
+      return state.theme[v] || v.default
     }
   },
   actions: {
@@ -184,7 +198,8 @@ store.subscribe((mutation, state) => {
 		couchDbUsername: state.couchDbUsername,
 		couchDbPassword: state.couchDbPassword,
 		version: state.version,
-		pageSize: state.pageSize,
+    pageSize: state.pageSize,
+    theme: state.theme,
 	};
 
   console.log('Updating localstorage cache…')

@@ -19,7 +19,7 @@
 
       </ul>
 
-      <button @click.prevent="$modal.show('sync')">Setup sync…</button> &nbsp;
+      <button @click.prevent="$modal.show('sync')">Setup sync…</button>
       <modal name="sync" height="auto" :scrollable="true">
         <a href="" class="right floated" @click.prevent="$modal.hide('sync')">Close</a>
         <form>
@@ -53,7 +53,12 @@
           <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
         </form>
       </modal>
-      <hr>
+      <button @click.prevent="$modal.show('theme')">Theming…</button>
+      <modal name="theme" height="auto">
+        <a href="" class="right floated" @click.prevent="$modal.hide('theme')">Close</a>
+          <p>Customize Tempo's look and feel</p>
+          <theme-form></theme-form>
+      </modal>
       <button @click="deleteConfirm">Delete my data…</button>
     </aside>
     <section>
@@ -199,8 +204,12 @@
 </template>
 
 <script>
+import ThemeForm from '@/components/ThemeForm'
 
 export default {
+  components: {
+    ThemeForm
+  },
   data () {
     return {
       toImport: null,
