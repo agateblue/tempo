@@ -75,7 +75,7 @@ main {
   main > aside {
     justify-content: center;
     max-width: 400px;
-    margin-right: 1em;
+    margin-right: 2em;
   }
 
   .theme-var {
@@ -169,7 +169,7 @@ label {
   color: var(--main-text-color);
 }
 .widget, form {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   clear: both;
   overflow: hidden;
 }
