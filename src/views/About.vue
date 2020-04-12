@@ -1,6 +1,6 @@
 <template>
   <main>
-    <aside>
+    <aside class="widget">
       <h1>
         About Tempo
       </h1>
@@ -61,7 +61,7 @@
       </modal>
       <button @click="deleteConfirm">Delete my data…</button>
     </aside>
-    <section>
+    <section class="widget">
       <h2>
         How does it work?
       </h2>

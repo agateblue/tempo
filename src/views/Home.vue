@@ -35,12 +35,13 @@
       </div>
     </aside>
     <section>
-      <h1 class="left floated">Your notes</h1>
-      <span class="right floated">{{ entries.length }} matching entries</span>
-      <router-link :to="{name: 'About'}">Help and settings</router-link> ·
-      <a href="" @click.prevent="$modal.show('export')">Export…</a>
-      <hr>
-      <entry v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
+      <header class="widget">
+        <h1 class="left floated">Your notes</h1>
+        <span class="right floated">{{ entries.length }} matching entries</span>
+        <router-link :to="{name: 'About'}">Help and settings</router-link> ·
+        <a href="" @click.prevent="$modal.show('export')">Export…</a>
+      </header>
+      <entry class="widget" v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
       <button v-if="shownEntries.length < entries.length" @click.prevent="count += $store.state.pageSize">Show more</button>
     </section>
     <modal name="export">

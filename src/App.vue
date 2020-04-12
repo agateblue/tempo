@@ -75,7 +75,7 @@ main {
   main > aside {
     justify-content: center;
     max-width: 400px;
-    margin-right: 2em;
+    margin-right: 1em;
   }
 
   .theme-var {
@@ -102,17 +102,11 @@ main {
   top: 5vh !important;
   overflow-y: auto !important;
 }
-main > * {
-  padding: 2em;
-  margin-bottom: 1em;
-}
 main > aside {
   flex-grow: 1;
-  background: var(--content-bg);
 }
 main > section {
   flex-grow: 2;
-  background: var(--content-bg);
 }
 
 textarea {
@@ -178,6 +172,10 @@ label {
   margin-bottom: 1em;
   clear: both;
   overflow: hidden;
+}
+.widget {
+  background: var(--content-bg);
+  padding: 1em;
 }
 .right.floated {
   float: right;
