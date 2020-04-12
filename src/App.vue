@@ -51,6 +51,9 @@ button, input[type="submit"] {
   margin-right: 0.5em;
   margin-bottom: 0.5em;
 }
+button:not(:last-child), input[type="submit"]:not(:last-child) {
+
+}
 
 button:hover, input[type="submit"]:hover {
   translate: 1px;
@@ -109,15 +112,6 @@ main > section {
   flex-grow: 2;
 }
 
-textarea {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  padding: 0.5em;
-  display: block;
-  width: 100%;
-  border-radius: 5px;
-  font-size: 110%;
-}
-
 input[type="text"], textarea, input[type="url"], input[type="password"] {
   width: 100%;
   margin-bottom: 1em;
@@ -126,6 +120,15 @@ input[type="text"], textarea, input[type="url"], input[type="password"] {
   border-radius: 5px;
   font-size: 110%;
   padding: 0.25em;
+}
+
+textarea {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  display: block;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 110%;
+  padding: 0.5em;
 }
 blockquote {
   background-color: var(--secondary-bg-color);
@@ -169,16 +172,18 @@ label {
   color: var(--main-text-color);
 }
 .widget, form {
-  margin-bottom: 2em;
   clear: both;
   overflow: hidden;
 }
 .widget {
   background: var(--content-bg);
   padding: 1em;
+  margin-bottom: 2em;
+
 }
 .right.floated {
   float: right;
+  margin-right: 0;
 }
 h1:first-child, h2:first-child, h3:first-child {
   margin-top: 0;
