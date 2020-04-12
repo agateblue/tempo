@@ -6,23 +6,39 @@
     <router-view/>
   </div>
 </template>
+<script>
+export default {
 
+}
+</script>
 <style>
+:root {
+  --main-bg-color: #422D62;
+  --main-text-color: rgba(255, 255, 255, 0.904);
+  --secondary-bg-color: rgba(255, 255, 255, 0.1);
+  --very-negative-color: #E35F75;
+  --negative-color: #F3BAC3;
+  --neutral-color: rgba(255, 255, 255, 0.1);
+  --positive-color: #79C698;
+  --very-positive-color: #398557;
+  --graph-label-color: black;
+}
+
 * {
   box-sizing: border-box;
 }
 body {
-  background-color: #422D62;
-  color: rgba(255, 255, 255, 0.904);
+  background-color: var(--main-bg-color);
+  color: var(--main-text-color);
   font-size: 110%;
   line-height: 1.5;
 }
 body .v--modal {
-  background-color: #422D62;
+  background-color: var(--main-bg-color);
   padding: 1em;
 }
 a {
-  color: rgba(255, 255, 255, 0.904);
+  color: var(--main-text-color);
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -65,25 +81,25 @@ textarea {
 input[type="text"], textarea, input[type="url"], input[type="password"] {
   width: 100%;
   margin-bottom: 1em;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.904);
+  background-color: var(--secondary-bg-color);
+  color: var(--main-text-color);
   border-radius: 5px;
   font-size: 110%;
   padding: 0.25em;
 }
 blockquote {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--secondary-bg-color);
   padding: 1em;
   margin: 0;
 }
 code {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--secondary-bg-color);
   padding: 0 0.25em;
 }
 article {
   margin-bottom: 3em;
   padding: 1em;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--secondary-bg-color);
 }
 ul, ol {
   padding-left: 1em;
@@ -110,7 +126,7 @@ label {
   background: transparent;
   border: none;
   text-decoration: underline;
-  color: rgba(255, 255, 255, 0.904);
+  color: var(--main-text-color);
 }
 .widget, form {
   margin-bottom: 1em;
@@ -125,28 +141,28 @@ h1:first-child, h2:first-child, h3:first-child {
 }
 
 .cal-heatmap-container .q1 {
-  fill: #E35F75 !important;
+  fill: var(--very-negative-color) !important;
 }
 .cal-heatmap-container .q2 {
-  fill: #F3BAC3 !important;
+  fill: var(--negative-color) !important;
 }
 .cal-heatmap-container .q3 {
-  fill: rgba(255, 255, 255, 0.904) !important;
+  fill: var(--main-text-color) !important;
 }
 .cal-heatmap-container .q4 {
-  fill: #79C698 !important;
+  fill: var(--positive-color) !important;
 }
 .cal-heatmap-container .q5 {
-  fill: #398557 !important;
+  fill: var(--very-positive-color) !important;
 }
 .cal-heatmap-container .graph-label {
   font-size: 1em !important;
   font-weight: bold;
-  fill: rgba(255, 255, 255, 0.904);
+  fill: var(--neutral-color);
 }
 
 .cal-heatmap-container .subdomain-text {
-  fill: black !important;
+  fill: var(--graph-label-color) !important;
   font-size: 0.8em !important;
 }
 
@@ -154,7 +170,7 @@ h1:first-child, h2:first-child, h3:first-child {
   shape-rendering: auto !important;
 }
 .cal-heatmap-container rect.highlight-now {
-    stroke: black !important;
+    stroke: var(--graph-label-color) !important;
     shape-rendering: auto;
     stroke-width: 2;
 }
