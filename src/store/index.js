@@ -203,7 +203,7 @@ const store = new Vuex.Store({
       } catch {
         console.debug('No existing theme')
       }
-      if (existing && isEqual(existing, theme)) {
+      if (existing && isEqual(existing.theme, theme)) {
         return
       }
       let data = {
