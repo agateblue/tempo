@@ -19,7 +19,7 @@
         <form @submit.prevent="submitSearch" class="inline">
           <label for="search" class="hidden">Search</label>
           <input type="text" ref="search" :value="query" name="search" id="search" placeholder="#work +">
-          <input type="submit" class="right floated" value="Search">
+          <input type="submit" class="right floated secondary" value="Search">
         </form>
       </aside>
       <div v-if="query" :class="[{attached: $store.state.showDailyMood}, 'center aligned widget']">

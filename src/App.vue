@@ -79,6 +79,12 @@ button, input[type="submit"] {
 button:hover, input[type="submit"]:hover, button:focus, input[type="submit"]:focus {
   opacity: 0.8;
 }
+button.secondary, input[type="submit"].secondary {
+  border: 1px solid var(--main-text-color);
+  background-color: transparent;
+  color: var(--main-text-color);
+  box-shadow: none;
+}
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -149,6 +155,7 @@ input[type="text"], textarea, input[type="url"], input[type="password"] {
 }
 input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus {
   opacity: 1;
+  border: 1px solid var(--accent-color);
 }
 
 textarea {
