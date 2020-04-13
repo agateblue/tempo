@@ -15,7 +15,7 @@
         </h2>
         <entry-form @input="addNew" />
       </aside>
-      <aside :class="[{attached: query}, 'widget']">
+      <aside v-if="entriesCount" :class="[{attached: query}, 'widget']">
         <form @submit.prevent="submitSearch" class="inline">
           <label for="search" class="hidden">Search</label>
           <input type="text" ref="search" :value="query" name="search" id="search" placeholder="#work +">
@@ -185,9 +185,11 @@ ${e.text}
     },
     async search () {
 
-      this.count = this.$store.state.pageSize,
+      this.count = this.$store.state.pageSize
+      let allEntries = await this.getEntries()
+      this.entriesCount = allEntries.length
       this.entries = this.filterEntries(
-        await this.getEntries(),
+        allEntries,
         parseQuery(this.query),
       )
     }

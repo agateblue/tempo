@@ -9,7 +9,7 @@
       placeholder="What's going on in your life?"
       @input="text = $event.target.value"
       :value="value"></textarea>
-    <input class="right floated" type="submit">
+    <input class="right floated" type="submit" value="Send">
   </form>
 </template>
 

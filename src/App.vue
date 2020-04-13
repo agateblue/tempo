@@ -26,6 +26,7 @@ export default {
 :root {
   --border: 1px solid rgba(125, 125, 125, 0.2);
   --border-radius: 3px;
+  --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
 }
 * {
   box-sizing: border-box;
@@ -55,6 +56,7 @@ button, input[type="submit"] {
   margin-right: 0.5em;
   margin-bottom: 0.5em;
   border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 button:hover, input[type="submit"]:hover {
@@ -195,13 +197,14 @@ label {
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
 }
-.widget.attached + .widget{
+.widget.attached + .widget {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-.widget:not(.attached) {
+.widget:not(.attached), .widget:last-child {
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
+  border-bottom: none;
 }
 .right.floated {
   float: right;
