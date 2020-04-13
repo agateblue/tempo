@@ -3,7 +3,7 @@
     <textarea
       :name="name"
       :id="name"
-      rows="10"
+      rows="4"
       ref="textarea"
       @keydown.ctrl.enter.exact="submit"
       placeholder="What's going on in your life?"

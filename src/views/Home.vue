@@ -1,47 +1,41 @@
 <template>
   <main>
-    <aside>
-      <div class="widget">
+    <section>
+      <aside class="attached widget">
+        <router-link :to="{name: 'About'}">Help and settings</router-link> ·
+        <a href="" @click.prevent="$modal.show('export')">Export…</a> ·
+        <a href="" @click.stop.prevent="$store.commit('toggleShowDailyMood')">
+          <template v-if="$store.state.showDailyMood">Hide daily mood</template>
+          <template v-else>Show daily mood</template>
+        </a>
+      </aside>
+      <aside class="attached widget">
         <h2>
           <label for="how">How do you feel?</label>
         </h2>
         <entry-form @input="addNew" />
-      </div>
-      <div class="widget">
-        <h2>
-          <label for="search">Filter entries</label>
-        </h2>
-        <form @submit.prevent="submitSearch">
+      </aside>
+      <aside :class="[{attached: query}, 'widget']">
+        <form @submit.prevent="submitSearch" class="inline">
+          <label for="search" class="hidden">Search</label>
           <input type="text" ref="search" :value="query" name="search" id="search" placeholder="#work +">
           <input type="submit" class="right floated" value="Search">
-          <button class="link" @click.stop.prevent="clearSearch">Clear</button>
         </form>
+      </aside>
+      <div v-if="query" :class="[{attached: $store.state.showDailyMood}, 'center aligned widget']">
+        {{ entries.length }} matching entries · <button class="link" @click="clearSearch">Clear search</button>
       </div>
-      <div class="widget">
-        <h2>
-          <button class="right floated link" @click.stop.prevent="showGraph = !showGraph">
-            <template v-if="showGraph">Hide</template>
-            <template v-else>Show</template>
-          </button>
+      <aside class="widget" v-if="$store.state.showDailyMood">
+        <h3>
           Daily mood
-        </h2>
-
+        </h3>
         <heatmap
-          v-if="showGraph"
           @selected-date="filterByDate"
           :key="JSON.stringify(moodData)"
           :chart-data="moodData">
         </heatmap>
-      </div>
-    </aside>
-    <section>
-      <header class="widget">
-        <h1 class="left floated">Your notes</h1>
-        <span class="right floated">{{ entries.length }} matching entries</span>
-        <router-link :to="{name: 'About'}">Help and settings</router-link> ·
-        <a href="" @click.prevent="$modal.show('export')">Export…</a>
-      </header>
-      <entry class="widget" v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
+      </aside>
+      <entry class="attached widget" v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
       <button v-if="shownEntries.length < entries.length" @click.prevent="count += $store.state.pageSize">Show more</button>
     </section>
     <modal name="export">
@@ -75,7 +69,6 @@ export default {
     return {
       entries: [],
       count: this.$store.state.pageSize,
-      showGraph: true,
     }
   },
   async created () {
