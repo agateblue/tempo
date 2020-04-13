@@ -84,6 +84,7 @@ const store = new Vuex.Store({
     couchDbUsername: null,
     couchDbPassword: null,
     lastSync: new Date(),
+    showDailyMood: true,
     theme,
     cssVars,
     version,
@@ -92,6 +93,9 @@ const store = new Vuex.Store({
     handleSync (state, info) {
       console.log('Received sync event', info)
       state.lastSync = new Date()
+    },
+    toggleShowDailyMood (state) {
+      state.showDailyMood = !state.showDailyMood
     },
     syncHandler (state, newValue) {
       if (state.syncHandler) {
@@ -200,6 +204,7 @@ store.subscribe((mutation, state) => {
 		version: state.version,
     pageSize: state.pageSize,
     theme: state.theme,
+    showDailyMood: state.showDailyMood,
 	};
 
   console.log('Updating localstorage cache…')

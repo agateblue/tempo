@@ -23,6 +23,10 @@ export default {
 }
 </script>
 <style>
+:root {
+  --border: 1px solid rgba(125, 125, 125, 0.2);
+  --border-radius: 2px;
+}
 * {
   box-sizing: border-box;
 }
@@ -50,9 +54,7 @@ button, input[type="submit"] {
   cursor: pointer;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
-}
-button:not(:last-child), input[type="submit"]:not(:last-child) {
-
+  border-radius: var(--border-radius);
 }
 
 button:hover, input[type="submit"]:hover {
@@ -110,24 +112,27 @@ main > aside {
 }
 main > section {
   flex-grow: 2;
+  max-width: 500px;
 }
 
 input[type="text"], textarea, input[type="url"], input[type="password"] {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   width: 100%;
   margin-bottom: 1em;
   background-color: var(--secondary-bg-color);
   color: var(--main-text-color);
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   font-size: 110%;
   padding: 0.25em;
+  border: var(--border);
+  opacity: 0.7;
+}
+input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus {
+  opacity: 1;
 }
 
 textarea {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   display: block;
-  width: 100%;
-  border-radius: 5px;
-  font-size: 110%;
   padding: 0.5em;
 }
 blockquote {
@@ -175,11 +180,17 @@ label {
   clear: both;
   overflow: hidden;
 }
+.hidden {
+  display: none;
+}
 .widget {
   background: var(--content-bg);
   padding: 1em;
   margin-bottom: 2em;
-
+}
+.widget.attached {
+  margin-bottom: 0;
+  border-bottom: var(--border);
 }
 .right.floated {
   float: right;
@@ -187,6 +198,9 @@ label {
 }
 h1:first-child, h2:first-child, h3:first-child {
   margin-top: 0;
+}
+h1, h2 {
+  margin: 0.5em 0;
 }
 
 .cal-heatmap-container .q1 {
@@ -242,5 +256,23 @@ hr {
   display: flex;
   justify-content: space-between;
   vertical-align: center;
+}
+form.inline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+form.inline > * {
+  margin-bottom: 0;
+}
+form.inline > *:not(:last-child) {
+  margin-right: 1em;
+}
+svg {
+  margin: 0 auto;
+}
+h3 span.right.floated {
+  font-size: 0.7em;
+  font-weight: normal;
 }
 </style>
