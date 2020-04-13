@@ -7,6 +7,10 @@
         <span class="color-preview" :style="`background: ${values[v.id]}`"></span>
       </div>
     </div>
+    <div>
+      <label for="json">Import/Export theme</label>
+      <input type="text" id="json" v-model="themeJson">
+    </div>
     <button type="reset" @click.prevent="$store.dispatch('setTheme', null)" class="link">Reset to defaults</button>
     <input class="right floated" type="submit" value="Apply">
   </form>
@@ -22,6 +26,27 @@ export default {
     })
     return {
       values
+    }
+  },
+  computed: {
+    themeJson: {
+      get () {
+        return JSON.stringify(this.values)
+      },
+      set (v) {
+        let payload
+        try {
+          payload = JSON.parse(v)
+        } catch {
+          console.log('Invalid JSON')
+          return
+        }
+        Object.keys(this.values).forEach((k) => {
+          if (payload[k] != undefined) {
+            this.values[k] = payload[k]
+          }
+        })
+      }
     }
   },
   methods: {
