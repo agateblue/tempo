@@ -13,7 +13,7 @@ const signToType = {
   '?': 'feeling',
   '#': 'tag',
 }
-const tagRegex = /(^|\s)((#|\+|-|~|\?)([a-z\d-]+))/gi
+const tagRegex = /(^|\s)((#|\+|-|~|\?)([A-zÀ-ÿ\d-]+))/gi
 export function parseTags (text) {
   const tags = []
   const regex = new RegExp(tagRegex)
