@@ -14,7 +14,7 @@
       </entry-form>
 
     </template>
-    <VueShowdown v-else :vue-template="true" class="content" :markdown="prerenderedText" />
+    <VueShowdown v-else :vue-template="true" :options="{simpleLineBreaks: true, headerLevelStart: 3, simplifiedAutoLink: true, tasklists:true, emoji: true}" :markdown="prerenderedText" />
     <footer>
       <div>
         <button class="link" @click.prevent="editing = !editing">
