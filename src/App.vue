@@ -47,6 +47,7 @@ body .v--modal {
 a {
   color: var(--accent-color);
 }
+
 button, input[type="submit"] {
   background-color: var(--accent-color);
   color: var(--text-color);
@@ -59,7 +60,7 @@ button, input[type="submit"] {
   box-shadow: var(--box-shadow);
 }
 
-button:hover, input[type="submit"]:hover {
+button:hover, input[type="submit"]:hover, button:focus, input[type="submit"]:focus {
   opacity: 0.8;
 }
 
@@ -177,6 +178,9 @@ label {
   text-decoration: underline;
   color: var(--main-text-color);
 }
+a:hover, .link:hover {
+  text-decoration: none;
+}
 .widget, form {
   clear: both;
   overflow: hidden;
@@ -281,6 +285,9 @@ form.inline > * {
 }
 form.inline > *:not(:last-child) {
   margin-right: 1em;
+}
+form input[type="submit"] {
+  margin-bottom: 0;
 }
 svg {
   margin: 0 auto;
