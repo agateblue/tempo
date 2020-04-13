@@ -21,7 +21,14 @@ export default {
     },
     "$store.state.lastSync": {
       async handler () {
-        let t = await this.$store.state.db.get('theme')
+        console.log('Loading theme…')
+        let t
+        try {
+          t = await this.$store.state.db.get('theme')
+        } catch (e) {
+          console.log('No theme found')
+          return
+        }
         if (t && t.theme) {
           await this.$store.dispatch('setTheme', t.theme)
         }
@@ -117,6 +124,8 @@ main {
   max-height: 90vh !important;
   top: 5vh !important;
   overflow-y: auto !important;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 main > aside {
   flex-grow: 1;
