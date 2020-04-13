@@ -1,7 +1,7 @@
 <template>
   <main>
     <section>
-      <aside class="attached widget">
+      <aside class="center aligned attached widget">
         <router-link :to="{name: 'About'}">Help and settings</router-link> ·
         <a href="" @click.prevent="$modal.show('export')">Export…</a> ·
         <a href="" @click.stop.prevent="$store.commit('toggleShowDailyMood')">
