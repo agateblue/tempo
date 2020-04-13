@@ -84,7 +84,7 @@ const store = new Vuex.Store({
     couchDbUsername: null,
     couchDbPassword: null,
     lastSync: new Date(),
-    showDailyMood: true,
+    showDailyMood: false,
     theme,
     cssVars,
     version,
