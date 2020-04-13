@@ -25,7 +25,7 @@ export default {
 <style>
 :root {
   --border: 1px solid rgba(125, 125, 125, 0.2);
-  --border-radius: 2px;
+  --border-radius: 3px;
 }
 * {
   box-sizing: border-box;
@@ -58,7 +58,6 @@ button, input[type="submit"] {
 }
 
 button:hover, input[type="submit"]:hover {
-  translate: 1px;
   opacity: 0.8;
 }
 
@@ -191,6 +190,18 @@ label {
 .widget.attached {
   margin-bottom: 0;
   border-bottom: var(--border);
+}
+.widget {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+.widget.attached + .widget{
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.widget:not(.attached) {
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 .right.floated {
   float: right;
