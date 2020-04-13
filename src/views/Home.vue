@@ -74,6 +74,7 @@ export default {
   data () {
     return {
       entries: [],
+      entriesCount: 0,
       count: this.$store.state.pageSize,
     }
   },

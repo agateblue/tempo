@@ -7,7 +7,7 @@
         <span class="color-preview" :style="`background: ${values[v.id]}`"></span>
       </div>
     </div>
-    <button type="reset" @click.prevent="$store.commit('resetTheme')" class="link">Reset to defaults</button>
+    <button type="reset" @click.prevent="$store.dispatch('setTheme', null)" class="link">Reset to defaults</button>
     <input class="right floated" type="submit" value="Apply">
   </form>
 </template>
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     submit () {
-      this.$store.commit('theme', this.values)
+      this.$store.dispatch('setTheme', this.values)
     }
   },
   watch: {

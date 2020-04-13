@@ -18,6 +18,15 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+    "$store.state.lastSync": {
+      async handler () {
+        let t = await this.$store.state.db.get('theme')
+        if (t && t.theme) {
+          await this.$store.dispatch('setTheme', t.theme)
+        }
+      },
+      immediate: true,
     }
   }
 }

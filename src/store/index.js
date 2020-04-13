@@ -189,8 +189,24 @@ const store = new Vuex.Store({
         })
         commit('syncHandler', syncHandler)
       }
-
     },
+    async setTheme ({state, commit}, theme) {
+      if (theme) {
+        commit('theme', theme)
+      } else {
+        commit('resetTheme')
+      }
+      let existing = await state.db.get('theme')
+      let data = {
+        _id: 'theme',
+        theme: theme,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    }
   },
   modules: {
   }
