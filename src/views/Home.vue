@@ -35,7 +35,11 @@
           :chart-data="moodData">
         </heatmap>
       </aside>
-      <entry class="attached widget" v-for="entry in shownEntries" :entry="entry" :key="entry._id" @delete="handleDelete"></entry>
+      <entry
+        :class="[{attached: idx != shownEntries.length - 1}, 'widget']"
+        v-for="(entry, idx) in shownEntries"
+        :entry="entry" :key="entry._id"
+        @delete="handleDelete"></entry>
       <p v-if="shownEntries.length < entries.length" class="center aligned">
         <button @click.prevent="count += $store.state.pageSize">Show more</button>
       </p>
