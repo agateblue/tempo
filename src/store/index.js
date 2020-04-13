@@ -7,6 +7,7 @@ PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
 
 Vue.use(Vuex)
+import {isEqual} from 'lodash'
 
 const version = 1
 const cssVars = [
@@ -201,6 +202,9 @@ const store = new Vuex.Store({
         existing = await state.db.get('theme')
       } catch {
         console.debug('No existing theme')
+      }
+      if (existing && isEqual(existing, theme)) {
+        return
       }
       let data = {
         _id: 'theme',
