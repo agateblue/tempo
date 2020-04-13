@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import VueShowdown from 'vue-showdown'
 import VModal from 'vue-js-modal'
+require('flatpickr/dist/flatpickr.css')
 
 Vue.use(VModal)
 Vue.config.productionTip = false

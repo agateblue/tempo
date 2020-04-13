@@ -143,7 +143,7 @@ const store = new Vuex.Store({
       }
       state.db = new PouchDB('db')
       state.db.createIndex({
-        index: {fields: ['type']}
+        index: {fields: ['date', 'type']}
       })
     }
   },

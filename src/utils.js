@@ -33,9 +33,13 @@ export function parseTags (text) {
 }
 
 export function insertTagMarkup (text) {
-  return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-    return ` <router-link :to="{name: 'Home', query: {q: '${m2}'}}">${m2}</router-link>`
-  })
+  try {
+    return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
+      return ` <router-link :to="{name: 'Home', query: {q: '${m2}'}}">${m2}</router-link>`
+    })
+  } catch {
+    return ''
+  }
 }
 
 export function getNewEntryData(text) {

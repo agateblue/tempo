@@ -8,8 +8,8 @@
       <entry-form
         v-if="editing"
         :show-delete="true"
-        @input="update"
-        :value="currentEntry.text"
+        :entry="currentEntry"
+        @updated="update"
         :name="`how-${currentEntry._id}`">
       </entry-form>
 
@@ -29,7 +29,7 @@
   </article>
 </template>
 <script>
-import {insertTagMarkup, getNewEntryData} from '@/utils'
+import {insertTagMarkup} from '@/utils'
 import EntryForm from '@/components/EntryForm.vue'
 
 export default {
@@ -56,15 +56,10 @@ export default {
     }
   },
   methods: {
-    async update (text) {
-      let data = {
-        ...getNewEntryData(text),
-        _rev: this.currentEntry._rev,
-        _id: this.currentEntry._id,
-        date: this.currentEntry.date || (new Date ()).toISOString(),
-      }
-      this.currentEntry = await this.$store.dispatch('updateEntry', data)
+    async update (e) {
+      this.currentEntry = e
       this.editing = false
+      this.$emit('updated', e)
     }
   }
 }
