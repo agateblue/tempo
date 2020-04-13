@@ -13,7 +13,7 @@
         <h2>
           <label for="how">How do you feel?</label>
         </h2>
-        <entry-form @input="addNew" />
+        <entry-form @created="search" />
       </aside>
       <aside v-if="entriesCount" :class="[{attached: query}, 'widget']">
         <form @submit.prevent="submitSearch" class="inline">
@@ -39,6 +39,7 @@
         :class="[{attached: idx != shownEntries.length - 1}, 'widget']"
         v-for="(entry, idx) in shownEntries"
         :entry="entry" :key="entry._id"
+        @updated="search"
         @delete="handleDelete"></entry>
       <p v-if="shownEntries.length < entries.length" class="center aligned">
         <button @click.prevent="count += $store.state.pageSize">Show more</button>
@@ -60,7 +61,7 @@ import Entry from '@/components/Entry.vue'
 import Heatmap from '@/components/Heatmap.vue'
 
 
-import {getNewEntryData, parseQuery, matchTokens} from '@/utils'
+import {parseQuery, matchTokens} from '@/utils'
 
 export default {
   props: {
@@ -142,21 +143,13 @@ ${e.text}
         this.$router.push({name: 'Home', query: {q: `@${day}` }})
       }
     },
-    async addNew (text) {
-      let data = {
-        ...getNewEntryData(text),
-        date: (new Date ()).toISOString(),
-      }
-      data._id = data.date
-      await this.$store.dispatch('addEntry', data)
-      await this.search()
-    },
     async getEntries () {
       let result = await this.$store.state.db.find({
         selector: {
           type: 'entry',
+          date: { $gt: 0 }
         },
-        sort: [{"_id": "desc"}]
+        sort: [{"date": "desc"}]
       })
       return result.docs
     },

@@ -232,16 +232,12 @@ export default {
         delete e._rev
       })
       let result = await this.$store.state.db.bulkDocs(entries)
-      console.log(result)
       this.importedEntries = result.filter((e) => {
         return e.ok
       }).length
       this.failedEntries = result.filter((e) => {
         return !e.ok
       }).length
-      console.log(this.importedEntries, this.failedEntries)
-
-
     },
     deleteConfirm () {
       if (confirm("This will remove all your notes. This action is irreversible.")) {

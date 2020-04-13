@@ -55,6 +55,9 @@ body {
   color: var(--main-text-color);
   font-size: 110%;
   line-height: 1.5;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 body .v--modal {
   background-color: var(--modal-bg);
@@ -86,11 +89,6 @@ button.secondary, input[type="submit"].secondary {
   box-shadow: none;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 main {
   margin: 0 auto;
 }
@@ -141,9 +139,16 @@ main > section {
   max-width: 500px;
 }
 
-input[type="text"], textarea, input[type="url"], input[type="password"] {
+input[type="text"],
+textarea,
+input[type="url"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+body .flatpickr-time input,
+body .flatpickr-time input:hover,
+body .flatpickr-time input:focus {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  width: 100%;
   margin-bottom: 1em;
   background-color: var(--secondary-bg-color);
   color: var(--main-text-color);
@@ -153,11 +158,28 @@ input[type="text"], textarea, input[type="url"], input[type="password"] {
   border: var(--border);
   opacity: 0.7;
 }
-input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus {
+input[type="text"], textarea, input[type="url"], input[type="password"] {
+  width: 100%;
+}
+
+input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus, body .flatpickr-time input:focus {
   opacity: 1;
   border: 1px solid var(--accent-color);
 }
-
+label {
+  display: block;
+}
+.inline, input[type="text"].inline {
+  display: inline-block;
+  width: auto;
+}
+label.inline {
+  margin-right: 0.5em;
+}
+.inline.field {
+  display: inline-block;
+  margin-right: 0.5em;
+}
 textarea {
   display: block;
   padding: 0.5em;
@@ -320,5 +342,54 @@ svg {
 h3 span.right.floated {
   font-size: 0.7em;
   font-weight: normal;
+}
+body .flatpickr-calendar {
+  background: var(--secondary-bg-color);
+}
+body span.flatpickr-weekday,
+body .flatpickr-months .flatpickr-month,
+body .flatpickr-time .flatpickr-time-separator,
+body .flatpickr-time .flatpickr-am-pm,
+body .flatpickr-months .flatpickr-prev-month,
+body .flatpickr-months .flatpickr-next-month {
+  color: var(--main-text-color);
+  fill: var(--main-text-color);
+}
+body .flatpickr-day {
+  background: var(--neutral-color);
+  color: var(--main-text-color);
+  margin-bottom: 0.5em;
+}
+
+body .flatpickr-day.nextMonthDay,
+body .flatpickr-day.prevMonthDay {
+  color: var(--main-text-color);
+  background: var(--neutral-color);
+  opacity: 0.4;
+
+}
+body .flatpickr-day.selected, body .flatpickr-day.selected:hover {
+  background: var(--accent-color) !important;
+  border: none;
+}
+body .flatpickr-day:hover, body .flatpickr-day:focus  {
+  background: var(--accent-color) !important;
+  border: none;
+  opacity: 0.8;
+}
+body .numInputWrapper span {
+  border-color: var(--main-text-color);
+}
+body .flatpickr-time .numInputWrapper span.arrowUp::after {
+  border-bottom-color: var(--main-text-color);
+}
+body .flatpickr-time .numInputWrapper span.arrowDown::after {
+  border-top-color: var(--main-text-color);
+}
+body .flatpickr-current-month .numInputWrapper span.arrowUp::after {
+  border-bottom-color: var(--main-text-color);
+}
+body .flatpickr-current-month .numInputWrapper span.arrowDown::after {
+  border-top-color: var(--main-text-color);
 }
 </style>
