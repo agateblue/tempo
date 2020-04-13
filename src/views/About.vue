@@ -19,7 +19,7 @@
 
       </ul>
 
-      <button @click.prevent="$modal.show('sync')">Setup sync…</button>
+      <button class="secondary" @click.prevent="$modal.show('sync')">Setup sync…</button>
       <modal name="sync" height="auto" :scrollable="true">
         <a href="" class="right floated" @click.prevent="$modal.hide('sync')">Close</a>
         <form>
@@ -41,7 +41,7 @@
         </form>
       </modal>
 
-      <button @click.prevent="$modal.show('import')">Import entries…</button>
+      <button class="secondary" @click.prevent="$modal.show('import')">Import entries…</button>
       <modal name="import">
         <a href="" class="right floated" @click.prevent="$modal.hide('import')">Close</a>
         <form>
@@ -53,13 +53,13 @@
           <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
         </form>
       </modal>
-      <button @click.prevent="$modal.show('theme')">Theming…</button>
+      <button class="secondary" @click.prevent="$modal.show('theme')">Theming…</button>
       <modal name="theme" height="auto">
         <a href="" class="right floated" @click.prevent="$modal.hide('theme')">Close</a>
           <p>Customize Tempo's look and feel</p>
           <theme-form></theme-form>
       </modal>
-      <button @click="deleteConfirm">Delete my data…</button>
+      <button class="secondary" @click="deleteConfirm">Delete my data…</button>
     </aside>
     <section class="widget">
       <h2>
