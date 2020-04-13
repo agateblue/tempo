@@ -196,7 +196,12 @@ const store = new Vuex.Store({
       } else {
         commit('resetTheme')
       }
-      let existing = await state.db.get('theme')
+      let existing
+      try {
+        existing = await state.db.get('theme')
+      } catch {
+        console.debug('No existing theme')
+      }
       let data = {
         _id: 'theme',
         theme: theme,
