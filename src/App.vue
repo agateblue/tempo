@@ -160,6 +160,7 @@ body .flatpickr-time input:focus {
 }
 input[type="text"], textarea, input[type="url"], input[type="password"] {
   width: 100%;
+  max-width: 100%;
 }
 
 input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus, body .flatpickr-time input:focus {
