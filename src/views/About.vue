@@ -104,6 +104,7 @@
       <ul>
         <li><code>~</code>: indicate mixed feelings</li>
         <li><code>?</code>: indicate you don't know how you feel</li>
+        <li><code>!</code>: indicate that something is important</li>
       </ul>
       <p>
         You can freely mix any and all these tags in the same note, and use different moodtags with the same words. For instance:
@@ -174,7 +175,7 @@
             <code>+</code>
           </td>
           <td>
-            Find all entries with a positive moodtag (also works with <code>-</code>, <code>?</code> and <code>~</code>)
+            Find all entries with a positive moodtag (also works with <code>-</code>, <code>?</code>, <code>!</code> and <code>~</code>)
           </td>
         </tr>
       </table>
