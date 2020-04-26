@@ -141,6 +141,7 @@ main > section {
 
 input[type="text"],
 textarea,
+select,
 input[type="url"],
 input[type="password"],
 input[type="date"],
@@ -149,7 +150,6 @@ body .flatpickr-time input,
 body .flatpickr-time input:hover,
 body .flatpickr-time input:focus {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  margin-bottom: 1em;
   background-color: var(--secondary-bg-color);
   color: var(--main-text-color);
   border-radius: var(--border-radius);
@@ -158,12 +158,38 @@ body .flatpickr-time input:focus {
   border: var(--border);
   opacity: 0.7;
 }
+input[type="text"],
+textarea,
+input[type="url"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+body .flatpickr-time input,
+body .flatpickr-time input:hover,
+body .flatpickr-time input:focus {
+  margin-bottom: 1em;
+}
 input[type="text"], textarea, input[type="url"], input[type="password"] {
   width: 100%;
   max-width: 100%;
 }
 
-input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus, body .flatpickr-time input:focus {
+input.compact {
+  margin: 0;
+}
+.wrapper {
+  position: relative;
+}
+.clearing.link {
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  position: absolute;
+  right: 0.5em;
+  top: 0.1em;
+  margin-right: 0 !important;
+}
+input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus, body .flatpickr-time input:focus, select:focus {
   opacity: 1;
   border: 1px solid var(--accent-color);
 }
@@ -257,6 +283,18 @@ a:hover, .link:hover {
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
   border-bottom: none;
+}
+.controls.widget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.entry-content *:first-child {
+  margin-top: 0;
+}
+
+.entry-content *:last-child {
+  margin-bottom: 0;
 }
 .right.floated {
   float: right;
