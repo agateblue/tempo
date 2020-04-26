@@ -3,7 +3,6 @@
     <section>
       <aside class="center aligned attached widget">
         <router-link :to="{name: 'About'}">Help and settings</router-link> ·
-        <a href="" @click.prevent="$modal.show('export')">Export…</a> ·
         <a href="" @click.stop.prevent="$store.commit('toggleShowDailyMood')">
           <template v-if="$store.state.showDailyMood">Hide daily mood</template>
           <template v-else>Show daily mood</template>
@@ -24,22 +23,12 @@
           <span v-else-if="isSyncing">Syncing…</span>
         </template>
       </aside>
-      <aside class="attached widget">
+      <aside class="widget">
         <h2>
           <label for="how">How do you feel?</label>
         </h2>
-        <entry-form @created="search" />
+        <entry-form @created="clearSearch();search()" />
       </aside>
-      <aside v-if="entriesCount" :class="[{attached: query}, 'widget']">
-        <form @submit.prevent="submitSearch" class="inline">
-          <label for="search" class="hidden">Search</label>
-          <input type="text" ref="search" :value="query" name="search" id="search" placeholder="#work +">
-          <input type="submit" class="right floated secondary" value="Search">
-        </form>
-      </aside>
-      <div v-if="query" :class="[{attached: $store.state.showDailyMood}, 'center aligned widget']">
-        {{ entries.length }} matching entries · <button class="link" @click="clearSearch">Clear search</button>
-      </div>
       <aside class="widget" v-if="$store.state.showDailyMood">
         <h3>
           Daily mood
@@ -50,9 +39,31 @@
           :chart-data="moodData">
         </heatmap>
       </aside>
+
+      <aside v-if="entriesCount" :class="[{attached: true}, 'controls widget']">
+        <form @submit.prevent="submitSearch" class="inline">
+          <label for="search" class="hidden">Search</label>
+          <div class="wrapper">
+            <input type="text" ref="search" :value="query" class="compact" name="search" id="search" placeholder="#work +">
+            <a v-if="query" href="" class="clearing link" title="Clear search" @click.prevent="clearSearch();$refs.search.focus()">×</a>
+          </div>
+          <input type="submit" class="secondary" value="Search">
+        </form>
+        <a href="" class="link" @click.prevent="showAdditionalControls = !showAdditionalControls">More…</a>
+      </aside>
+      <aside v-if="showAdditionalControls" class="controls attached widget">
+        <form class="inline">
+          <label for="sort">Sort</label>
+          <select name="sort" id="sort" v-model="sort">
+            <option :value="{date: 'desc'}">Newest first</option>
+            <option :value="{date: 'asc'}">Oldest first</option>
+          </select>
+        </form>
+        <a v-if="entries.length > 0" href="" class="link" @click.prevent="$modal.show('export')">Export {{ entries.length }} entries…</a>
+      </aside>
       <entry
-        :class="[{attached: idx != shownEntries.length - 1}, 'widget']"
-        v-for="(entry, idx) in shownEntries"
+        class="attached widget"
+        v-for="entry in shownEntries"
         :entry="entry" :key="entry._id"
         @updated="search"
         @delete="handleDelete"></entry>
@@ -94,6 +105,8 @@ export default {
       count: this.$store.state.pageSize,
       isSyncing: false,
       syncError: null,
+      sort: {"date": "desc"},
+      showAdditionalControls: false,
     }
   },
   async created () {
@@ -166,7 +179,7 @@ ${e.text}
           type: 'entry',
           date: { $gt: 0 }
         },
-        sort: [{"date": "desc"}]
+        sort: [this.sort]
       })
       return result.docs
     },
@@ -225,6 +238,9 @@ ${e.text}
   },
   watch: {
     async query () {
+      await this.search()
+    },
+    async sort () {
       await this.search()
     },
     "$store.state.lastSync": {
