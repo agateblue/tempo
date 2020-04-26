@@ -191,6 +191,15 @@ const store = new Vuex.Store({
         commit('syncHandler', syncHandler)
       }
     },
+    async forceSync({state}) {
+      if (!state.couchDbUrl) {
+        return
+      }
+      console.log('Forcing sync…')
+      let remoteDb = new PouchDB(state.couchDbUrl)
+      await remoteDb.logIn(state.couchDbUsername, state.couchDbPassword)
+      return await state.db.sync(remoteDb)
+    },
     async setTheme ({state, commit}, theme) {
       if (theme) {
         commit('theme', theme)

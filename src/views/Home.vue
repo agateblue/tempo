@@ -8,6 +8,21 @@
           <template v-if="$store.state.showDailyMood">Hide daily mood</template>
           <template v-else>Show daily mood</template>
         </a>
+        <template v-if="$store.state.couchDbUrl">
+          ·
+          <a href="" @click.stop.prevent="forceSync" v-if="!isSyncing">
+            Sync
+          </a>
+          <template v-if="!isSyncing && syncError">
+            Sync error:
+            <span v-if="syncError.name">{{ syncError.name }}</span>
+            <span v-else>Unknown</span>
+          </template>
+          <span v-else-if="syncError === false">
+            Sync complete
+          </span>
+          <span v-else-if="isSyncing">Syncing…</span>
+        </template>
       </aside>
       <aside class="attached widget">
         <h2>
@@ -77,6 +92,8 @@ export default {
       entries: [],
       entriesCount: 0,
       count: this.$store.state.pageSize,
+      isSyncing: false,
+      syncError: null,
     }
   },
   async created () {
@@ -186,6 +203,24 @@ ${e.text}
         allEntries,
         parseQuery(this.query),
       )
+    },
+    async forceSync() {
+      this.isSyncing = true
+      this.syncError = null
+      try {
+        this.result = await this.$store.dispatch('forceSync')
+      } catch (e) {
+        this.syncError = e
+      }
+      if (!this.syncError) {
+        this.syncError = false
+      }
+      setTimeout(() => {
+        this.isSyncing = false
+      }, 2000);
+      setTimeout(() => {
+        this.syncError = null
+      }, 2000);
     }
   },
   watch: {
