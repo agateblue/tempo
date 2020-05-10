@@ -258,8 +258,8 @@ export default {
         },
         height: 300,
         type: this.chartType,
-        colors: [this.$store.getters['cssVarValue']('accent-color')],
         maxSlices: 7,
+        colors: ["magenta", "orange"]
       }
     }
   },

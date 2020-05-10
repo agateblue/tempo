@@ -40,7 +40,8 @@ export default {
 </script>
 <style>
 :root {
-  --border: 1px solid rgba(125, 125, 125, 0.2);
+  --border-color:rgba(125, 125, 125, 0.2);
+  --border: 1px solid var(--border-color);
   --border-radius: 3px;
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
 }
@@ -411,6 +412,12 @@ td, th {
 }
 .line-vertical {
   display: none;
+}
+.line-horizontal {
+  stroke: var(--border-color) !important;
+}
+.chart .chart-container .axis, .chart .chart-container .chart-label, .chart .chart-container .title {
+  fill: var(--main-text-color);
 }
 .row {
   display: flex;
