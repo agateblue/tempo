@@ -61,25 +61,51 @@
         </form>
         <a v-if="entries.length > 0" href="" class="link" @click.prevent="$modal.show('export')">Export {{ entries.length }} entries…</a>
       </aside>
-      <aside v-if="showAdditionalControls" class="attached widget">
+      <aside v-if="showAdditionalControls" class="widget">
         <form>
-          <label for="sort">Query</label>
-          <textarea id="query" name="query" v-model="dataQuery"></textarea>
+          <div class="row">
+            <div class="column">
+              <label for="save-queries">Saved queries</label>
+              <select name="saved-queries" id="saved-queries" @input="updateQuery">
+                <option :value="idx" v-for="(dq, idx) in defaultDataQueries" :key="idx">{{ dq.label }}</option>
+              </select>
+            </div>
+            <div class="column">
+              <label for="chart-type">Visualization</label>
+              <select id="chart-type" name="chart-type" v-model="chartType">
+                <option value="line">Plot line</option>
+                <option value="pie">Pie chart</option>
+                <option value="percentage">Percentage bar</option>
+                <option value="table">Table</option>
+                <option value="json">JSON</option>
+              </select>
+            </div>
+          </div>
+          <hr>
+          <label for="query">Query</label>
+          <textarea id="query" name="query" v-model="dataQuery" rows="3"></textarea>
         </form>
-        <table v-if="queriedData && queriedData[0]">
-          <thead>
-            <tr>
-              <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, idx) in queriedData" :key="idx">
-              <td v-for="field in dataQueryFields" :key="field">
-                {{ row[field] }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <template v-if="queriedData && queriedData[0]">
+          <table v-if="chartType === 'table'">
+            <thead>
+              <tr>
+                <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, idx) in queriedData" :key="idx">
+                <td v-for="field in dataQueryFields" :key="field">
+                  {{ row[field] }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <textarea v-else-if="chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
+          <chart
+            v-else
+            :options="chartOptions">
+          </chart>
+        </template>
       </aside>
       <entry
         class="attached widget"
@@ -104,10 +130,16 @@
 <script>
 import EntryForm from '@/components/EntryForm.vue'
 import Entry from '@/components/Entry.vue'
-import Heatmap from '@/components/Heatmap.vue'
-import alasql from 'alasql'
+import debounce from 'lodash/debounce'
 
 import {parseQuery, matchTokens} from '@/utils'
+function getWeekNumber (d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+  var dayNum = d.getUTCDay() || 7
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum)
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1))
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+}
 
 export default {
   props: {
@@ -116,7 +148,8 @@ export default {
   components: {
     EntryForm,
     Entry,
-    Heatmap,
+    Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
+    Heatmap:  () => import(/* webpackChunkName: "visualization" */ "@/components/Heatmap.vue"),
   },
   data () {
     return {
@@ -125,10 +158,49 @@ export default {
       count: this.$store.state.pageSize,
       isSyncing: false,
       syncError: null,
-      dataQuery: 'SELECT mood, count(mood) FROM ? GROUP BY mood ORDER BY mood DESC',
+      dataQuery: null,
       queriedData: null,
       sort: {"date": "desc"},
+      chartType: "line",
       showAdditionalControls: false,
+      alasql: null,
+      defaultDataQueries: [
+        {
+          label: "Mood by day",
+          query: 'SELECT date, sum(mood) as mood FROM ? GROUP BY date ORDER BY date DESC',
+          chartType: 'line',
+        },
+        {
+          label: "Mood instability",
+          query: 'SELECT date, STDDEV(mood) as moodInstability FROM ? GROUP BY date ORDER BY date DESC',
+          chartType: 'line',
+        },
+        {
+          label: "Entries per week",
+          query: 'SELECT week, count(*) as entries FROM ? GROUP BY week ORDER BY week DESC',
+          chartType: 'table',
+        },
+        {
+          label: "Average entry length",
+          query: 'SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC',
+          chartType: 'line',
+        },
+        {
+          label: "Mood for 'work' tag",
+          query: 'SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood',
+          chartType: 'percentage',
+        },
+        {
+          label: "Sleep quality",
+          query: 'SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC',
+          chartType: 'line',
+        },
+        {
+          label: "Predominant moods",
+          query: 'SELECT mood, count(*) as entries FROM ? GROUP BY mood',
+          chartType: 'percentage',
+        },
+      ]
     }
   },
   async created () {
@@ -151,33 +223,57 @@ export default {
       return this.entries.slice(0, this.count)
     },
     queryableEntries () {
-      let data = {
-        entries: [],
-        tags: [],
-      }
+      let data = []
       this.entries.forEach((e) => {
+        let fullDate = new Date(e.date)
+        let weekNumber = getWeekNumber(fullDate)
+        let year = fullDate.getFullYear()
         let entry = {
           text: e.text,
           mood: e.mood,
-          tags: e.tags,
-          date: new Date(e.date),
+          fullDate: fullDate,
+          date: fullDate.toISOString().split('T')[0],
+          year: year,
+          month: fullDate.getMonth() + 1,
+          day: fullDate.getDate(),
+          weekday: fullDate.getDay() + 1,
+          weeknumber: weekNumber,
+          week: `${year}-${weekNumber}`,
+          tags: {}
         }
-        data.entries.push(entry)
         e.tags.forEach((t) => {
-
-          data.tags.push({
+          entry.tags[t.id] = {
             ...t,
-            entry: entry
-          })
+            present: true
+          }
         })
+        data.push(entry)
       })
-      return data.entries
+      return data
     },
     dataQueryFields () {
       if (this.queriedData && this.queriedData[0]) {
         return Object.keys(this.queriedData[0])
       }
       return []
+    },
+    chartOptions () {
+      return {
+        data: {
+          datasets: this.getDatasets(this.queriedData),
+          labels: this.getLabels(this.queriedData)
+        },
+        axisOptions: {
+          xIsSeries: true,
+        },
+        lineOptions: {
+          hideDots: 1,
+        },
+        height: 300,
+        type: this.chartType,
+        colors: [this.$store.getters['cssVarValue']('accent-color')],
+        maxSlices: 7,
+      }
     }
   },
   methods: {
@@ -290,8 +386,37 @@ ${e.text}
       if (!query) {
         return null
       }
-      return await alasql(this.dataQuery,[this.queryableEntries]);
+      if (!this.alasql) {
+        this.alasql = (await import(/* webpackChunkName: "visualization" */ "alasql")).default
+      }
+      return await this.alasql(this.dataQuery,[this.queryableEntries]);
+    },
+    getLabels (data) {
+      let firstField = Object.keys(data[0])[0]
+      let labels = data.map((r) => {
+        return r[firstField]
+      })
+      labels.reverse()
+      return labels
+    },
 
+    getDatasets (data) {
+      let allFields = Object.keys(data[0]).slice(1)
+      let datasets = []
+      allFields.forEach(f => {
+        let ds = {
+          values: data.map(r => { return r[f] }),
+          name: f,
+        }
+        ds.values.reverse()
+        datasets.push(ds)
+      })
+      return datasets
+    },
+    updateQuery (event) {
+      let conf = this.defaultDataQueries[event.target.value]
+      this.dataQuery = conf.query
+      this.chartType = conf.chartType
     }
   },
   watch: {
@@ -307,15 +432,36 @@ ${e.text}
       }
     },
     dataQuery: {
-      immediate: true,
-      handler: async function (v) {
-        this.queriedData = await this.queryData(v)
-      }
+      handler: debounce(
+        async function (v) {
+          try {
+            this.queriedData = await this.queryData(v)
+          } catch (e) {
+            console.log('SQL Error', e)
+            this.queriedData = null
+          }
+
+        },
+        500
+      )
     },
     entries: {
       deep: true,
       handler: async function () {
-        this.queriedData = await this.queryData(this.queryData)
+        try {
+          this.queriedData = await this.queryData(this.dataQuery)
+        } catch (e) {
+          console.log('SQL Error', e)
+          this.queriedData = null
+        }
+
+      }
+    },
+    showAdditionalControls (v) {
+      if (v) {
+        this.dataQuery = this.defaultDataQueries[0].query
+      } else {
+        this.dataQuery = null
       }
     }
   },

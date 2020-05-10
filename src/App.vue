@@ -440,4 +440,13 @@ td, th {
   border: var(--border);
   padding: 0.5em;
 }
+.line-vertical {
+  display: none;
+}
+.row {
+  display: flex;
+}
+.row > .column {
+  flex-grow: 1;
+}
 </style>
