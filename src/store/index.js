@@ -37,40 +37,10 @@ const cssVars = [
     label: 'Secondary background color',
   },
   {
-    id: "very-negative-color",
-    default: '#E35F75',
-    label: 'Very negative mood color',
-  },
-  {
     id: "accent-color",
     default: '#FF65A0',
     label: 'Accent color used for links and tags',
-  },
-  {
-    id: "negative-color",
-    default: '#F3BAC3',
-    label: 'Negative mood color',
-  },
-  {
-    id: "neutral-color",
-    default: 'rgba(255, 255, 255, 0.1)',
-    label: 'Neutral mood color',
-  },
-  {
-    id: "positive-color",
-    default: '#79C698',
-    label: 'Positive mood color',
-  },
-  {
-    id: "very-positive-color",
-    default: '#398557',
-    label: 'Very positive mood color',
-  },
-  {
-    id: "graph-label-color",
-    default: 'black',
-    label: 'Mood widget text color',
-  },
+  }
 ]
 let theme = {}
 cssVars.forEach(v => {
@@ -85,7 +55,6 @@ const store = new Vuex.Store({
     couchDbUsername: null,
     couchDbPassword: null,
     lastSync: new Date(),
-    showDailyMood: false,
     theme,
     cssVars,
     version,
@@ -94,9 +63,6 @@ const store = new Vuex.Store({
     handleSync (state, info) {
       console.log('Received sync event', info)
       state.lastSync = new Date()
-    },
-    toggleShowDailyMood (state) {
-      state.showDailyMood = !state.showDailyMood
     },
     syncHandler (state, newValue) {
       if (state.syncHandler) {
@@ -238,7 +204,6 @@ store.subscribe((mutation, state) => {
 		version: state.version,
     pageSize: state.pageSize,
     theme: state.theme,
-    showDailyMood: state.showDailyMood,
 	};
 
   console.log('Updating localstorage cache…')

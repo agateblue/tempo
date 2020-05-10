@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "alasql": "^0.6.0",
-    "cal-heatmap": "^3.6.2",
     "core-js": "^3.6.4",
     "frappe-charts": "^1.4.1",
     "pouchdb": "^7.2.1",
