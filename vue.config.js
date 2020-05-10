@@ -1,4 +1,11 @@
+var IgnorePlugin =  require("webpack").IgnorePlugin;
+
 module.exports = {
+  configureWebpack: {
+    plugins: [
+      new IgnorePlugin(/(^fs$|cptable|jszip|xlsx|^es6-promise$|^net$|^tls$|^forever-agent$|^tough-cookie$|cpexcel|^path$|^request$|react-native|^vertx$)/)
+    ],
+  },
   runtimeCompiler: true,
   chainWebpack: config => {
     config

@@ -431,4 +431,13 @@ body .flatpickr-current-month .numInputWrapper span.arrowUp::after {
 body .flatpickr-current-month .numInputWrapper span.arrowDown::after {
   border-top-color: var(--main-text-color);
 }
+table, thead, tbody {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+td, th {
+  border: var(--border);
+  padding: 0.5em;
+}
 </style>

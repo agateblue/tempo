@@ -61,6 +61,26 @@
         </form>
         <a v-if="entries.length > 0" href="" class="link" @click.prevent="$modal.show('export')">Export {{ entries.length }} entries…</a>
       </aside>
+      <aside v-if="showAdditionalControls" class="attached widget">
+        <form>
+          <label for="sort">Query</label>
+          <textarea id="query" name="query" v-model="dataQuery"></textarea>
+        </form>
+        <table v-if="queriedData && queriedData[0]">
+          <thead>
+            <tr>
+              <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, idx) in queriedData" :key="idx">
+              <td v-for="field in dataQueryFields" :key="field">
+                {{ row[field] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </aside>
       <entry
         class="attached widget"
         v-for="entry in shownEntries"
@@ -85,7 +105,7 @@
 import EntryForm from '@/components/EntryForm.vue'
 import Entry from '@/components/Entry.vue'
 import Heatmap from '@/components/Heatmap.vue'
-
+import alasql from 'alasql'
 
 import {parseQuery, matchTokens} from '@/utils'
 
@@ -105,6 +125,8 @@ export default {
       count: this.$store.state.pageSize,
       isSyncing: false,
       syncError: null,
+      dataQuery: 'SELECT mood, count(mood) FROM ? GROUP BY mood ORDER BY mood DESC',
+      queriedData: null,
       sort: {"date": "desc"},
       showAdditionalControls: false,
     }
@@ -127,6 +149,35 @@ export default {
     },
     shownEntries () {
       return this.entries.slice(0, this.count)
+    },
+    queryableEntries () {
+      let data = {
+        entries: [],
+        tags: [],
+      }
+      this.entries.forEach((e) => {
+        let entry = {
+          text: e.text,
+          mood: e.mood,
+          tags: e.tags,
+          date: new Date(e.date),
+        }
+        data.entries.push(entry)
+        e.tags.forEach((t) => {
+
+          data.tags.push({
+            ...t,
+            entry: entry
+          })
+        })
+      })
+      return data.entries
+    },
+    dataQueryFields () {
+      if (this.queriedData && this.queriedData[0]) {
+        return Object.keys(this.queriedData[0])
+      }
+      return []
     }
   },
   methods: {
@@ -234,6 +285,13 @@ ${e.text}
       setTimeout(() => {
         this.syncError = null
       }, 2000);
+    },
+    async queryData (query) {
+      if (!query) {
+        return null
+      }
+      return await alasql(this.dataQuery,[this.queryableEntries]);
+
     }
   },
   watch: {
@@ -246,6 +304,18 @@ ${e.text}
     "$store.state.lastSync": {
       async handler () {
         await this.search()
+      }
+    },
+    dataQuery: {
+      immediate: true,
+      handler: async function (v) {
+        this.queriedData = await this.queryData(v)
+      }
+    },
+    entries: {
+      deep: true,
+      handler: async function () {
+        this.queriedData = await this.queryData(this.queryData)
       }
     }
   },
