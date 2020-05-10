@@ -307,40 +307,6 @@ h1, h2 {
   margin: 0.5em 0;
 }
 
-.cal-heatmap-container .q1 {
-  fill: var(--very-negative-color) !important;
-}
-.cal-heatmap-container .q2 {
-  fill: var(--negative-color) !important;
-}
-.cal-heatmap-container .q3 {
-  fill: var(--main-text-color) !important;
-}
-.cal-heatmap-container .q4 {
-  fill: var(--positive-color) !important;
-}
-.cal-heatmap-container .q5 {
-  fill: var(--very-positive-color) !important;
-}
-.cal-heatmap-container .graph-label {
-  font-size: 1em !important;
-  font-weight: bold;
-  fill: var(--neutral-color);
-}
-
-.cal-heatmap-container .subdomain-text {
-  fill: var(--graph-label-color) !important;
-  font-size: 0.8em !important;
-}
-
-.cal-heatmap-container .graph, .cal-heatmap-container .graph-legend rect {
-  shape-rendering: auto !important;
-}
-.cal-heatmap-container rect.highlight-now {
-    stroke: var(--graph-label-color) !important;
-    shape-rendering: auto;
-    stroke-width: 2;
-}
 hr {
   border: none;
   display: block;
@@ -435,6 +401,9 @@ table, thead, tbody {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
+}
+table {
+  margin-bottom: 1em;
 }
 td, th {
   border: var(--border);

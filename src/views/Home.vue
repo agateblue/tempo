@@ -2,11 +2,7 @@
   <main>
     <section>
       <aside class="center aligned attached widget">
-        <router-link :to="{name: 'About'}">Help and settings</router-link> ·
-        <a href="" @click.stop.prevent="$store.commit('toggleShowDailyMood')">
-          <template v-if="$store.state.showDailyMood">Hide daily mood</template>
-          <template v-else>Show daily mood</template>
-        </a>
+        <router-link :to="{name: 'About'}">Help and settings</router-link>
         <template v-if="$store.state.couchDbUrl">
           ·
           <a href="" @click.stop.prevent="forceSync" v-if="!isSyncing">
@@ -29,17 +25,6 @@
         </h2>
         <entry-form @created="clearSearch();search()" />
       </aside>
-      <aside class="widget" v-if="$store.state.showDailyMood">
-        <h3>
-          Daily mood
-        </h3>
-        <heatmap
-          @selected-date="filterByDate"
-          :key="JSON.stringify(moodData)"
-          :chart-data="moodData">
-        </heatmap>
-      </aside>
-
       <aside v-if="entriesCount" :class="[{attached: true}, 'controls widget']">
         <form @submit.prevent="submitSearch" class="inline">
           <label for="search" class="hidden">Search</label>
@@ -62,16 +47,17 @@
         <a v-if="entries.length > 0" href="" class="link" @click.prevent="$modal.show('export')">Export {{ entries.length }} entries…</a>
       </aside>
       <aside v-if="showAdditionalControls" class="widget">
+        <h3>Visualization</h3>
         <form>
           <div class="row">
             <div class="column">
-              <label for="save-queries">Saved queries</label>
+              <label for="save-queries">Query</label>
               <select name="saved-queries" id="saved-queries" @input="updateQuery">
                 <option :value="idx" v-for="(dq, idx) in defaultDataQueries" :key="idx">{{ dq.label }}</option>
               </select>
             </div>
             <div class="column">
-              <label for="chart-type">Visualization</label>
+              <label for="chart-type">Output</label>
               <select id="chart-type" name="chart-type" v-model="chartType">
                 <option value="line">Plot line</option>
                 <option value="pie">Pie chart</option>
@@ -82,30 +68,30 @@
             </div>
           </div>
           <hr>
-          <label for="query">Query</label>
-          <textarea id="query" name="query" v-model="dataQuery" rows="3"></textarea>
+          <template v-if="queriedData && queriedData[0]">
+            <table v-if="chartType === 'table'">
+              <thead>
+                <tr>
+                  <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(row, idx) in queriedData" :key="idx">
+                  <td v-for="field in dataQueryFields" :key="field">
+                    {{ row[field] }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <textarea v-else-if="chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
+            <chart
+              v-else
+              :options="chartOptions">
+            </chart>
+          </template>
+          <label for="query">Raw query</label>
+          <textarea id="query" name="query" v-model="dataQuery" rows="2"></textarea>
         </form>
-        <template v-if="queriedData && queriedData[0]">
-          <table v-if="chartType === 'table'">
-            <thead>
-              <tr>
-                <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(row, idx) in queriedData" :key="idx">
-                <td v-for="field in dataQueryFields" :key="field">
-                  {{ row[field] }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <textarea v-else-if="chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
-          <chart
-            v-else
-            :options="chartOptions">
-          </chart>
-        </template>
       </aside>
       <entry
         class="attached widget"
@@ -149,7 +135,6 @@ export default {
     EntryForm,
     Entry,
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
-    Heatmap:  () => import(/* webpackChunkName: "visualization" */ "@/components/Heatmap.vue"),
   },
   data () {
     return {
@@ -162,27 +147,28 @@ export default {
       queriedData: null,
       sort: {"date": "desc"},
       chartType: "line",
+      chartTitle: "",
       showAdditionalControls: false,
       alasql: null,
       defaultDataQueries: [
         {
           label: "Mood by day",
-          query: 'SELECT date, sum(mood) as mood FROM ? GROUP BY date ORDER BY date DESC',
+          query: 'SELECT date, sum(mood) as mood FROM ? GROUP BY date ORDER BY date DESC LIMIT 30',
           chartType: 'line',
         },
         {
           label: "Mood instability",
-          query: 'SELECT date, STDDEV(mood) as moodInstability FROM ? GROUP BY date ORDER BY date DESC',
+          query: 'SELECT date, STDDEV(mood) as moodInstability FROM ? GROUP BY date ORDER BY date DESC LIMIT 30',
           chartType: 'line',
         },
         {
           label: "Entries per week",
-          query: 'SELECT week, count(*) as entries FROM ? GROUP BY week ORDER BY week DESC',
+          query: 'SELECT week, count(*) as entries FROM ? GROUP BY week ORDER BY week DESC LIMIT 16',
           chartType: 'table',
         },
         {
           label: "Average entry length",
-          query: 'SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC',
+          query: 'SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC LIMIT 30',
           chartType: 'line',
         },
         {
@@ -192,7 +178,7 @@ export default {
         },
         {
           label: "Sleep quality",
-          query: 'SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC',
+          query: 'SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC LIMIT 30',
           chartType: 'line',
         },
         {
@@ -261,8 +247,9 @@ export default {
       return {
         data: {
           datasets: this.getDatasets(this.queriedData),
-          labels: this.getLabels(this.queriedData)
+          labels: this.getLabels(this.queriedData),
         },
+        title: this.chartTitle,
         axisOptions: {
           xIsSeries: true,
         },
@@ -417,6 +404,7 @@ ${e.text}
       let conf = this.defaultDataQueries[event.target.value]
       this.dataQuery = conf.query
       this.chartType = conf.chartType
+      this.chartTitle = conf.label
     }
   },
   watch: {
@@ -460,8 +448,11 @@ ${e.text}
     showAdditionalControls (v) {
       if (v) {
         this.dataQuery = this.defaultDataQueries[0].query
+        this.chartTitle = this.defaultDataQueries[0].label
+        this.chartType = this.defaultDataQueries[0].chartType
       } else {
         this.dataQuery = null
+        this.chartTitle = null
       }
     }
   },
