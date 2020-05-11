@@ -5,13 +5,19 @@
         Settings
       </h1>
       <router-link :to="{name: 'Home'}">Go back</router-link>
+      <ul>
+        <li><a href="#theming">Theming</a></li>
+        <li><a href="#import">Import entries</a></li>
+        <li><a href="#sync">Sync</a></li>
+        <li><a href="#delete">Delete data</a></li>
+      </ul>
     </section>
-    <section class="widget">
+    <section id="theming" class="attached widget">
       <h2>Theming</h2>
       <p>Customize Tempo's look and feel</p>
       <theme-form></theme-form>
     </section>
-    <section class="widget">
+    <section id="import" class="attached widget">
       <h2>Import entries</h2>
       <form>
         <p>Import entries from a JSON file exported from another Tempo session.</p>
@@ -22,7 +28,7 @@
         <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
       </form>
     </section>
-    <section class="widget">
+    <section id="sync" class="attached widget">
       <h2>Syncing with other devices</h2>
       <p>Your diary can be synced with other devices using any <a href="https://couchdb.apache.org/">CouchDB server</a>. This is not provided as part of Tempo though, and you have to find or host one yourself.</p>
       <form>
@@ -43,7 +49,7 @@
       </form>
 
     </section>
-    <section class="widget">
+    <section id="delete" class="attached widget">
       <h2>Delete your data</h2>
       <p>Delete all your data from Tempo.</p>
       <button class="right floated" @click="deleteConfirm">Delete my data…</button>

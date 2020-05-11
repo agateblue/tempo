@@ -18,7 +18,7 @@
         <li><a href="#software">Powered by free and open-source software</a></li>
       </ul>
     </section>
-    <section class="widget">
+    <section class="attached widget">
       <h2>
         How does it work?
       </h2>
@@ -26,20 +26,20 @@
         Use Tempo as you would use a personnal log. Write notes when you feel like it, and use hashtags and moodtags to indicate how you feel.
       </p>
     </section>
-    <section id="private" class="widget">
+    <section id="private" class="attached widget">
       <h2>
         Where is the data stored?
       </h2>
       <p>The data never leaves your browser and isn't sent to any third-party or server. The only exception to that is when you enable (optional) syncing with other devices, through a CouchDB server of your choice.</p>
       <p>All your data can also be exported in JSON and Markdown format at any time.</p>
     </section>
-    <section id="offline" class="widget">
+    <section id="offline" class="attached widget">
       <h2>
         Does it work offline?
       </h2>
       <p>Yes! Tempo is a Progressive Web App (PWA) and can be accessed and used even without an internet connection.</p>
     </section>
-    <section class="widget">
+    <section class="attached widget">
       <h2>
         Hashtags
       </h2>
@@ -51,7 +51,7 @@
       </blockquote>
       <p>Hashtags can help you to categorize your notes and search them later.</p>
     </section>
-    <section id="mood-tracking" class="widget">
+    <section id="mood-tracking" class="attached widget">
       <h2>
         Moodtags
       </h2>
@@ -86,7 +86,7 @@
         Had a good sport session this morning, I'm <a href="">+tired</a> but happy.
       </blockquote>
     </section>
-    <section id="search" class="widget">
+    <section id="search" class="attached widget">
       <h2>
         Filtering notes
       </h2>
@@ -173,7 +173,7 @@
         </tr>
       </table>
     </section>
-    <section id="software" class="widget">
+    <section id="software" class="attached widget">
       <h2>
         Tempo is powered by free and open-source software
       </h2>
