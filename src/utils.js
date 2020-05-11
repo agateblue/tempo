@@ -1,3 +1,4 @@
+import yaml from 'yamljs'
 
 const signToMood = {
   '+': 1,
@@ -14,7 +15,7 @@ const signToType = {
   '?': 'feeling',
   '#': 'tag',
 }
-const tagRegex = /(^|\s)((#|\+{1,3}|-{1,3}|~|\?|!)([A-zÀ-ÿ\d-]+))/gi
+const tagRegex = /(^|\s)((?!---)(#|\+{1,3}|-{1,3}|~|\?|!)([A-zÀ-ÿ\d-]+))/gi
 export function parseTags (text) {
   const tags = []
   const regex = new RegExp(tagRegex)
@@ -52,6 +53,18 @@ export function getNewEntryData(text) {
     tags: parseTags(text),
     mood: 0,
     type: 'entry',
+    event: null,
+    data: null,
+  }
+  let frontMatter = getFrontMatter(text)
+
+  if (frontMatter) {
+    let eventData = parseFrontMatter(frontMatter)
+    if (eventData && typeof eventData === "object" && eventData.event) {
+      entryData.event = String(eventData.event)
+      entryData.data = eventData
+      delete entryData.data.event
+    }
   }
   entryData.tags.forEach(t => {
     if (t.mood != null && t.mood != undefined) {
@@ -114,4 +127,28 @@ export function matchTokens(entry, tokens) {
     }
   }
   return true
+}
+
+export function getFrontMatter (entry) {
+  let parts = entry.split('\n---\n')
+  if (parts.length > 1) {
+    return parts[0]
+  }
+  return null
+}
+
+export function parseFrontMatter(raw) {
+  try {
+    return yaml.parse(raw)
+  } catch (e) {
+    console.log('Invalid front matter', raw)
+    return null
+  }
+
+}
+export function quoteFrontMatter(text) {
+  if (getFrontMatter(text)) {
+    text = '```\n' + text.replace('\n---\n', '\n```\n')
+  }
+  return text
 }

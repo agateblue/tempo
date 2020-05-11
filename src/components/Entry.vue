@@ -29,7 +29,7 @@
   </article>
 </template>
 <script>
-import {insertTagMarkup} from '@/utils'
+import {insertTagMarkup, quoteFrontMatter} from '@/utils'
 import EntryForm from '@/components/EntryForm.vue'
 
 export default {
@@ -52,7 +52,7 @@ export default {
     },
     prerenderedText () {
       // we need to insert some markup so that tags render with a link
-      return insertTagMarkup(this.currentEntry.text)
+      return insertTagMarkup(quoteFrontMatter(this.currentEntry.text))
     }
   },
   methods: {
