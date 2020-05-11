@@ -44,6 +44,7 @@ export default {
   --border: 1px solid var(--border-color);
   --border-radius: 3px;
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
+  --single-column-width: 550px;
 }
 * {
   box-sizing: border-box;
@@ -93,8 +94,11 @@ button.secondary, input[type="submit"].secondary {
 main {
   margin: 0 auto;
 }
+main.single-column {
+  width: var(--single-column-width);
+}
 @media screen and (min-width: 700px) {
-  main {
+  main:not(.single-column) {
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -137,7 +141,7 @@ main > aside {
 }
 main > section {
   flex-grow: 2;
-  max-width: 500px;
+  max-width: var(--single-column-width);
 }
 
 input[type="text"],
