@@ -95,7 +95,7 @@ main {
   margin: 0 auto;
 }
 main.single-column {
-  width: var(--single-column-width);
+  max-width: var(--single-column-width);
 }
 @media screen and (min-width: 700px) {
   main:not(.single-column) {
