@@ -3,10 +3,11 @@ import {parseTags, getNewEntryData, insertTagMarkup, parseQuery, matchTokens} fr
 
 describe('utils', () => {
   it('can extract tags from text', () => {
-    const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
+    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work.'
     const expected = [
-      {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
+      {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
       {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+      {text: "--anxious", id: "anxious", type: "feeling", mood: -2, sign: '-'},
       {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
     ]
     expect(parseTags(msg)).to.deep.equal(expected)

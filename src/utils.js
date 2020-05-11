@@ -14,7 +14,7 @@ const signToType = {
   '?': 'feeling',
   '#': 'tag',
 }
-const tagRegex = /(^|\s)((#|\+|-|~|\?|!)([A-zÀ-ÿ\d-]+))/gi
+const tagRegex = /(^|\s)((#|\+{1,3}|-{1,3}|~|\?|!)([A-zÀ-ÿ\d-]+))/gi
 export function parseTags (text) {
   const tags = []
   const regex = new RegExp(tagRegex)
@@ -22,11 +22,14 @@ export function parseTags (text) {
   while (match != null) {
     let tag = {
       text: match[2],
-      sign: match[3],
+      sign: match[3][0],
       id: match[4],
     }
     tag.type = signToType[tag.sign]
     tag.mood = signToMood[tag.sign]
+    if (tag.mood) {
+      tag.mood = tag.mood * match[3].length
+    }
     tags.push(tag)
     match = regex.exec(text)
   }
