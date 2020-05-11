@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <aside class="widget">
+  <main class="single-column">
+    <section class="widget">
       <h1>
         About Tempo
       </h1>
@@ -11,56 +11,13 @@
       <p>Features:</p>
       <ul>
         <li>Markdown syntax</li>
-        <li>Offline first</li>
-        <li>Private by design</li>
-        <li>Mood tracking</li>
-        <li>Powerful tagging and filtering</li>
-        <li><a href="https://code.eliotberriot.com/eliotberriot/tempo">Free and Open Source</a></li>
-
+        <li><a href="#private">Private by design</a></li>
+        <li><a href="#offline">Offline first</a></li>
+        <li><a href="#mood-tracking">Mood tracking</a></li>
+        <li><a href="#search">Powerful tagging and filtering</a></li>
+        <li><a href="#software">Powered by free and open-source software</a></li>
       </ul>
-
-      <button class="secondary" @click.prevent="$modal.show('sync')">Setup sync…</button>
-      <modal name="sync" height="auto" :scrollable="true">
-        <a href="" class="right floated" @click.prevent="$modal.hide('sync')">Close</a>
-        <form>
-          <p>Setup synchronisation through CouchDB</p>
-          <div>
-            <label for="dbUrl">CouchDB URL</label>
-            <input type="url" placeholder="http://localhost:5984/tempo" id="dbUrl" name="dbUrl" ref="dbUrl" :value="$store.state.couchDbUrl">
-          </div>
-          <div>
-            <label for="dbUsername">CouchDB Username</label>
-            <input type="text" placeholder="admin" id="dbUsername" name="dbUsername" ref="dbUsername" :value="$store.state.couchDbUsername">
-          </div>
-          <div>
-            <label for="dbPassword">CouchDB Password</label>
-            <input type="password" placeholder="secret" id="dbPassword" name="dbPassword" ref="dbPassword" :value="$store.state.couchDbPassword">
-          </div>
-          <hr>
-          <input type="submit" @click.stop.prevent="$store.dispatch('setupSync', {url: $refs.dbUrl.value, username: $refs.dbUsername.value, password: $refs.dbPassword.value })" value="Setup sync">
-        </form>
-      </modal>
-
-      <button class="secondary" @click.prevent="$modal.show('import')">Import entries…</button>
-      <modal name="import">
-        <a href="" class="right floated" @click.prevent="$modal.hide('import')">Close</a>
-        <form>
-          <p>Import entries from a JSON file exported from another Tempo session.</p>
-          <input type="file" name="import" accept=".json,application/json" @change="toImport = $event.target.files[0]">
-          <hr>
-          <input :disabled="!toImport" type="submit" @click.stop.prevent="importEntries" value="Import">
-          <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
-          <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
-        </form>
-      </modal>
-      <button class="secondary" @click.prevent="$modal.show('theme')">Theming…</button>
-      <modal name="theme" height="auto">
-        <a href="" class="right floated" @click.prevent="$modal.hide('theme')">Close</a>
-          <p>Customize Tempo's look and feel</p>
-          <theme-form></theme-form>
-      </modal>
-      <button class="secondary" @click="deleteConfirm">Delete my data…</button>
-    </aside>
+    </section>
     <section class="widget">
       <h2>
         How does it work?
@@ -68,10 +25,21 @@
       <p>
         Use Tempo as you would use a personnal log. Write notes when you feel like it, and use hashtags and moodtags to indicate how you feel.
       </p>
+    </section>
+    <section id="private" class="widget">
       <h2>
         Where is the data stored?
       </h2>
-      <p>The data never leaves your browser. Future versions may allow optional syncing with other devices.</p>
+      <p>The data never leaves your browser and isn't sent to any third-party or server. The only exception to that is when you enable (optional) syncing with other devices, through a CouchDB server of your choice.</p>
+      <p>All your data can also be exported in JSON and Markdown format at any time.</p>
+    </section>
+    <section id="offline" class="widget">
+      <h2>
+        Does it work offline?
+      </h2>
+      <p>Yes! Tempo is a Progressive Web App (PWA) and can be accessed and used even without an internet connection.</p>
+    </section>
+    <section class="widget">
       <h2>
         Hashtags
       </h2>
@@ -82,6 +50,8 @@
         Had a great day at <a href="">#work!</a>
       </blockquote>
       <p>Hashtags can help you to categorize your notes and search them later.</p>
+    </section>
+    <section id="mood-tracking" class="widget">
       <h2>
         Moodtags
       </h2>
@@ -115,6 +85,8 @@
       <blockquote>
         Had a good sport session this morning, I'm <a href="">+tired</a> but happy.
       </blockquote>
+    </section>
+    <section id="search" class="widget">
       <h2>
         Filtering notes
       </h2>
@@ -201,52 +173,17 @@
         </tr>
       </table>
     </section>
+    <section id="software" class="widget">
+      <h2>
+        Tempo is powered by free and open-source software
+      </h2>
+      <p>
+        <a href="https://code.eliotberriot.com/eliotberriot/tempo">Source code is publicly available</a> and can be reused, modified and self-hosted according to your needs.
+      </p>
+    </section>
   </main>
 </template>
 
 <script>
-import ThemeForm from '@/components/ThemeForm'
-
-export default {
-  components: {
-    ThemeForm
-  },
-  data () {
-    return {
-      toImport: null,
-      importedEntries: 0,
-      failedEntries: 0,
-    }
-  },
-  methods: {
-    async importEntries () {
-      if (!this.toImport) {
-        console.log('No file to import')
-        return
-      }
-      this.importedEntries = 0
-      this.failedEntries = 0
-      console.log('Importing entries…')
-      let text = await this.toImport.text()
-      let entries = JSON.parse(text)
-      entries.forEach((e) => {
-        delete e._rev
-      })
-      let result = await this.$store.state.db.bulkDocs(entries)
-      this.importedEntries = result.filter((e) => {
-        return e.ok
-      }).length
-      this.failedEntries = result.filter((e) => {
-        return !e.ok
-      }).length
-    },
-    deleteConfirm () {
-      if (confirm("This will remove all your notes. This action is irreversible.")) {
-        this.$store.dispatch('reset')
-        this.importedEntries = 0
-        this.failedEntries = 0
-      }
-    }
-  }
-}
+export default {}
 </script>

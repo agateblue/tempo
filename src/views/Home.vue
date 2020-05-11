@@ -2,7 +2,8 @@
   <main>
     <section>
       <aside class="center aligned attached widget">
-        <router-link :to="{name: 'About'}">Help and settings</router-link>
+        <router-link :to="{name: 'About'}">Help</router-link> ·
+        <router-link :to="{name: 'Settings'}">Settings</router-link>
         <template v-if="$store.state.couchDbUrl">
           ·
           <a href="" @click.stop.prevent="forceSync" v-if="!isSyncing">
