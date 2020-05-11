@@ -119,7 +119,7 @@ import EntryForm from '@/components/EntryForm.vue'
 import Entry from '@/components/Entry.vue'
 import debounce from 'lodash/debounce'
 
-import {parseQuery, matchTokens} from '@/utils'
+import {parseQuery, matchTokens, quoteFrontMatter} from '@/utils'
 function getWeekNumber (d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
   var dayNum = d.getUTCDay() || 7
@@ -226,7 +226,9 @@ export default {
           weekday: fullDate.getDay() + 1,
           weeknumber: weekNumber,
           week: `${year}-${weekNumber}`,
-          tags: {}
+          tags: {},
+          event: e.event || null,
+          data: e.data || null,
         }
         e.tags.forEach((t) => {
           entry.tags[t.id] = {
@@ -270,9 +272,11 @@ export default {
         return `---
 date: ${e.date}
 mood: ${e.mood}
+event: ${e.event}
+data: ${JSON.stringify(e.data || {})}
 ---
 
-${e.text}
+${quoteFrontMatter(e.text)}
 
 `
       })
