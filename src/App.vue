@@ -221,9 +221,9 @@ blockquote {
   padding: 1em;
   margin: 0;
 }
-code {
+pre {
   background-color: var(--secondary-bg-color);
-  padding: 0 0.25em;
+  padding: 0.5em;
 }
 article {
   margin-bottom: 2em;
