@@ -87,10 +87,10 @@
       </h2>
       <p>Moodtags work similarly, but allow you to associate a mood with a given word. For instance:</p>
       <blockquote>
-        Stephanie and I had an argument. I feel <a href="">-angry</a> and <a href="">-confused</a>…
+        Stephanie and I had an argument. I feel <a href="">--angry</a> and <a href="">-confused</a>…
       </blockquote>
       <p>
-        By using the <code>-</code> tag, you indicate to Tempo that <code>angry</code> and <code>confused</code> are negative feelings. Similarly, you could use the <code>+</code> tag in front of a word to indicate a positive feeling.
+        By using the <code>-</code> tag, you indicate to Tempo that <code>angry</code> and <code>confused</code> are negative feelings. Similarly, you could use the <code>+</code> tag in front of a word to indicate a positive feeling. You can repeat these signs up to three time to indicate a greater intensity.
       </p>
       <p>
         When present, <code>-</code> and <code>+</code> tags are used to compute the mood score of each note. This score is then used in the daily mood widget to track your moods over time.
@@ -110,7 +110,7 @@
         You can freely mix any and all these tags in the same note, and use different moodtags with the same words. For instance:
       </p>
       <blockquote>
-        I hate insomnia, I'm feeling so <a href="">-tired</a>…
+        I hate insomnia, I'm feeling so <a href="">---tired</a>…
       </blockquote>
       <blockquote>
         Had a good sport session this morning, I'm <a href="">+tired</a> but happy.
