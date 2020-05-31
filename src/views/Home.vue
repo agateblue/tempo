@@ -151,43 +151,6 @@ export default {
       chartTitle: "",
       showAdditionalControls: false,
       alasql: null,
-      defaultDataQueries: [
-        {
-          label: "Mood by day",
-          query: 'SELECT date, sum(mood) as mood FROM ? GROUP BY date ORDER BY date DESC LIMIT 30',
-          chartType: 'line',
-        },
-        {
-          label: "Mood instability",
-          query: 'SELECT date, STDDEV(mood) as moodInstability FROM ? GROUP BY date ORDER BY date DESC LIMIT 30',
-          chartType: 'line',
-        },
-        {
-          label: "Entries per week",
-          query: 'SELECT week, count(*) as entries FROM ? GROUP BY week ORDER BY week DESC LIMIT 16',
-          chartType: 'table',
-        },
-        {
-          label: "Average entry length",
-          query: 'SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC LIMIT 30',
-          chartType: 'line',
-        },
-        {
-          label: "Mood for 'work' tag",
-          query: 'SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood',
-          chartType: 'percentage',
-        },
-        {
-          label: "Sleep quality",
-          query: 'SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC LIMIT 30',
-          chartType: 'line',
-        },
-        {
-          label: "Predominant moods",
-          query: 'SELECT mood, count(*) as entries FROM ? GROUP BY mood',
-          chartType: 'percentage',
-        },
-      ]
     }
   },
   async created () {
@@ -205,6 +168,49 @@ export default {
         dataPoints: {...points},
         start,
       }
+    },
+    defaultDataQueries () {
+      let defaultDays = 60
+      return [
+        {
+          label: "Mood by day",
+          help: "Higher is better",
+          query: `SELECT date, sum(mood) as mood FROM ? GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,
+          chartType: 'line',
+        },
+        {
+          label: "Mood instability",
+          help: "Lower is stabler",
+          query: `Select date, posmood * negmood / 10 as instability From (SELECT date, sum(CASE when mood>0 then mood else 0 END) as posmood,  sum(CASE when mood<0 then abs(mood) else 0 END) AS negmood FROM ? GROUP BY date ORDER BY date DESC LIMIT ${defaultDays})`,
+          chartType: 'line',
+        },
+        {
+          help: "Lower is stabler",
+          label: "Entries per week",
+          query: `SELECT week, count(*) as entries FROM ? GROUP BY week ORDER BY week DESC LIMIT 16`,
+          chartType: 'table',
+        },
+        {
+          label: "Average entry length",
+          query: `SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,
+          chartType: 'line',
+        },
+        {
+          label: "Mood for 'work' tag",
+          query: `SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood`,
+          chartType: 'percentage',
+        },
+        // {
+        //   label: "Sleep quality",
+        //   query: `SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,
+        //   chartType: 'line',
+        // },
+        {
+          label: "Predominant moods",
+          query: `SELECT mood, count(*) as entries FROM ? GROUP BY mood`,
+          chartType: 'percentage',
+        },
+      ]
     },
     shownEntries () {
       return this.entries.slice(0, this.count)
@@ -409,7 +415,11 @@ ${quoteFrontMatter(e.text)}
       let conf = this.defaultDataQueries[event.target.value]
       this.dataQuery = conf.query
       this.chartType = conf.chartType
-      this.chartTitle = conf.label
+      let help = ''
+      if (conf.help) {
+        help = ` · ${conf.help}`
+      }
+      this.chartTitle = `${conf.label}${help}`
     }
   },
   watch: {
@@ -453,7 +463,12 @@ ${quoteFrontMatter(e.text)}
     showAdditionalControls (v) {
       if (v) {
         this.dataQuery = this.defaultDataQueries[0].query
-        this.chartTitle = this.defaultDataQueries[0].label
+
+        let help = ''
+        if (this.defaultDataQueries[0].help) {
+          help = ` · ${this.defaultDataQueries[0].help}`
+        }
+        this.chartTitle = `${this.defaultDataQueries[0].label}${help}`
         this.chartType = this.defaultDataQueries[0].chartType
       } else {
         this.dataQuery = null
