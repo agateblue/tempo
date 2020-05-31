@@ -1,13 +1,38 @@
 <template>
   <div id="app">
     <h1 class="center aligned">
-      <router-link :to="{name: 'Home'}">Tempo</router-link>
+      <router-link :to="{name: 'Home'}">Tempod</router-link>
     </h1>
+    <button v-if="updateExists" @click.prevent="updateApp">
+      New version available! Click to update
+    </button>
+    {{ $store.state.serviceWorker }}
     <router-view/>
   </div>
 </template>
 <script>
 export default {
+  created () {
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.addEventListener(
+        'controllerchange', () => {
+          if (this.$store.state.serviceWorker.refreshing) return;
+          this.$store.commit('serviceWorker', {
+            refreshing: true
+          })
+          window.location.reload();
+        }
+      );
+    }
+  },
+  methods: {
+
+    updateApp () {
+      this.$store.commit('serviceWorker', {updateAvailable: false})
+      if (!this.$store.state.serviceWorker.registration || !this.$store.state.serviceWorker.registration.waiting) { return; }
+      this.$store.state.serviceWorker.registration.waiting.postMessage({command: 'skipWaiting'})
+    }
+  },
   watch: {
     "$store.state.theme": {
       handler (theme) {

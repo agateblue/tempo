@@ -58,6 +58,12 @@ const store = new Vuex.Store({
     theme,
     cssVars,
     version,
+
+    serviceWorker: {
+      refreshing: false,
+      registration: null,
+      updateAvailable: false,
+    }
   },
   mutations: {
     handleSync (state, info) {
@@ -111,7 +117,10 @@ const store = new Vuex.Store({
       state.db.createIndex({
         index: {fields: ['date', 'type']}
       })
-    }
+    },
+    serviceWorker: (state, value) => {
+      state.serviceWorker = {...state.serviceWorker, ...value}
+    },
   },
   getters: {
     cssVarValue: (state) => (id) => {
