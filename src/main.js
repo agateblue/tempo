@@ -18,6 +18,8 @@ import {
   mdiMagnify,
   mdiDotsVertical,
   mdiDelete,
+  mdiChevronUp,
+  mdiChevronDown,
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
@@ -27,6 +29,8 @@ Vue.prototype.$icons = {
   mdiMagnify,
   mdiDotsVertical,
   mdiDelete,
+  mdiChevronUp,
+  mdiChevronDown,
 }
 new Vue({
   router,
