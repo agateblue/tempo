@@ -2,7 +2,19 @@
   <v-row justify="space-between" vertical-align: to>
     <v-col cols="10">
       <time class="block font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
-      <div v-html="row.text"></div>
+      <div v-html="expand ? row.text : truncatedText"></div>
+      <template v-if="isTruncated">
+        <v-btn small class="mt-4"
+          @click="expand = !expand"
+        >
+          <template v-if="expand">
+            Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
+          </template>
+          <template v-else>
+            Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
+          </template>
+        </v-btn>
+      </template>
     </v-col>
     <v-col class="text-right" cols="2">
       <v-menu bottom left>
@@ -113,6 +125,8 @@
 </template>
 <script>
 import EntryForm from '@/components/EntryForm.vue'
+import truncate from 'truncate-html'
+truncate.setup({byWords: true, length: 30, keepWhitespaces: true })
 
 export default {
   props: {
@@ -126,7 +140,17 @@ export default {
       deleteDialog: false,
       editDialog: false,
       currentEntry: this.row.rawEntry,
+      expand: false,
     }
+  },
+  computed: {
+    truncatedText () {
+      return truncate(this.row.text)
+    },
+    isTruncated () {
+      return this.truncatedText.length < this.row.text.length
+    },
+
   },
   methods: {
     async update (e) {
