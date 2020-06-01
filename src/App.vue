@@ -1,13 +1,52 @@
 <template>
   <div id="app">
-    <h1 class="center aligned">
-      <router-link :to="{name: 'Home'}">Tempo</router-link>
-    </h1>
-    <router-view/>
+    <v-app id="tempo">
+
+      <v-app-bar
+        app
+        :dark="$store.state.dark">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-toolbar-title>Topics</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn to="/">
+          Tempo
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn icon to="/new">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+      </v-app-bar>
+      <v-navigation-drawer
+        v-model="drawer"
+        :dark="$store.state.dark"
+        app
+      >
+      </v-navigation-drawer>
+      <v-content>
+        <v-container fluid>
+          <router-view></router-view>
+        </v-container>
+      </v-content>
+
+      <v-footer app>
+      </v-footer>
+
+    </v-app>
   </div>
 </template>
 <script>
 export default {
+  data () {
+    return {
+      drawer: null,
+    }
+  },
   watch: {
     "$store.state.theme": {
       handler (theme) {
@@ -50,16 +89,17 @@ export default {
   box-sizing: border-box;
 }
 body {
-  background: var(--main-bg);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-size: cover;
   color: var(--main-text-color);
   font-size: 110%;
   line-height: 1.5;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+.v-application--wrap {
+  background: ;: var(--main-bg);
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 body .v--modal {
   background-color: var(--modal-bg);

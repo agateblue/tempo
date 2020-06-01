@@ -2,7 +2,7 @@
   <article>
     <template v-if="editing">
       <h3>
-        <button class="right floated link" @click.stop.prevent="$emit('delete', currentEntry)">Delete</button>
+        <button class="right floated link" @click.stop.prevent="handleDelete(currentEntry)">Delete</button>
         <label :for="`how-${currentEntry._id}`">Edit Entry</label>
       </h3>
       <entry-form
@@ -60,7 +60,11 @@ export default {
       this.currentEntry = e
       this.editing = false
       this.$emit('updated', e)
-    }
+    },
+    async handleDelete (entry) {
+      await this.$store.state.db.remove(entry)
+      this.$emit('delete', entry)
+    },
   }
 }
 </script>
