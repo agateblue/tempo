@@ -7,7 +7,6 @@ import VueShowdown from 'vue-showdown'
 import VModal from 'vue-js-modal'
 import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
-require('flatpickr/dist/flatpickr.css')
 
 Vue.use(VModal)
 Vue.config.productionTip = false
@@ -21,12 +20,16 @@ Vue.use(VueShowdown, {
 
 // three shaking icons to reduce bundle size
 import {
+  mdiCalendar,
+  mdiClock,
   mdiPencil,
   mdiMagnify,
   mdiDotsVertical,
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
+  mdiCalendar,
+  mdiClock,
   mdiPencil,
   mdiMagnify,
   mdiDotsVertical,

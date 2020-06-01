@@ -4,7 +4,7 @@
       <h2>
         <label for="how">What's going on?</label>
       </h2>
-      <entry-form @created="entries.push($event)" />
+      <entry-form @created="entries = [$event, ...entries]" />
     </section>
     <section v-if="entries.length">
       <h2>Latest entries</h2>

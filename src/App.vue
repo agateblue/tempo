@@ -189,10 +189,7 @@ select,
 input[type="url"],
 input[type="password"],
 input[type="date"],
-input[type="time"],
-body .flatpickr-time input,
-body .flatpickr-time input:hover,
-body .flatpickr-time input:focus {
+input[type="time"] {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   background-color: var(--secondary-bg-color);
   color: var(--main-text-color);
@@ -207,10 +204,7 @@ textarea,
 input[type="url"],
 input[type="password"],
 input[type="date"],
-input[type="time"],
-body .flatpickr-time input,
-body .flatpickr-time input:hover,
-body .flatpickr-time input:focus {
+input[type="time"] {
   margin-bottom: 1em;
 }
 input[type="text"], textarea, input[type="url"], input[type="password"] {
@@ -233,7 +227,7 @@ input.compact {
   top: 0.1em;
   margin-right: 0 !important;
 }
-input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus, body .flatpickr-time input:focus, select:focus {
+input[type="text"]:focus, textarea:focus, input[type="url"]:focus, input[type="password"]:focus, select:focus {
   opacity: 1;
   border: 1px solid var(--accent-color);
 }
@@ -391,55 +385,6 @@ svg {
 h3 span.right.floated {
   font-size: 0.7em;
   font-weight: normal;
-}
-body .flatpickr-calendar {
-  background: var(--secondary-bg-color);
-}
-body span.flatpickr-weekday,
-body .flatpickr-months .flatpickr-month,
-body .flatpickr-time .flatpickr-time-separator,
-body .flatpickr-time .flatpickr-am-pm,
-body .flatpickr-months .flatpickr-prev-month,
-body .flatpickr-months .flatpickr-next-month {
-  color: var(--main-text-color);
-  fill: var(--main-text-color);
-}
-body .flatpickr-day {
-  background: var(--neutral-color);
-  color: var(--main-text-color);
-  margin-bottom: 0.5em;
-}
-
-body .flatpickr-day.nextMonthDay,
-body .flatpickr-day.prevMonthDay {
-  color: var(--main-text-color);
-  background: var(--neutral-color);
-  opacity: 0.4;
-
-}
-body .flatpickr-day.selected, body .flatpickr-day.selected:hover {
-  background: var(--accent-color) !important;
-  border: none;
-}
-body .flatpickr-day:hover, body .flatpickr-day:focus  {
-  background: var(--accent-color) !important;
-  border: none;
-  opacity: 0.8;
-}
-body .numInputWrapper span {
-  border-color: var(--main-text-color);
-}
-body .flatpickr-time .numInputWrapper span.arrowUp::after {
-  border-bottom-color: var(--main-text-color);
-}
-body .flatpickr-time .numInputWrapper span.arrowDown::after {
-  border-top-color: var(--main-text-color);
-}
-body .flatpickr-current-month .numInputWrapper span.arrowUp::after {
-  border-bottom-color: var(--main-text-color);
-}
-body .flatpickr-current-month .numInputWrapper span.arrowDown::after {
-  border-top-color: var(--main-text-color);
 }
 table, thead, tbody {
   width: 100%;
