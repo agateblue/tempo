@@ -1,23 +1,92 @@
 <template>
   <form @submit.prevent="submit">
-    <textarea
+    <v-textarea
+      outlined
       :name="name"
-      :id="name"
-      rows="4"
       ref="textarea"
+      :autofocus="true"
       @keydown.ctrl.enter.exact="submit"
-      placeholder="What's going on in your life?"
-      v-model="text"></textarea>
-    <div class="inline field">
-      <label for="date" class="inline">Date</label>
-      <flat-pickr @on-open="setDefaultDate" placeholder="Now" class="inline" name="date" v-model="date" :config="{enableTime: true, position: 'below', time_24hr: true}"></flat-pickr>
-    </div>
-    <input class="right floated" type="submit" value="Send">
+      label="What's going on?"
+      v-model="text"
+    ></v-textarea>
+    <v-row>
+      <v-col cols="12" sm="5">
+        <v-menu
+          ref="dateMenu"
+          v-model="dateMenu"
+          :close-on-content-click="true"
+          :return-value.sync="date"
+          transition="scale-transition"
+          offset-y
+          min-width="290px"
+        >
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              v-model="newDate"
+              label="Date"
+              :prepend-icon="$icons.mdiCalendar"
+              readonly
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker v-model="newDate" no-title scrollable>
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-menu>
+      </v-col>
+      <v-col cols="12" sm="5">
+        <v-menu
+          ref="timeMenu"
+          v-model="timeMenu"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          :return-value.sync="newTime"
+          transition="scale-transition"
+          offset-y
+          max-width="290px"
+          min-width="290px"
+        >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="newTime"
+            label="Time"
+            :prepend-icon="$icons.mdiClock"
+            readonly
+            v-on="on"
+          ></v-text-field>
+        </template>
+        <v-time-picker
+          v-if="timeMenu"
+          v-model="newTime"
+          format="24hr"
+          full-width
+          scrollable
+          @click:minute="$refs.timeMenu.save(newTime)"
+          ></v-time-picker>
+        </v-menu>
+      </v-col>
+      <v-col cols="12" sm="2">
+        <v-btn
+          color="primary"
+          type="submit"
+        >
+          Send
+        </v-btn>
+        <!-- <input type="submit" value="Send"> -->
+      </v-col>
+    </v-row>
+
+         {{ newDate }} {{ newTime }}
   </form>
 </template>
 
 <script>
-import flatPickr from 'vue-flatpickr-component'
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
 
 import {getNewEntryData} from '@/utils'
 export default {
@@ -26,23 +95,48 @@ export default {
     value: {type: String, default: ''},
     name: {type: String, default: 'how'},
   },
-  components: {
-    flatPickr
-  },
   data () {
-    let text
+    return {
+      text: null,
+      dateDialog: false,
+      newDate: null,
+      newTime: null,
+      timeMenu: false,
+      dateMenu: false,
+    }
+  },
+  created () {
     let date = new Date()
     if (this.entry) {
-      text = this.entry.text
+      this.text = this.entry.text
       date = new Date(this.entry.date) || null
     }
-    return {
-      text,
-      date,
-    }
+    this.date = date
   },
   mounted () {
     this.$refs.textarea.focus()
+  },
+  computed: {
+    date: {
+      get () {
+        if (!this.newDate || !this.newTime) {
+          return null
+        }
+        return `${this.newDate}T${this.newTime}:00`
+      },
+      set (v) {
+        let iso = v.toISOString().split('T')
+        this.newDate = iso[0]
+        let time = iso[1].slice(0, 5).split(':')
+        let hours = parseInt(time[0])
+        let minutes = parseInt(time[1]) + (hours * 60)
+        minutes = minutes - v.getTimezoneOffset()
+        let realHours = Math.floor(minutes / 60);
+        var realMinutes = minutes % 60;
+        this.newTime = `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
+
+      }
+    }
   },
   methods: {
     setDefaultDate () {
