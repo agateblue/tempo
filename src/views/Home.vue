@@ -20,12 +20,6 @@
           <span v-else-if="isSyncing">Syncing…</span>
         </template>
       </aside>
-      <aside class="widget">
-        <h2>
-          <label for="how">How do you feel?</label>
-        </h2>
-        <entry-form @created="clearSearch();search()" />
-      </aside>
       <aside v-if="entriesCount" :class="[{attached: true}, 'controls widget']">
         <form @submit.prevent="submitSearch" class="inline">
           <label for="search" class="hidden">Search</label>
@@ -115,7 +109,6 @@
 </template>
 
 <script>
-import EntryForm from '@/components/EntryForm.vue'
 import Entry from '@/components/Entry.vue'
 import debounce from 'lodash/debounce'
 
@@ -133,7 +126,6 @@ export default {
     query: String
   },
   components: {
-    EntryForm,
     Entry,
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
   },
@@ -329,7 +321,6 @@ ${quoteFrontMatter(e.text)}
       return result.docs
     },
     async handleDelete (entry) {
-      await this.$store.state.db.remove(entry)
       this.entries = this.entries.filter((e) => {
         return e._id != entry._id
       })

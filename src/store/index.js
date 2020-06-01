@@ -58,6 +58,7 @@ const store = new Vuex.Store({
     theme,
     cssVars,
     version,
+    dark: true,
   },
   mutations: {
     handleSync (state, info) {
