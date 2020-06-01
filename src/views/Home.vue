@@ -88,12 +88,16 @@
           <textarea id="query" name="query" v-model="dataQuery" rows="2"></textarea>
         </form>
       </aside>
-      <entry
+      <!-- <entry
         class="attached widget"
         v-for="entry in shownEntries"
         :entry="entry" :key="entry._id"
         @updated="search"
-        @delete="handleDelete"></entry>
+        @delete="handleDelete"></entry> -->
+
+      <timeline
+        :entries="shownEntries"
+        @delete="handleDelete"></timeline>
       <p v-if="shownEntries.length < entries.length" class="center aligned">
         <button @click.prevent="count += $store.state.pageSize">Show more</button>
       </p>
@@ -109,24 +113,17 @@
 </template>
 
 <script>
-import Entry from '@/components/Entry.vue'
 import debounce from 'lodash/debounce'
+import Timeline from '@/components/Timeline.vue'
 
-import {parseQuery, matchTokens, quoteFrontMatter} from '@/utils'
-function getWeekNumber (d) {
-  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
-  var dayNum = d.getUTCDay() || 7
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum)
-  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1))
-  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
-}
+import {parseQuery, matchTokens, quoteFrontMatter, getCompleteEntry, } from '@/utils'
 
 export default {
   props: {
     query: String
   },
   components: {
-    Entry,
+    Timeline,
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
   },
   data () {
@@ -210,30 +207,7 @@ export default {
     queryableEntries () {
       let data = []
       this.entries.forEach((e) => {
-        let fullDate = new Date(e.date)
-        let weekNumber = getWeekNumber(fullDate)
-        let year = fullDate.getFullYear()
-        let entry = {
-          text: e.text,
-          mood: e.mood,
-          fullDate: fullDate,
-          date: fullDate.toISOString().split('T')[0],
-          year: year,
-          month: fullDate.getMonth() + 1,
-          day: fullDate.getDate(),
-          weekday: fullDate.getDay() + 1,
-          weeknumber: weekNumber,
-          week: `${year}-${weekNumber}`,
-          tags: {},
-          event: e.event || null,
-          data: e.data || null,
-        }
-        e.tags.forEach((t) => {
-          entry.tags[t.id] = {
-            ...t,
-            present: true
-          }
-        })
+        let entry = getCompleteEntry(e)
         data.push(entry)
       })
       return data

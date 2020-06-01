@@ -8,22 +8,21 @@
     </section>
     <section v-if="entries.length">
       <h2>Latest entries</h2>
-      <entry
-        v-for="entry in entries"
-        :entry="entry" :key="entry._id"
-        @delete="handleDelete"></entry>
+      <timeline
+        :entries="entries"
+        @delete="handleDelete"></timeline>
     </section>
   </div>
 </template>
 
 <script>
 import EntryForm from '@/components/EntryForm.vue'
-import Entry from '@/components/Entry.vue'
+import Timeline from '@/components/Timeline.vue'
 
 export default {
   components: {
     EntryForm,
-    Entry,
+    Timeline,
   },
   data () {
     return {
