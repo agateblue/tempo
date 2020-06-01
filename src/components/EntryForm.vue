@@ -76,8 +76,6 @@
         <!-- <input type="submit" value="Send"> -->
       </v-col>
     </v-row>
-
-         {{ newDate }} {{ newTime }}
   </form>
 </template>
 
@@ -122,9 +120,15 @@ export default {
         if (!this.newDate || !this.newTime) {
           return null
         }
-        return `${this.newDate}T${this.newTime}:00`
+        let d = new Date()
+        return `${this.newDate}T${this.newTime}:${pad(d.getSeconds(), 2)}`
       },
       set (v) {
+        if (!v) {
+          this.newDate = null
+          this.newTime = null
+          return
+        }
         let iso = v.toISOString().split('T')
         this.newDate = iso[0]
         let time = iso[1].slice(0, 5).split(':')

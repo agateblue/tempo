@@ -46,6 +46,18 @@ export default {
       drawer: null,
     }
   },
+  mounted () {
+    let self = this
+    // we have some internal links in rendered markdown but cannot use rotueur link there, so when a
+    // click is made on a link ith the appropriate class, we push via the router
+    window.onclick = function (e) {
+      var className = 'internal-link' // any css selector for children
+      if (e.target.localName == 'a' && e.target.classList.contains(className)) {
+        e.preventDefault();
+        self.$router.push(e.target.getAttribute('href'))
+      }
+    }
+  },
   watch: {
     "$store.state.theme": {
       handler (theme) {
@@ -73,7 +85,7 @@ export default {
       },
       immediate: true,
     }
-  }
+  },
 }
 </script>
 <style>

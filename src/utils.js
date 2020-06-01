@@ -40,7 +40,7 @@ export function parseTags (text) {
 export function insertTagMarkup (text) {
   try {
     return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-      return ` <router-link :to="{name: 'Home', query: {q: '${m2}'}}">${m2}</router-link>`
+      return `[${m2}](/?q=${m2}){.internal-link}`
     })
   } catch {
     return ''
@@ -151,4 +151,41 @@ export function quoteFrontMatter(text) {
     text = '```\n' + text.replace('\n---\n', '\n```\n')
   }
   return text
+}
+
+export function getCompleteEntry (e) {
+  let fullDate = new Date(e.date)
+  let weekNumber = getWeekNumber(fullDate)
+  let year = fullDate.getFullYear()
+  let entry = {
+    text: e.text,
+    mood: e.mood,
+    fullDate: fullDate,
+    date: fullDate.toISOString().split('T')[0],
+    year: year,
+    month: fullDate.getMonth() + 1,
+    day: fullDate.getDate(),
+    weekday: fullDate.getDay() + 1,
+    weeknumber: weekNumber,
+    week: `${year}-${weekNumber}`,
+    tags: {},
+    event: e.event || null,
+    data: e.data || null,
+  }
+  e.tags.forEach((t) => {
+    entry.tags[t.id] = {
+      ...t,
+      present: true
+    }
+  })
+  return entry
+}
+
+
+export function getWeekNumber (d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+  var dayNum = d.getUTCDay() || 7
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum)
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1))
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
 }
