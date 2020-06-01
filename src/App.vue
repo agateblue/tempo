@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app id="tempo">
+    <v-app id="tempo" :dark="$store.state.dark">
 
       <v-app-bar
         app
@@ -24,7 +24,6 @@
       </v-app-bar>
       <v-navigation-drawer
         v-model="drawer"
-        :dark="$store.state.dark"
         app
       >
       </v-navigation-drawer>
