@@ -7,8 +7,8 @@
         <v-timeline-item
           v-for="row in timelineRows"
           :key="row.id"
-          class="mb-4"
           :color="row.color"
+          class="pb-0"
           small
         >
           <entry v-if="row.type === 'entry'" @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
@@ -16,14 +16,12 @@
       </v-slide-x-transition>
 
       <v-timeline-item
-        class="mb-6"
         hide-dot
       >
         <span>TODAY</span>
       </v-timeline-item>
 
       <v-timeline-item
-        class="mb-4"
         color="grey"
         icon-color="grey lighten-2"
         small
@@ -117,14 +115,52 @@ const RENDERER = new MarkdownIt({
   breaks: true,
 });
 RENDERER.use(require('markdown-it-attrs'))
+let aggregateConfigs = [
+  {
+    id: 'day',
+    repr: (e) => e.date,
+  },
+  {
+    id: 'week',
+    repr: (e) => `Week ${e.weeknumber}, ${e.year}`,
+  },
+  {
+    id: 'month',
+    repr: (e) => {
+      let d = new Date(1, e.month, 1)
+      let monthName = d.toLocaleString('default', { month: 'long' })
+      return `${monthName} ${e.year}`
+    }
+  },
+]
+function recordAggregate(config, aggregates, entry, init) {
+  let complete = []
+  console.log('HL', config, aggregates, entry, init)
+  if (init) {
+    config.forEach((c) => {
+      aggregates[c.id] = [{repr: c.repr(entry), entries: [entry]}]
+    })
+  } else {
+    config.forEach((c) => {
+      let lastGroup = aggregates[c.id][aggregates[c.id].length - 1]
+      if (c.repr(entry) === lastGroup.repr) {
+        lastGroup.entries.push(entry)
+      } else {
+        complete.push({type: c.id, data: lastGroup})
+        aggregates[c.id].push([{repr: c.repr(entry), entries: [entry]}])
+      }
+    })
+  }
+  return complete
+}
 export default {
   props: ['entries'],
   components: {Entry} ,
   computed: {
     timelineRows () {
+      let aggregates = {}
       let rows = []
       this.entries.forEach((e) => {
-        // let previous = rows[rows.length + 1]
         let entry = getCompleteEntry(e)
         let row = {
           text: RENDERER.render(insertTagMarkup(quoteFrontMatter(entry.text))),
@@ -141,7 +177,8 @@ export default {
         } else if (entry.mood < 0) {
           row.color = "deep-orange" + baseColor + Math.min(Math.abs(entry.mood), 4)
         }
-        rows.push(row)
+        let additionalRows = recordAggregate(aggregateConfigs, aggregates, entry, rows.length === 0)
+        rows = [...rows, row, ...additionalRows]
       })
       return rows
     }
