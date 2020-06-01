@@ -11,10 +11,7 @@
           :color="row.color"
           small
         >
-          <v-row justify="space-between">
-            <v-col cols="7" v-html="row.text"></v-col>
-            <v-col class="text-right" cols="5" v-text="row.time"></v-col>
-          </v-row>
+          <entry v-if="row.type === 'entry'" @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
         </v-timeline-item>
       </v-slide-x-transition>
 
@@ -112,6 +109,7 @@
 <script>
 import MarkdownIt from 'markdown-it'
 import {getCompleteEntry, insertTagMarkup, quoteFrontMatter} from '@/utils'
+import Entry from './Entry'
 
 const RENDERER = new MarkdownIt({
   html: true,
@@ -121,18 +119,20 @@ const RENDERER = new MarkdownIt({
 RENDERER.use(require('markdown-it-attrs'))
 export default {
   props: ['entries'],
+  components: {Entry} ,
   computed: {
     timelineRows () {
       let rows = []
       this.entries.forEach((e) => {
-        let previous = rows[rows.length + 1]
+        // let previous = rows[rows.length + 1]
         let entry = getCompleteEntry(e)
 
         let row = {
           text: RENDERER.render(insertTagMarkup(quoteFrontMatter(entry.text))),
           id: Math.random(),
           color: 'grey',
-
+          type: "entry",
+          entry: entry,
         }
         let baseColor = " accent-"
         if (entry.mood > 0) {
@@ -140,7 +140,6 @@ export default {
         } else if (entry.mood < 0) {
           row.color = "deep-orange" + baseColor + Math.min(Math.abs(entry.mood), 4)
         }
-        console.log(previous, row)
         rows.push(row)
       })
       return rows

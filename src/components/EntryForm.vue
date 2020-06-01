@@ -10,7 +10,7 @@
       v-model="text"
     ></v-textarea>
     <v-row>
-      <v-col cols="12" sm="5">
+      <v-col cols="12" sm="5" id="date-field">
         <v-menu
           ref="dateMenu"
           v-model="dateMenu"
@@ -18,6 +18,7 @@
           :return-value.sync="date"
           transition="scale-transition"
           offset-y
+          attach="#date-field"
           min-width="290px"
         >
           <template v-slot:activator="{ on }">
@@ -35,7 +36,7 @@
           </v-date-picker>
         </v-menu>
       </v-col>
-      <v-col cols="12" sm="5">
+      <v-col cols="12" sm="5" id="time-field">
         <v-menu
           ref="timeMenu"
           v-model="timeMenu"
@@ -44,6 +45,7 @@
           :return-value.sync="newTime"
           transition="scale-transition"
           offset-y
+          attach="#time-field"
           max-width="290px"
           min-width="290px"
         >

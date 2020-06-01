@@ -17,6 +17,7 @@ import {
   mdiPencil,
   mdiMagnify,
   mdiDotsVertical,
+  mdiDelete,
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
@@ -25,6 +26,7 @@ Vue.prototype.$icons = {
   mdiPencil,
   mdiMagnify,
   mdiDotsVertical,
+  mdiDelete,
 }
 new Vue({
   router,
