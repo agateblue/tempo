@@ -13,13 +13,13 @@
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn icon to="/new">
-          <v-icon>mdi-pencil</v-icon>
+          <v-icon>{{ $icons.mdiPencil }}</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
+          <v-icon>{{ $icons.mdiMagnify }}</v-icon>
         </v-btn>
         <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
+          <v-icon>{{ $icons.mdiDotsVertical }}</v-icon>
         </v-btn>
       </v-app-bar>
       <v-navigation-drawer

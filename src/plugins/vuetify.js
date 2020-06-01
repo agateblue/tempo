@@ -4,10 +4,13 @@ import Vuetify from 'vuetify/lib';
 Vue.use(Vuetify);
 
 export default new Vuetify({
+  icons: {
+    iconfont: 'mdiSvg',
+  },
   theme: {
-      options: {
-        customProperties: true,
-      },
+    options: {
+      customProperties: true,
+    },
     themes: {
       light: {
         primary: '#ee44aa',

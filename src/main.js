@@ -7,7 +7,6 @@ import VueShowdown from 'vue-showdown'
 import VModal from 'vue-js-modal'
 import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
-import '@mdi/font/css/materialdesignicons.css'
 require('flatpickr/dist/flatpickr.css')
 
 Vue.use(VModal)
@@ -20,6 +19,18 @@ Vue.use(VueShowdown, {
   }
 })
 
+// three shaking icons to reduce bundle size
+import {
+  mdiPencil,
+  mdiMagnify,
+  mdiDotsVertical,
+} from '@mdi/js'
+
+Vue.prototype.$icons = {
+  mdiPencil,
+  mdiMagnify,
+  mdiDotsVertical,
+}
 new Vue({
   router,
   store,
@@ -27,6 +38,7 @@ new Vue({
   vuetify,
 
   beforeCreate() {
+
       this.$store.commit('loadCachedState')
       this.$store.commit('initDb')
       this.$store.dispatch(
