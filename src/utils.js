@@ -40,7 +40,7 @@ export function parseTags (text) {
 export function insertTagMarkup (text) {
   try {
     return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-      return `[${m2}](/?q=${m2}){.internal-link}`
+      return ` [${m2}](/?q=${m2}){.internal-link}`
     })
   } catch {
     return ''
@@ -190,4 +190,22 @@ export function getWeekNumber (d) {
   d.setUTCDate(d.getUTCDate() + 4 - dayNum)
   var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1))
   return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+}
+
+
+export function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+export function getPrettyTimeFromDate (v) {
+  let iso = v.toISOString().split('T')
+  let time = iso[1].slice(0, 5).split(':')
+  let hours = parseInt(time[0])
+  let minutes = parseInt(time[1]) + (hours * 60)
+  minutes = minutes - v.getTimezoneOffset()
+  let realHours = Math.floor(minutes / 60);
+  var realMinutes = minutes % 60;
+  return `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
 }

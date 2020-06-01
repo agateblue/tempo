@@ -1,5 +1,6 @@
 <template>
   <form @submit.prevent="submit">
+    {{ entry }}
     <v-textarea
       outlined
       :name="name"
@@ -68,7 +69,7 @@
           ></v-time-picker>
         </v-menu>
       </v-col>
-      <v-col cols="12" sm="2">
+      <v-col v-if="!entry" cols="12" sm="2">
         <v-btn
           color="primary"
           type="submit"
@@ -82,13 +83,8 @@
 </template>
 
 <script>
-function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
 
-import {getNewEntryData} from '@/utils'
+import {getNewEntryData, pad, getPrettyTimeFromDate} from '@/utils'
 export default {
   props: {
     entry: {type: Object, default: null},
@@ -109,7 +105,7 @@ export default {
     let date = new Date()
     if (this.entry) {
       this.text = this.entry.text
-      date = new Date(this.entry.date) || null
+      date = null
     }
     this.date = date
   },
@@ -133,13 +129,7 @@ export default {
         }
         let iso = v.toISOString().split('T')
         this.newDate = iso[0]
-        let time = iso[1].slice(0, 5).split(':')
-        let hours = parseInt(time[0])
-        let minutes = parseInt(time[1]) + (hours * 60)
-        minutes = minutes - v.getTimezoneOffset()
-        let realHours = Math.floor(minutes / 60);
-        var realMinutes = minutes % 60;
-        this.newTime = `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
+        this.newTime = getPrettyTimeFromDate(v)
 
       }
     }
@@ -174,11 +164,12 @@ export default {
       this.date = null
     },
     async update () {
+      let date = new Date(this.date || this.entry.date)
       let data = {
         ...getNewEntryData(this.text),
         _rev: this.entry._rev,
         _id: this.entry._id,
-        date: (new Date(this.date)).toISOString(),
+        date: date.toISOString(),
       }
       let e = await this.$store.dispatch('updateEntry', data)
       this.$emit('updated', e)

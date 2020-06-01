@@ -108,7 +108,7 @@
 </template>
 <script>
 import MarkdownIt from 'markdown-it'
-import {getCompleteEntry, insertTagMarkup, quoteFrontMatter} from '@/utils'
+import {getCompleteEntry, insertTagMarkup, quoteFrontMatter, getPrettyTimeFromDate} from '@/utils'
 import Entry from './Entry'
 
 const RENDERER = new MarkdownIt({
@@ -126,13 +126,14 @@ export default {
       this.entries.forEach((e) => {
         // let previous = rows[rows.length + 1]
         let entry = getCompleteEntry(e)
-
         let row = {
           text: RENDERER.render(insertTagMarkup(quoteFrontMatter(entry.text))),
           id: Math.random(),
           color: 'grey',
           type: "entry",
           entry: entry,
+          rawEntry: e,
+          time: getPrettyTimeFromDate(entry.fullDate)
         }
         let baseColor = " accent-"
         if (entry.mood > 0) {
