@@ -425,4 +425,7 @@ td, th {
 .row > .column {
   flex-grow: 1;
 }
+.block {
+  display: block;
+}
 </style>

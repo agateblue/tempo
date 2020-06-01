@@ -1,8 +1,10 @@
 <template>
-  <v-row justify="space-between">
-    <v-col cols="7" v-html="row.text"></v-col>
-    <v-col class="text-right" cols="4" v-text="row.time"></v-col>
-    <v-col class="text-right" cols="1">
+  <v-row justify="space-between" vertical-align: to>
+    <v-col cols="10">
+      <time class="block font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
+      <div v-html="row.text"></div>
+    </v-col>
+    <v-col class="text-right" cols="2">
       <v-menu bottom left>
         <template v-slot:activator="{ on }">
           <v-btn
@@ -15,8 +17,13 @@
         </template>
 
         <v-list>
-          <v-list-item>
-            <v-list-item-title>Edit</v-list-item-title>
+          <v-list-item @click.stop="editDialog = true">
+            <v-list-item-icon>
+              <v-icon>{{ $icons.mdiPencil }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Edit</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
           <v-list-item @click.stop="deleteDialog = true">
             <v-list-item-icon>
@@ -28,7 +35,47 @@
           </v-list-item>
         </v-list>
       </v-menu>
+
     </v-col>
+
+
+    <v-dialog
+      v-model="editDialog"
+      max-width="800"
+    >
+      <v-card>
+        <v-card-title class="headline">Update entry</v-card-title>
+
+        <v-card-text>
+          <entry-form
+            ref="updateForm"
+            :entry="row.rawEntry"
+            @updated="update"
+            :name="`how-${row.rawEntry._id}`">
+          </entry-form>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="secondary"
+            text
+            @click="editDialog = false"
+          >
+            Cancel
+          </v-btn>
+
+          <v-btn
+            color="primary"
+            text
+            @click="editDialog = false;$refs.updateForm.submit()"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-dialog
       v-model="deleteDialog"
@@ -63,67 +110,32 @@
       </v-card>
     </v-dialog>
   </v-row>
-  <!-- <article>
-    <template v-if="editing">
-      <h3>
-        <button class="right floated link" @click.stop.prevent="handleDelete(currentEntry)">Delete</button>
-        <label :for="`how-${row._id}`">Edit Entry</label>
-      </h3> -->
-      <!-- <entry-form
-        v-if="editing"
-        :show-delete="true"
-        :entry="currentEntry"
-        @updated="update"
-        :name="`how-${row._id}`">
-      </entry-form> -->
-
-    <!-- </template> -->
-    <!-- <VueShowdown class="entry-content" v-else :vue-template="true" :options="{simpleLineBreaks: true, headerLevelStart: 3, simplifiedAutoLink: true, tasklists:true, emoji: true}" :markdown="prerenderedText" /> -->
-    <!-- <footer>
-      <div>
-        <button class="link" @click.prevent="editing = !editing">
-          <template v-if="editing">Cancel</template>
-          <template v-else>Edit</template>
-        </button>
-      </div>
-      <div>
-        <time :datetime="row.date" :title="row.date">{{ prettyDate }}</time>
-      </div>
-    </footer>
-  </article> -->
 </template>
 <script>
-// import EntryForm from '@/components/EntryForm.vue'
+import EntryForm from '@/components/EntryForm.vue'
 
 export default {
   props: {
     row: Object
   },
   components: {
-    // EntryForm
+    EntryForm
   },
   data () {
     return {
       deleteDialog: false,
-      editing: false,
-      currentEntry: this.row.entry,
+      editDialog: false,
+      currentEntry: this.row.rawEntry,
     }
-  },
-  computed: {
-    prettyDate () {
-      let d = new Date(this.row.date)
-      return d.toLocaleString()
-    },
   },
   methods: {
     async update (e) {
       this.currentEntry = e
-      this.editing = false
       this.$emit('updated', e)
     },
     async handleDelete () {
-      await this.$store.state.db.remove(this.row.entry)
-      this.$emit('delete', this.row.entry)
+      await this.$store.state.db.remove(this.row.rawEntry)
+      this.$emit('delete', this.row.rawEntry)
     },
   }
 }
