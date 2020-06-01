@@ -159,6 +159,8 @@ export function getCompleteEntry (e) {
   let year = fullDate.getFullYear()
   let entry = {
     text: e.text,
+    _id: e._id,
+    _rev: e._rev,
     mood: e.mood,
     fullDate: fullDate,
     date: fullDate.toISOString().split('T')[0],
