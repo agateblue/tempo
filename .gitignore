@@ -21,3 +21,4 @@ yarn-error.log*
 *.sln
 *.sw?
 .themes
+src/assets/vendor/roboto-fontface

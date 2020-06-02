@@ -5,8 +5,18 @@ module.exports = {
       analyzerMode: process.env.BUNDLE_ANALYZE || "disabled"
     }
   },
+
   productionSourceMap: false,
   runtimeCompiler: true,
+  configureWebpack:{
+    optimization: {
+      splitChunks: {
+        minSize: 250000,
+        maxSize: 1000000,
+      }
+    },
+
+  },
   chainWebpack: config => {
     config
     .plugin('html')
