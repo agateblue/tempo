@@ -1,17 +1,6 @@
 <template>
   <main>
     <section>
-      <aside v-if="entriesCount" :class="[{attached: true}, 'controls widget']">
-        <form @submit.prevent="submitSearch" class="inline">
-          <label for="search" class="hidden">Search</label>
-          <div class="wrapper">
-            <input type="text" ref="search" :value="query" class="compact" name="search" id="search" placeholder="#work +">
-            <a v-if="query" href="" class="clearing link" title="Clear search" @click.prevent="clearSearch();$refs.search.focus()">×</a>
-          </div>
-          <input type="submit" class="secondary" value="Search">
-        </form>
-        <a href="" class="link" @click.prevent="showAdditionalControls = !showAdditionalControls">More…</a>
-      </aside>
       <aside v-if="showAdditionalControls" class="controls attached widget">
         <form class="inline">
           <label for="sort">Sort</label>

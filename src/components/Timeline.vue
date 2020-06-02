@@ -135,7 +135,6 @@ let aggregateConfigs = [
 ]
 function recordAggregate(config, aggregates, entry, init) {
   let complete = []
-  console.log('HL', config, aggregates, entry, init)
   if (init) {
     config.forEach((c) => {
       aggregates[c.id] = [{repr: c.repr(entry), entries: [entry]}]

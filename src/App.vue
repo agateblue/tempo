@@ -68,11 +68,17 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
          <v-text-field
+          v-model="searchQuery"
           solo
           flat
+          clearable
           hide-details
+          ref="search"
           label="Search"
-          :prepend-inner-icon="$icons.mdiMagnify"
+          :append-outer-icon="$icons.mdiMagnify"
+          @click:append-outer="$router.push({ path: '/', query: { q: searchQuery }})"
+          @keydown.enter="$router.push({ path: '/', query: { q: searchQuery }})"
+          @click:clear="$router.push({ path: '/', query: { q: '' }})"
         ></v-text-field>
         <v-spacer></v-spacer>
       </v-app-bar>
@@ -93,6 +99,7 @@ export default {
       drawer: null,
       isSyncing: false,
       syncError: null,
+      searchQuery: ''
     };
   },
   mounted() {
@@ -103,7 +110,8 @@ export default {
       var className = "internal-link"; // any css selector for children
       if (e.target.localName == "a" && e.target.classList.contains(className)) {
         e.preventDefault();
-        self.$router.push(e.target.getAttribute("href"));
+        self.searchQuery = e.target.getAttribute("data-query")
+        self.$router.push({ path: '/', query: { q: e.target.getAttribute("data-query") }})
       }
     };
   },
@@ -124,8 +132,18 @@ export default {
         this.syncError = null
       }, 3000);
     },
+    handleSearch () {
+
+    }
   },
   watch: {
+    "$router.currentRoute.query": {
+      handler (v) {
+        this.searchQuery = v.q
+      },
+      immediate: true,
+      deep: true,
+    },
     "$store.state.theme": {
       handler(theme) {
         let style = document.documentElement.style;

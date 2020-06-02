@@ -40,7 +40,7 @@ export function parseTags (text) {
 export function insertTagMarkup (text) {
   try {
     return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-      return ` [${m2}](/?q=${m2}){.internal-link}`
+      return ` [${m2}](/?q=${encodeURIComponent(m2)}){.internal-link data-query="${m2}"}`
     })
   } catch {
     return ''
