@@ -102,6 +102,19 @@ export default {
       searchQuery: ''
     };
   },
+  created () {
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.addEventListener(
+        'controllerchange', () => {
+          if (this.$store.state.serviceWorker.refreshing) return;
+          this.$store.commit('serviceWorker', {
+            refreshing: true
+          })
+          window.location.reload();
+        }
+      );
+    }
+  },
   mounted() {
     let self = this;
     // we have some internal links in rendered markdown but cannot use rotueur link there, so when a
@@ -132,8 +145,10 @@ export default {
         this.syncError = null
       }, 3000);
     },
-    handleSearch () {
-
+    updateApp () {
+      this.$store.commit('serviceWorker', {updateAvailable: false})
+      if (!this.$store.state.serviceWorker.registration || !this.$store.state.serviceWorker.registration.waiting) { return; }
+      this.$store.state.serviceWorker.registration.waiting.postMessage({command: 'skipWaiting'})
     }
   },
   watch: {
