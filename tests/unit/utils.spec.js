@@ -39,18 +39,19 @@ describe('utils', () => {
   })
   it('insert tag markup', () => {
     const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
-    const expected = `Today was quite [+happy](/?q=%2Bhappy){.internal-link data-query="+happy"}, but I feel [~tired](/?q=~tired){.internal-link data-query="~tired"} because of [#work](/?q=%23work){.internal-link data-query="#work"}.`
+    const expected = `Today was quite [+happy](/?q=tag:happy){.internal-link data-query="tag:happy"}, but I feel [~tired](/?q=tag:tired){.internal-link data-query="tag:tired"} because of [#work](/?q=tag:work){.internal-link data-query="tag:work"}.`
     const result = insertTagMarkup(msg)
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'hello #world + - @2020'
+    const query = 'hello #world + - @2020 t:mytag'
     const expected = [
       {text: 'hello'},
       {tag: '#world'},
       {sign: '+'},
       {sign: '-'},
       {date: '2020'},
+      {tagName: 'mytag'},
     ]
     const result = parseQuery(query)
     expect(result).to.deep.equal(expected)
@@ -58,6 +59,7 @@ describe('utils', () => {
   it('match tokens true', () => {
     const tokens = [
       {text: 'hello'},
+      {tagName: 'foo'},
       {sign: '+'},
     ]
     const entry = {
@@ -65,6 +67,7 @@ describe('utils', () => {
       tags: [
         {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
         {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+        {text: "--foo", id: "foo", type: "feeling", mood: 0, sign: '-'},
       ]
     }
     const result = matchTokens(entry, tokens)

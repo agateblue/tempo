@@ -39,8 +39,8 @@ export function parseTags (text) {
 
 export function insertTagMarkup (text) {
   try {
-    return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-      return ` [${m2}](/?q=${encodeURIComponent(m2)}){.internal-link data-query="${m2}"}`
+    return text.replace(tagRegex, (match, m1, m2, m3, m4) => {  // eslint-disable-line no-unused-vars
+      return ` [${m2}](/?q=tag:${encodeURIComponent(m4)}){.internal-link data-query="tag:${m4}"}`
     })
   } catch {
     return ''
@@ -93,6 +93,8 @@ export function parseQuery(query) {
       }
     } else if (stripped[0] == '@') {
       tokens.push({date: stripped.slice(1)})
+    } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
+      tokens.push({tagName: stripped.split(':')[1]})
     } else {
       tokens.push({text: stripped})
     }
@@ -109,6 +111,14 @@ export function matchTokens(entry, tokens) {
     if (token.tag) {
       let matching = entry.tags.filter((t) => {
         return t.text.toLowerCase() === token.tag.toLowerCase()
+      })
+      if (matching.length === 0) {
+        return false
+      }
+    }
+    if (token.tagName) {
+      let matching = entry.tags.filter((t) => {
+        return t.id.toLowerCase() === token.tagName.toLowerCase()
       })
       if (matching.length === 0) {
         return false
