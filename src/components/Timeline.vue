@@ -72,7 +72,9 @@ export default {
     timelineRows () {
       let aggregates = {}
       let rows = []
-      this.entries.forEach((e) => {
+      let reversedEntries = [...this.entries]
+      reversedEntries.reverse()
+      reversedEntries.forEach((e) => {
         let entry = getCompleteEntry(e)
         let row = {
           text: RENDERER.render(insertTagMarkup(quoteFrontMatter(entry.text))),

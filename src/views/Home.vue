@@ -58,19 +58,13 @@
           <textarea id="query" name="query" v-model="dataQuery" rows="2"></textarea>
         </form>
       </aside>
-      <!-- <entry
-        class="attached widget"
-        v-for="entry in shownEntries"
-        :entry="entry" :key="entry._id"
-        @updated="search"
-        @delete="handleDelete"></entry> -->
 
+      <v-container class="narrow" v-if="shownEntries.length < entries.length">
+        <v-btn block color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
+      </v-container>
       <timeline
         :entries="shownEntries"
         @delete="handleDelete"></timeline>
-      <p v-if="shownEntries.length < entries.length" class="center aligned">
-        <button @click.prevent="count += $store.state.pageSize">Show more</button>
-      </p>
     </section>
     <modal name="export">
       <a href="" class="right floated" @click.prevent="$modal.hide('export')">Close</a>
@@ -79,6 +73,12 @@
       <p>Export the selected {{ entries.length }} entries as JSON file. Can be imported in Tempo.</p>
       <button @click="downloadJSON">Download as JSON</button>
     </modal>
+
+    <v-footer inset padless app>
+      <v-container>
+        <entry-form @created="handleCreated" />
+      </v-container>
+    </v-footer>
   </main>
 </template>
 
@@ -87,6 +87,7 @@ import debounce from 'lodash/debounce'
 import Timeline from '@/components/Timeline.vue'
 import alasql from 'alasql'
 
+import EntryForm from '@/components/EntryForm.vue'
 import {parseQuery, matchTokens, quoteFrontMatter, getCompleteEntry, } from '@/utils'
 
 export default {
@@ -95,6 +96,7 @@ export default {
   },
   components: {
     Timeline,
+    EntryForm,
     Chart:  () => import("@/components/Chart"),
   },
   data () {
@@ -296,6 +298,9 @@ ${quoteFrontMatter(e.text)}
         allEntries,
         parseQuery(this.query),
       )
+      this.$nextTick(() => {
+        this.scrollToBottom()
+      })
     },
     async forceSync() {
       this.isSyncing = true
@@ -352,6 +357,12 @@ ${quoteFrontMatter(e.text)}
         help = ` · ${conf.help}`
       }
       this.chartTitle = `${conf.label}${help}`
+    },
+    async handleCreated () {
+      await this.search()
+    },
+    scrollToBottom () {
+      window.scrollTo(0,document.body.scrollHeight)
     }
   },
   watch: {

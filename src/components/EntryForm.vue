@@ -1,18 +1,25 @@
 <template>
   <form @submit.prevent="submit">
-    {{ entry }}
-    <v-textarea
-      outlined
-      :name="name"
-      ref="textarea"
-      :autofocus="true"
-      @keydown.ctrl.enter.exact="submit"
-      label="What's going on?"
-      v-model="text"
-    ></v-textarea>
     <v-row>
-      <v-col cols="12" sm="5" id="date-field">
+      <v-col cols="12" md="6">
+        <v-textarea
+          solo
+          clearable
+          :name="name"
+          ref="textarea"
+          autofocus
+          auto-grow
+          rows="2"
+          :append-outer-icon="entry ? '': $icons.mdiSend"
+          @click:append-outer="submit"
+          @keydown.ctrl.enter.exact="submit"
+          label="What's going on?"
+          v-model="text"
+        ></v-textarea>
+      </v-col>
+      <v-col offset="1" cols="5" md="3" id="date-field">
         <v-menu
+          top
           ref="dateMenu"
           v-model="dateMenu"
           :close-on-content-click="true"
@@ -37,9 +44,11 @@
           </v-date-picker>
         </v-menu>
       </v-col>
-      <v-col cols="12" sm="5" id="time-field">
+
+      <v-col cols="5" md="2" id="time-field">
         <v-menu
           ref="timeMenu"
+          top
           v-model="timeMenu"
           :close-on-content-click="false"
           :nudge-right="40"
@@ -68,15 +77,6 @@
           @click:minute="$refs.timeMenu.save(newTime)"
           ></v-time-picker>
         </v-menu>
-      </v-col>
-      <v-col v-if="!entry" cols="12" sm="2">
-        <v-btn
-          color="primary"
-          type="submit"
-        >
-          Send
-        </v-btn>
-        <!-- <input type="submit" value="Send"> -->
       </v-col>
     </v-row>
   </form>
