@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import { register } from 'register-service-worker'
+import store from './store'
 
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
@@ -11,13 +12,15 @@ if (process.env.NODE_ENV === 'production') {
       )
     },
     registered (registration) {
+      console.log('hLLOOE', registration)
       console.log('Service worker has been registered.')
       var checkInterval = 1000 * 60 * 60 * 2
       setInterval(() => {
         console.log('Checking for service worker update…')
         registration.update();
       }, checkInterval);
-      registration.update()
+      registration.update();
+      store.commit('serviceWorker', {registration: registration})
     },
     cached () {
       console.log('Content has been cached for offline use.')
@@ -25,8 +28,9 @@ if (process.env.NODE_ENV === 'production') {
     updatefound () {
       console.log('New content is downloading.')
     },
-    updated () {
+    updated (registration) {
       console.log('New content is available; please refresh.')
+      store.commit('serviceWorker', {updateAvailable: true, registration: registration})
     },
     offline () {
       console.log('No internet connection found. App is running in offline mode.')
