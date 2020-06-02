@@ -39,7 +39,7 @@ describe('utils', () => {
   })
   it('insert tag markup', () => {
     const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
-    const expected = `Today was quite <router-link :to="{name: 'Home', query: {q: '+happy'}}">+happy</router-link>, but I feel <router-link :to="{name: 'Home', query: {q: '~tired'}}">~tired</router-link> because of <router-link :to="{name: 'Home', query: {q: '#work'}}">#work</router-link>.`
+    const expected = `Today was quite [+happy](/?q=%2Bhappy){.internal-link data-query="+happy"}, but I feel [~tired](/?q=~tired){.internal-link data-query="~tired"} because of [#work](/?q=%23work){.internal-link data-query="#work"}.`
     const result = insertTagMarkup(msg)
     expect(result).to.deep.equal(expected)
   })
