@@ -1,9 +1,21 @@
 <template>
   <div id="app">
     <v-app id="tempo" :dark="$store.state.dark">
-      <v-navigation-drawer clipped right v-model="drawer" app>
+      <v-navigation-drawer clipped left v-model="drawer" app>
         <div class="vertical row">
           <div class="grow" v-if="$store.state.couchDbUrl">
+            <v-list dense>
+              <v-list-item-group>
+                <v-list-item to="/">
+                  <v-list-item-icon>
+                    <v-icon v-text="$icons.mdiHome"></v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Home</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </div>
           <div v-if="$store.state.couchDbUrl">
             <v-btn
@@ -49,14 +61,20 @@
         </div>
 
       </v-navigation-drawer>
-      <v-app-bar clipped-right dense app :dark="$store.state.dark">
+      <v-app-bar clipped-left app :dark="$store.state.dark">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <v-toolbar-title>
-          <v-btn text to="/">
-            Tempo
-          </v-btn>
+          Tempo
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+         <v-text-field
+          solo
+          flat
+          hide-details
+          label="Search"
+          :prepend-inner-icon="$icons.mdiMagnify"
+        ></v-text-field>
+        <v-spacer></v-spacer>
       </v-app-bar>
       <v-content>
         <v-container fluid>
