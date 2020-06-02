@@ -42,7 +42,7 @@ Vue.prototype.$icons = {
 
 Vue.prototype.$theme = {
   card: {
-    color: "indigo darken-2",
+    color: "grey darken-4",
     textSize: "body-1",
   }
 }

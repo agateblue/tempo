@@ -219,26 +219,6 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
   --single-column-width: 550px;
 }
-* {
-  box-sizing: border-box;
-}
-body {
-  color: var(--main-text-color);
-  font-size: 110%;
-  line-height: 1.5;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.v-application--wrap {
-  background: var(--main-bg);
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-body .v--modal {
-  background-color: var(--modal-bg);
-  padding: 1em;
-}
 section.v-card.theme--dark {
   max-width: var(--single-column-width);
   margin-left: auto;
