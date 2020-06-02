@@ -7,7 +7,7 @@ PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
 
 Vue.use(Vuex)
-import {isEqual} from 'lodash'
+import isEqual from 'lodash/isEqual'
 
 const version = 1
 const cssVars = [

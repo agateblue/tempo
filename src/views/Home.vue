@@ -115,6 +115,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import Timeline from '@/components/Timeline.vue'
+import alasql from 'alasql'
 
 import {parseQuery, matchTokens, quoteFrontMatter, getCompleteEntry, } from '@/utils'
 
@@ -124,7 +125,7 @@ export default {
   },
   components: {
     Timeline,
-    Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
+    Chart:  () => import("@/components/Chart"),
   },
   data () {
     return {
@@ -139,7 +140,6 @@ export default {
       chartType: "line",
       chartTitle: "",
       showAdditionalControls: false,
-      alasql: null,
     }
   },
   async created () {
@@ -349,10 +349,7 @@ ${quoteFrontMatter(e.text)}
       if (!query) {
         return null
       }
-      if (!this.alasql) {
-        this.alasql = (await import(/* webpackChunkName: "visualization" */ "alasql")).default
-      }
-      return await this.alasql(this.dataQuery,[this.queryableEntries]);
+      return await alasql(this.dataQuery,[this.queryableEntries]);
     },
     getLabels (data) {
       let firstField = Object.keys(data[0])[0]
