@@ -8,7 +8,6 @@
 
 <script>
 import { Chart } from 'frappe-charts/dist/frappe-charts.esm.js'
-import 'frappe-charts/dist/frappe-charts.min.css'
 
 export default {
   props: ["options"],
