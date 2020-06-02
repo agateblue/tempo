@@ -39,6 +39,13 @@ Vue.prototype.$icons = {
   mdiChevronDown,
   mdiHelpCircleOutline,
 }
+
+Vue.prototype.$theme = {
+  card: {
+    color: "indigo darken-2",
+    textSize: "body-1",
+  }
+}
 new Vue({
   router,
   store,

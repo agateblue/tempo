@@ -67,7 +67,15 @@
           Tempo
         </v-toolbar-title>
         <v-spacer></v-spacer>
-         <v-text-field
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <v-text-field
           v-model="searchQuery"
           solo
           flat
@@ -80,10 +88,9 @@
           @keydown.enter="$router.push({ path: '/', query: { q: searchQuery }})"
           @click:clear="$router.push({ path: '/', query: { q: '' }})"
         ></v-text-field>
-        <v-spacer></v-spacer>
       </v-app-bar>
       <v-content>
-        <v-container fluid>
+        <v-container fluid tag="main">
           <router-view></router-view>
         </v-container>
       </v-content>
@@ -231,6 +238,11 @@ body {
 body .v--modal {
   background-color: var(--modal-bg);
   padding: 1em;
+}
+section.v-card.theme--dark {
+  max-width: var(--single-column-width);
+  margin-left: auto;
+  margin-right: auto;
 }
 // a {
 //   color: var(--accent-color);
