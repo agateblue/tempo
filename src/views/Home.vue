@@ -1,25 +1,6 @@
 <template>
   <main>
     <section>
-      <aside class="center aligned attached widget">
-        <router-link :to="{name: 'About'}">Help</router-link> ·
-        <router-link :to="{name: 'Settings'}">Settings</router-link>
-        <template v-if="$store.state.couchDbUrl">
-          ·
-          <a href="" @click.stop.prevent="forceSync" v-if="!isSyncing">
-            Sync
-          </a>
-          <template v-if="!isSyncing && syncError">
-            Sync error:
-            <span v-if="syncError.name">{{ syncError.name }}</span>
-            <span v-else>Unknown</span>
-          </template>
-          <span v-else-if="syncError === false">
-            Sync complete
-          </span>
-          <span v-else-if="isSyncing">Syncing…</span>
-        </template>
-      </aside>
       <aside v-if="entriesCount" :class="[{attached: true}, 'controls widget']">
         <form @submit.prevent="submitSearch" class="inline">
           <label for="search" class="hidden">Search</label>

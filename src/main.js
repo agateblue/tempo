@@ -13,23 +13,29 @@ Vue.config.productionTip = false
 import {
   mdiCalendar,
   mdiClock,
+  mdiCog,
+  mdiSync,
   mdiPencil,
   mdiMagnify,
   mdiDotsVertical,
   mdiDelete,
   mdiChevronUp,
   mdiChevronDown,
+  mdiHelpCircleOutline,
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
   mdiCalendar,
   mdiClock,
+  mdiCog,
+  mdiSync,
   mdiPencil,
   mdiMagnify,
   mdiDotsVertical,
   mdiDelete,
   mdiChevronUp,
   mdiChevronDown,
+  mdiHelpCircleOutline,
 }
 new Vue({
   router,
