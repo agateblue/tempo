@@ -94,8 +94,6 @@
           <router-view></router-view>
         </v-container>
       </v-content>
-
-      <v-footer app> </v-footer>
     </v-app>
   </div>
 </template>
@@ -219,10 +217,16 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
   --single-column-width: 550px;
 }
+.container.narrow {
+  max-width: var(--single-column-width);
+}
 section.v-card.theme--dark {
   max-width: var(--single-column-width);
   margin-left: auto;
   margin-right: auto;
+}
+.v-footer .v-textarea .v-text-field__details {
+  display: none;
 }
 // a {
 //   color: var(--accent-color);
