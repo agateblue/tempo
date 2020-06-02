@@ -1,7 +1,55 @@
 <template>
   <div id="app">
     <v-app id="tempo" :dark="$store.state.dark">
-      <v-app-bar app :dark="$store.state.dark">
+      <v-navigation-drawer clipped right v-model="drawer" app>
+        <div class="vertical row">
+          <div class="grow" v-if="$store.state.couchDbUrl">
+          </div>
+          <div v-if="$store.state.couchDbUrl">
+            <v-btn
+              class="ma-4 mr-4"
+              :loading="isSyncing"
+              :disabled="isSyncing"
+              @click.stop.prevent="forceSync"
+            >
+              <v-icon left>{{ $icons.mdiSync }}</v-icon>
+              Sync now
+              <template v-slot:loader>
+                <span>Loading...</span>
+              </template>
+            </v-btn>
+            <p v-if="!isSyncing && syncError">
+              Sync error:
+              <span v-if="syncError.name">{{ syncError.name }}</span>
+              <span v-else>Unknown</span>
+            </p>
+          </div>
+          <div>
+            <v-list dense>
+              <v-list-item-group>
+                <v-list-item to="/settings">
+                  <v-list-item-icon>
+                    <v-icon v-text="$icons.mdiCog"></v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Settings</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item to="/about">
+                  <v-list-item-icon>
+                    <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>Help</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </div>
+        </div>
+
+      </v-navigation-drawer>
+      <v-app-bar clipped-right dense app :dark="$store.state.dark">
         <v-toolbar-title>
           <v-btn text to="/">
             Tempo
@@ -10,54 +58,6 @@
         <v-spacer></v-spacer>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       </v-app-bar>
-      <v-navigation-drawer right v-model="drawer" app>
-      <div class="vertical row">
-        <div class="grow" v-if="$store.state.couchDbUrl">
-        </div>
-        <div v-if="$store.state.couchDbUrl">
-          <v-btn
-            class="ma-4 mr-4"
-            :loading="isSyncing"
-            :disabled="isSyncing"
-            @click.stop.prevent="forceSync"
-          >
-            <v-icon left>{{ $icons.mdiSync }}</v-icon>
-            Sync now
-            <template v-slot:loader>
-              <span>Loading...</span>
-            </template>
-          </v-btn>
-          <p v-if="!isSyncing && syncError">
-            Sync error:
-            <span v-if="syncError.name">{{ syncError.name }}</span>
-            <span v-else>Unknown</span>
-          </p>
-        </div>
-        <div>
-          <v-list dense>
-            <v-list-item-group>
-              <v-list-item to="/settings">
-                <v-list-item-icon>
-                  <v-icon v-text="$icons.mdiCog"></v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Settings</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item to="/about">
-                <v-list-item-icon>
-                  <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Help</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </div>
-      </div>
-
-      </v-navigation-drawer>
       <v-content>
         <v-container fluid>
           <router-view></router-view>
