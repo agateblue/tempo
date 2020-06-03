@@ -1,27 +1,28 @@
 <template>
-  <v-lazy
-    :options="{
-      threshold: .5
-    }"
-    min-height="50"
-    transition="fade-transition"
-  >
-    <v-card elevation="4">
-        <v-card-text :class="$theme.card.textSize">
-          <div class="rendered-markdown" v-html="expand ? row.text : truncatedText"></div>
-          <div v-if="isTruncated">
-            <v-btn small class="mt-4"
-              @click="expand = !expand"
-            >
-              <template v-if="expand">
-                Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
-              </template>
-              <template v-else>
-                Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
-              </template>
-            </v-btn>
-          </div>
-        </v-card-text>
+  <v-card elevation="4">
+      <v-card-text :class="$theme.card.textSize">
+        <div class="rendered-markdown" v-html="expand ? row.text : truncatedText"></div>
+        <div v-if="isTruncated">
+          <v-btn small class="mt-4"
+            @click="expand = !expand"
+          >
+            <template v-if="expand">
+              Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
+            </template>
+            <template v-else>
+              Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
+            </template>
+          </v-btn>
+        </div>
+      </v-card-text>
+
+      <v-lazy
+        :options="{
+          threshold: .5
+        }"
+        min-height="50"
+        transition="fade-transition"
+      >
         <v-card-actions>
           <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
           <v-spacer></v-spacer>
@@ -126,8 +127,8 @@
             </v-card>
           </v-dialog>
         </v-card-actions>
-    </v-card>
-  </v-lazy>
+      </v-lazy>
+  </v-card>
 </template>
 <script>
 import EntryForm from '@/components/EntryForm.vue'
