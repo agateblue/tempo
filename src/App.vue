@@ -19,6 +19,7 @@
           </div>
           <div v-if="$store.state.couchDbUrl">
             <v-btn
+            text
               class="ma-4 mr-4"
               :loading="isSyncing"
               :disabled="isSyncing"
