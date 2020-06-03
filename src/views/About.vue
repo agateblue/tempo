@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">About Tempo</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -9,7 +9,7 @@
         </p>
       </v-card-text>
     </v-card>
-    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Features</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -24,7 +24,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">How does it work?</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -34,7 +34,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Where is the data stored?</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -43,7 +43,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" id="offline" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="offline" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Does it work offline?</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -51,7 +51,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Hashtags</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -65,7 +65,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" id="mood-tracking"  class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="mood-tracking"  class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Moodtags</v-card-title>
       <v-card-text :class="$theme.card.textSize">
         <p>Moodtags work similarly, but allow you to associate a mood with a given word. For instance:</p>
@@ -101,7 +101,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" id="search"  class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="search"  class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Search and filter notes</v-card-title>
       <v-card-text :class="$theme.card.textSize">
         <p>
@@ -199,7 +199,7 @@
     </v-card>
 
 
-    <v-card tag="section" id="software" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="software" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Tempo is powered by free and open-source software</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">

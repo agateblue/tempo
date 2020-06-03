@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-timeline align-top dense clipped>
+    <v-timeline :dark="$store.state.dark" align-top dense clipped>
       <v-slide-x-transition
         group
       >

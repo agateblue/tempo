@@ -16,7 +16,7 @@
       </v-col>
 
       <v-col offset="1" cols="2">
-        <v-card dense class="fixed-secondary">
+        <v-card :dark="$store.state.dark" dense class="fixed-secondary">
           <v-list dense>
             <v-list-item>
               <v-list-item-content>
@@ -60,6 +60,7 @@
             </v-list>
 
             <v-dialog
+              :dark="$store.state.dark"
               v-model="exportDialog"
               max-width="700"
             >
@@ -100,7 +101,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-footer inset padless app>
+    <v-footer inset padless app :dark="$store.state.dark">
       <entry-form class="mx-3" @created="handleCreated" />
     </v-footer>
   </div>
