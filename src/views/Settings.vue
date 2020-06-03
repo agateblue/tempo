@@ -1,74 +1,124 @@
 <template>
-  <main class="single-column">
-    <section class="widget">
-      <h1>
-        Settings
-      </h1>
-      <router-link :to="{name: 'Home'}">Go back</router-link>
-      <ul>
-        <li><a href="#theming">Theming</a></li>
-        <li><a href="#import">Import entries</a></li>
-        <li><a href="#sync">Sync</a></li>
-        <li><a href="#delete">Delete data</a></li>
-      </ul>
-    </section>
-    <section id="theming" class="attached widget">
-      <h2>Theming</h2>
-      <p>Customize Tempo's look and feel</p>
-      <theme-form></theme-form>
-    </section>
-    <section id="import" class="attached widget">
-      <h2>Import entries</h2>
-      <form>
-        <p>Import entries from a JSON file exported from another Tempo session.</p>
-        <input type="file" name="import" accept=".json,application/json" @change="toImport = $event.target.files[0]">
-        <hr>
-        <input class="right floated" :disabled="!toImport" type="submit" @click.stop.prevent="importEntries" value="Import">
-        <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
-        <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
-      </form>
-    </section>
-    <section id="sync" class="attached widget">
-      <h2>Syncing with other devices</h2>
-      <p>Your diary can be synced with other devices using any <a href="https://couchdb.apache.org/">CouchDB server</a>. This is not provided as part of Tempo though, and you have to find or host one yourself.</p>
-      <form>
-        <div>
-          <label for="dbUrl">CouchDB URL</label>
-          <input type="url" placeholder="http://localhost:5984/tempo" id="dbUrl" name="dbUrl" ref="dbUrl" :value="$store.state.couchDbUrl">
-        </div>
-        <div>
-          <label for="dbUsername">CouchDB Username</label>
-          <input type="text" placeholder="admin" id="dbUsername" name="dbUsername" ref="dbUsername" :value="$store.state.couchDbUsername">
-        </div>
-        <div>
-          <label for="dbPassword">CouchDB Password</label>
-          <input type="password" placeholder="secret" id="dbPassword" name="dbPassword" ref="dbPassword" :value="$store.state.couchDbPassword">
-        </div>
-        <hr>
-        <input class="right floated" type="submit" @click.stop.prevent="$store.dispatch('setupSync', {url: $refs.dbUrl.value, username: $refs.dbUsername.value, password: $refs.dbPassword.value })" value="Setup sync">
-      </form>
+  <div>
+    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Settings</v-card-title>
 
-    </section>
-    <section id="delete" class="attached widget">
-      <h2>Delete your data</h2>
-      <p>Delete all your data from Tempo.</p>
-      <button class="right floated" @click="deleteConfirm">Delete my data…</button>
-    </section>
-  </main>
+      <v-card-text :class="$theme.card.textSize">
+        <ul>
+          <li><a href="#theming">Theming</a></li>
+          <li><a href="#import">Import entries</a></li>
+          <li><a href="#sync">Sync</a></li>
+          <li><a href="#delete">Delete data</a></li>
+        </ul>
+      </v-card-text>
+    </v-card>
+    <!-- <v-card tag="section" id="theming" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Theming</v-card-title>
+      <v-card-text :class="$theme.card.textSize">
+        <p>Customize Tempo's look and feel</p>
+        <v-list dense>
+          <v-list-item>
+            <v-list-item-action>
+              <v-switch :color="$theme.switch.color" v-model="darkTheme"></v-switch>
+            </v-list-item-action>
+            <v-list-item-title>Dark theme</v-list-item-title>
+          </v-list-item>
+        </v-list>
+        <theme-form></theme-form>
+      </v-card-text>
+    </v-card> -->
+
+    <v-card tag="section" id="import" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Import entries</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>Import entries from a JSON file exported from another Tempo session.</p>
+        <v-form>
+          <v-file-input accept=".json,application/json" label="JSON export" v-model="toImport"></v-file-input>
+          <v-btn
+            :disabled="!toImport"
+            color="primary"
+            @click="importEntries">
+            Import
+          </v-btn>
+          <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
+          <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
+        </v-form>
+      </v-card-text>
+    </v-card>
+
+    <v-card tag="section" id="sync" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Syncing with other devices</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>Your diary can be synced with other devices using any <a href="https://couchdb.apache.org/">CouchDB server</a>. This is not provided as part of Tempo though, and you have to find or host one yourself.</p>
+        <v-form>
+          <v-text-field
+            v-model="couchDbUrl"
+            label="CouchDB URL"
+            placeholder="http://localhost:5984/tempo"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="couchDbUsername"
+            label="CouchDB Username"
+            name="alice"
+            required
+          ></v-text-field>
+          <v-text-field
+            :append-icon="showdbPassword ? $icons.mdiEye : $icons.mdiEyeOff"
+            :type="showdbPassword ? 'text' : 'password'"
+            name="input-10-2"
+            required
+            label="CouchDB Password"
+            v-model="couchDbPassword"
+            class="input-group--focused"
+            @click:append="showdbPassword = !showdbPassword"
+          ></v-text-field>
+          <v-btn
+            class="mr-4"
+            color="primary"
+            @click="setupSync">
+            Setup sync
+          </v-btn>
+          <span v-if="syncStatus">{{ syncStatus }}</span>
+        </v-form>
+      </v-card-text>
+    </v-card>
+
+    <v-card tag="section" id="delete" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Delete your data</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>Delete all your data from Tempo.</p>
+        <v-btn
+          color="error"
+          @click="deleteConfirm">
+          Delete my data…
+        </v-btn>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>
-import ThemeForm from '@/components/ThemeForm'
+// import ThemeForm from '@/components/ThemeForm'
 
 export default {
   components: {
-    ThemeForm
+    // ThemeForm
   },
   data () {
+
     return {
+      syncStatus: null,
       toImport: null,
       importedEntries: 0,
       failedEntries: 0,
+      showdbPassword: false,
+      couchDbUrl: this.$store.state.couchDbUrl,
+      couchDbUsername: this.$store.state.couchDbUsername,
+      couchDbPassword: this.$store.state.couchDbPassword,
     }
   },
   methods: {
@@ -98,6 +148,21 @@ export default {
         this.$store.dispatch('reset')
         this.importedEntries = 0
         this.failedEntries = 0
+      }
+    },
+    async setupSync () {
+      this.syncStatus = "Checking sync..."
+      try {
+        await this.$store.dispatch(
+          'setupSync', {
+            url: this.couchDbUrl,
+            username: this.couchDbUsername,
+            password: this.couchDbPassword
+          }
+        )
+        this.syncStatus = `Sync OK!`
+      } catch (e) {
+        this.syncStatus = `Error: ${e.name || e}`
       }
     }
   }
