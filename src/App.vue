@@ -602,4 +602,7 @@ section.v-card {
 .block {
   display: block;
 }
+.rendered-markdown > *:last-child {
+  margin-bottom: 0;
+}
 </style>

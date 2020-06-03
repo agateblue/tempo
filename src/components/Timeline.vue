@@ -1,12 +1,13 @@
 <template>
   <div>
-    <v-timeline  align-top dense clipped>
+    <v-timeline  dense>
       <v-slide-x-transition
         group
       >
         <v-timeline-item
           v-for="row in timelineRows"
           :key="row.id"
+          left
           :color="row.color"
           class="pb-4"
           small
