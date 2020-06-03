@@ -1,127 +1,133 @@
 <template>
-  <v-card elevation="4">
-    <v-card-text :class="$theme.card.textSize">
-      <div class="rendered-markdown" v-html="expand ? row.text : truncatedText"></div>
-      <div v-if="isTruncated">
-        <v-btn small class="mt-4"
-          @click="expand = !expand"
-        >
-          <template v-if="expand">
-            Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
-          </template>
-          <template v-else>
-            Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
-          </template>
-        </v-btn>
-      </div>
-    </v-card-text>
-    <v-card-actions>
-      <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
-      <v-spacer></v-spacer>
-      <v-menu  bottom left>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            icon
-            v-on="on"
-          >
-            <v-icon>{{ $icons.mdiDotsHorizontal}}</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item @click.stop="editDialog = true">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiPencil }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Edit</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click.stop="deleteDialog = true">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiDelete }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Delete</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-card-actions>
-
-    <v-dialog
-
-      v-model="editDialog"
-      max-width="800"
-    >
-      <v-card :color="$theme.card.color">
-        <v-card-title class="headline">Update entry</v-card-title>
-
-        <v-card-text>
-          <entry-form
-            ref="updateForm"
-            :entry="row.rawEntry"
-            @updated="update"
-            :name="`how-${row.rawEntry._id}`">
-          </entry-form>
+  <v-lazy
+    :options="{
+      threshold: .5
+    }"
+    min-height="50"
+    transition="fade-transition"
+  >
+    <v-card elevation="4">
+        <v-card-text :class="$theme.card.textSize">
+          <div class="rendered-markdown" v-html="expand ? row.text : truncatedText"></div>
+          <div v-if="isTruncated">
+            <v-btn small class="mt-4"
+              @click="expand = !expand"
+            >
+              <template v-if="expand">
+                Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
+              </template>
+              <template v-else>
+                Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
+              </template>
+            </v-btn>
+          </div>
         </v-card-text>
-
         <v-card-actions>
+          <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
           <v-spacer></v-spacer>
+          <v-menu  bottom left>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                icon
+                v-on="on"
+              >
+                <v-icon>{{ $icons.mdiDotsHorizontal}}</v-icon>
+              </v-btn>
+            </template>
 
-          <v-btn
-            color="secondary"
-            text
-            @click="editDialog = false"
-          >
-            Cancel
-          </v-btn>
+            <v-list>
+              <v-list-item @click.stop="editDialog = true">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons.mdiPencil }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Edit</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item @click.stop="deleteDialog = true">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons.mdiDelete }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Delete</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-dialog
 
-          <v-btn
-            color="primary"
-            text
-            @click="editDialog = false;$refs.updateForm.submit()"
+            v-model="editDialog"
+            max-width="800"
           >
-            Save
-          </v-btn>
+            <v-card :color="$theme.card.color">
+              <v-card-title class="headline">Update entry</v-card-title>
+
+              <v-card-text>
+                <entry-form
+                  ref="updateForm"
+                  :entry="row.rawEntry"
+                  @updated="update"
+                  :name="`how-${row.rawEntry._id}`">
+                </entry-form>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  color="secondary"
+                  text
+                  @click="editDialog = false"
+                >
+                  Cancel
+                </v-btn>
+
+                <v-btn
+                  color="primary"
+                  text
+                  @click="editDialog = false;$refs.updateForm.submit()"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog
+
+            v-model="deleteDialog"
+            max-width="400"
+          >
+            <v-card :color="$theme.card.color">
+              <v-card-title class="headline">Delete this entry?</v-card-title>
+
+              <v-card-text>
+                This action is irreversible.
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                  color="secondary"
+                  text
+                  @click="deleteDialog = false"
+                >
+                  Cancel
+                </v-btn>
+
+                <v-btn
+                  color="primary"
+                  text
+                  @click="deleteDialog = false;handleDelete()"
+                >
+                  Delete
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog
-
-      v-model="deleteDialog"
-      max-width="400"
-    >
-      <v-card :color="$theme.card.color">
-        <v-card-title class="headline">Delete this entry?</v-card-title>
-
-        <v-card-text>
-          This action is irreversible.
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="secondary"
-            text
-            @click="deleteDialog = false"
-          >
-            Cancel
-          </v-btn>
-
-          <v-btn
-            color="primary"
-            text
-            @click="deleteDialog = false;handleDelete()"
-          >
-            Delete
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-card>
+    </v-card>
+  </v-lazy>
 </template>
 <script>
 import EntryForm from '@/components/EntryForm.vue'

@@ -44,7 +44,7 @@ cssVars.forEach(v => {
 const store = new Vuex.Store({
   state: {
     db: null,
-    pageSize: 50,
+    pageSize: 15,
     syncHandler: null,
     couchDbUrl: null,
     couchDbUsername: null,
@@ -206,7 +206,6 @@ store.subscribe((mutation, state) => {
 		couchDbUsername: state.couchDbUsername,
 		couchDbPassword: state.couchDbPassword,
 		version: state.version,
-    pageSize: state.pageSize,
     theme: state.theme,
 	};
 
