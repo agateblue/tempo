@@ -4,7 +4,7 @@
       {{ config.label }}
     </v-card-title>
     <v-card-text v-if="queriedData && queriedData[0]">
-      <v-simple-table v-if="config.chartType === 'table'">
+      <v-simple-table v-if="chartType === 'table'">
         <template v-slot:default>
           <thead>
             <tr>
@@ -22,7 +22,7 @@
       </v-simple-table>
 
       <v-textarea
-        v-else-if="config.chartType === 'json'"
+        v-else-if="chartType === 'json'"
         auto-grow
         :value="JSON.stringify(queriedData, null, 2)"
         rows="2"
@@ -59,6 +59,11 @@
       <div v-show="expand">
         <v-divider></v-divider>
         <v-card-text>
+          <v-select label="Output" v-model="chartType" :items="chartTypes">
+
+          </v-select>
+
+
           <v-textarea
 
             clearable
@@ -95,7 +100,16 @@ export default {
   },
   computed: {
     isFrappeChart () {
-      return ['json', 'table'].indexOf(this.config.chartType) < 0
+      return ['json', 'table'].indexOf(this.chartType) < 0
+    },
+    chartTypes () {
+      return [
+        {value: "line", text: "Plot line"},
+        {value: "pie", text: "Pie chart"},
+        {value: "percentage", text: "Percentage bar"},
+        {value: "table", text: "Table"},
+        {value: "json", text: "JSON"},
+      ]
     },
     dataQueryFields () {
       if (this.queriedData && this.queriedData[0]) {
