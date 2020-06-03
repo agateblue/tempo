@@ -1,87 +1,150 @@
 <template>
-  <main>
-    <section>
-      <aside v-if="showAdditionalControls" class="controls attached widget">
-        <form class="inline">
-          <label for="sort">Sort</label>
-          <select name="sort" id="sort" v-model="sort">
-            <option :value="{date: 'desc'}">Newest first</option>
-            <option :value="{date: 'asc'}">Oldest first</option>
-          </select>
-        </form>
-        <a v-if="entries.length > 0" href="" class="link" @click.prevent="$modal.show('export')">Export {{ entries.length }} entries…</a>
-      </aside>
-      <aside v-if="showAdditionalControls" class="widget">
-        <h3>Visualization</h3>
-        <form>
-          <div class="row">
-            <div class="column">
-              <label for="save-queries">Query</label>
-              <select name="saved-queries" id="saved-queries" @input="updateQuery">
-                <option :value="idx" v-for="(dq, idx) in defaultDataQueries" :key="idx">{{ dq.label }}</option>
-              </select>
+  <v-container>
+    <v-row>
+      <v-col cols="10">
+        <aside v-if="showAdditionalControls" class="widget">
+          <h3>Visualization</h3>
+          <form>
+            <div class="row">
+              <div class="column">
+                <label for="save-queries">Query</label>
+                <select name="saved-queries" id="saved-queries" @input="updateQuery">
+                  <option :value="idx" v-for="(dq, idx) in defaultDataQueries" :key="idx">{{ dq.label }}</option>
+                </select>
+              </div>
+              <div class="column">
+                <label for="chart-type">Output</label>
+                <select id="chart-type" name="chart-type" v-model="chartType">
+                  <option value="line">Plot line</option>
+                  <option value="pie">Pie chart</option>
+                  <option value="percentage">Percentage bar</option>
+                  <option value="table">Table</option>
+                  <option value="json">JSON</option>
+                </select>
+              </div>
             </div>
-            <div class="column">
-              <label for="chart-type">Output</label>
-              <select id="chart-type" name="chart-type" v-model="chartType">
-                <option value="line">Plot line</option>
-                <option value="pie">Pie chart</option>
-                <option value="percentage">Percentage bar</option>
-                <option value="table">Table</option>
-                <option value="json">JSON</option>
-              </select>
-            </div>
-          </div>
-          <hr>
-          <template v-if="queriedData && queriedData[0]">
-            <table v-if="chartType === 'table'">
-              <thead>
-                <tr>
-                  <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(row, idx) in queriedData" :key="idx">
-                  <td v-for="field in dataQueryFields" :key="field">
-                    {{ row[field] }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <textarea v-else-if="chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
-            <chart
-              v-else
-              :options="chartOptions">
-            </chart>
+            <hr>
+            <template v-if="queriedData && queriedData[0]">
+              <table v-if="chartType === 'table'">
+                <thead>
+                  <tr>
+                    <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row, idx) in queriedData" :key="idx">
+                    <td v-for="field in dataQueryFields" :key="field">
+                      {{ row[field] }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <textarea v-else-if="chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
+              <chart
+                v-else
+                :options="chartOptions">
+              </chart>
+            </template>
+            <label for="query">Raw query</label>
+            <textarea id="query" name="query" v-model="dataQuery" rows="2"></textarea>
+          </form>
+        </aside>
+
+        <template v-if="tab === 'timeline'">
+          <v-container class="narrow" v-if="shownEntries.length < entries.length">
+            <v-btn block color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
+          </v-container>
+          <timeline
+            :entries="shownEntries"
+            @delete="handleDelete"></timeline>
+        </template>
+        <template v-else-if="tab === 'visualization'">
+
+          <dataviz :entries="shownEntries"></dataviz>
+        </template>
+      </v-col>
+
+      <v-col cols="2">
+        <v-card class="fixed-secondary">
+          <v-list>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>{{ entries.length }} entries</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+          <v-divider></v-divider>
+          <v-list>
+            <v-list-item
+              v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Stats and charts', icon: 'mdiChartTimelineVariant'}]"
+              :key="row.id"
+              @click="selectTab(row.id)"
+              :class="[{'v-list-item--active': tab === row.id}]">
+              <v-list-item-icon>
+                <v-icon>{{ $icons[row.icon] }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>{{ row.label }}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+
+          <template v-if="tab === 'timeline'">
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-item>
+                <v-list-item-action>
+                  <v-switch v-model="sortDesc" :color="$theme.switch.color"></v-switch>
+                </v-list-item-action>
+                <v-list-item-title>Newest entries first</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click.stop="exportDialog = true">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons.mdiDownload }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Export...</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+
+            <v-dialog
+              v-model="exportDialog"
+              max-width="700"
+            >
+              <v-card>
+                <v-card-title class="headline">Export your entries</v-card-title>
+
+                <v-card-text>
+                  <p>Export the selected {{ entries.length }} entries. Use JSON format if you want to reimport them in Tempo, or Markdown for a more text-based format that can be opened and read by text editors.</p>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn
+                    color="secondary"
+                    text
+                    @click="exportDialog = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn color="primary" @click="downloadMarkdown">Export as Markdown</v-btn>
+                  <v-btn color="primary" @click="downloadJSON">Export as JSON</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </template>
-          <label for="query">Raw query</label>
-          <textarea id="query" name="query" v-model="dataQuery" rows="2"></textarea>
-        </form>
-      </aside>
 
-      <template v-if="$store.state.logTab === 'timeline'">
-        <v-container class="narrow" v-if="shownEntries.length < entries.length">
-          <v-btn block color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
-        </v-container>
-        <timeline
-          :entries="shownEntries"
-          @delete="handleDelete"></timeline>
-      </template>
-    </section>
-    <modal name="export">
-      <a href="" class="right floated" @click.prevent="$modal.hide('export')">Close</a>
-      <p>Export the selected {{ entries.length }} entries as a Markdown file.</p>
-      <button @click="downloadMarkdown">Download as markdown</button>
-      <p>Export the selected {{ entries.length }} entries as JSON file. Can be imported in Tempo.</p>
-      <button @click="downloadJSON">Download as JSON</button>
-    </modal>
-
+        </v-card>
+      </v-col>
+    </v-row>
     <v-footer inset padless app>
       <v-container>
         <entry-form @created="handleCreated" />
       </v-container>
     </v-footer>
-  </main>
+  </v-container>
 </template>
 
 <script>
@@ -99,39 +162,27 @@ export default {
   components: {
     Timeline,
     EntryForm,
-    Chart:  () => import("@/components/Chart"),
+    Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
   },
   data () {
     return {
       entries: [],
       entriesCount: 0,
       count: this.$store.state.pageSize,
-      isSyncing: false,
-      syncError: null,
       dataQuery: null,
       queriedData: null,
-      sort: {"date": "desc"},
+      sortDesc: true,
       chartType: "line",
       chartTitle: "",
+      tab: 'timeline',
       showAdditionalControls: false,
+      exportDialog: false,
     }
   },
   async created () {
     this.search()
   },
   computed: {
-    moodData () {
-      let start = new Date()
-      let points = {}
-      this.entries.forEach((e) =>  {
-        let timestamp = (new Date(e._id).getTime()) / 1000
-        points[String(parseInt(timestamp))] = e.mood
-      })
-      return {
-        dataPoints: {...points},
-        start,
-      }
-    },
     defaultDataQueries () {
       let defaultDays = 60
       return [
@@ -264,7 +315,7 @@ ${quoteFrontMatter(e.text)}
           type: 'entry',
           date: { $gt: 0 }
         },
-        sort: [this.sort]
+        sort: [{"date": this.sortDesc ? "desc": 'asc'}]
       })
       return result.docs
     },
@@ -291,6 +342,11 @@ ${quoteFrontMatter(e.text)}
         this.$router.push({name: 'Home', query: {q: this.$refs.search.value }})
       }
     },
+
+    selectTab (value) {
+      this.tab = value || 'timeline'
+    },
+
     async search () {
 
       this.count = this.$store.state.pageSize
@@ -303,24 +359,6 @@ ${quoteFrontMatter(e.text)}
       this.$nextTick(() => {
         this.scrollToBottom()
       })
-    },
-    async forceSync() {
-      this.isSyncing = true
-      this.syncError = null
-      try {
-        this.result = await this.$store.dispatch('forceSync')
-      } catch (e) {
-        this.syncError = e
-      }
-      if (!this.syncError) {
-        this.syncError = false
-      }
-      setTimeout(() => {
-        this.isSyncing = false
-      }, 2000);
-      setTimeout(() => {
-        this.syncError = null
-      }, 2000);
     },
     async queryData (query) {
       if (!query) {
@@ -371,7 +409,7 @@ ${quoteFrontMatter(e.text)}
     async query () {
       await this.search()
     },
-    async sort () {
+    async sortDesc () {
       await this.search()
     },
     "$store.state.lastSync": {
@@ -380,7 +418,11 @@ ${quoteFrontMatter(e.text)}
       }
     },
 
-    "$store.state.logTab" (v) {
+    "tab" (v) {
+      this.$router.push({
+        path: this.$router.currentRoute.path,
+        query: {...this.$router.currentRoute.query, tab: v},
+      })
       if (v === 'timeline') {
         this.$nextTick(() => {
           this.scrollToBottom()

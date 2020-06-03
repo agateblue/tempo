@@ -27,11 +27,6 @@ const cssVars = [
     label: 'Background color for sidebar and main content',
   },
   {
-    id: "modal-bg",
-    default: 'rgba(39, 22, 58, 1)',
-    label: 'Background color for modal windows',
-  },
-  {
     id: "secondary-bg-color",
     default: 'rgba(66, 45, 98, 1)',
     label: 'Secondary background color',
@@ -59,8 +54,6 @@ const store = new Vuex.Store({
     cssVars,
     version,
     dark: true,
-    logTab: 'timeline',
-
     serviceWorker: {
       refreshing: false,
       registration: null,
@@ -122,10 +115,7 @@ const store = new Vuex.Store({
     },
     serviceWorker: (state, value) => {
       state.serviceWorker = {...state.serviceWorker, ...value}
-    },
-    logTab: (state, value) => {
-      state.logTab = value || 'timeline'
-    },
+    }
   },
   getters: {
     cssVarValue: (state) => (id) => {

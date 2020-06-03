@@ -11,7 +11,7 @@
                     <v-icon v-text="$icons.mdiHome"></v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title>Home</v-list-item-title>
+                    <v-list-item-title>All entries</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list-item-group>
@@ -67,22 +67,6 @@
           Tempo
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <template v-if="$router.currentRoute.path === '/'">
-          <v-btn
-            :class="{'v-btn--active': $store.state.logTab === 'timeline'}"
-            @click="$store.commit('logTab', 'timeline')"
-            icon
-            title="Timeline">
-            <v-icon>{{ $icons.mdiFormatListBulleted }}</v-icon>
-          </v-btn>
-          <v-btn
-            :class="{'v-btn--active': $store.state.logTab ===  'visualization'}"
-            @click="$store.commit('logTab', 'visualization')"
-            icon
-            title="Statistics and visualization">
-            <v-icon>{{ $icons.mdiChartTimelineVariant }}</v-icon>
-          </v-btn>
-        </template>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="searchQuery"
@@ -174,12 +158,6 @@ export default {
       immediate: true,
       deep: true,
     },
-    "$store.state.logTab" (v) {
-      this.$router.push({
-        path: this.$router.currentRoute.path,
-        query: {...this.$router.currentRoute.query, tab: v},
-      })
-    },
     "$store.state.theme": {
       handler(theme) {
         let style = document.documentElement.style;
@@ -232,6 +210,7 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --border-radius: 3px;
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
   --single-column-width: 550px;
+  --top-bar-height: 100px;
 }
 .container.narrow {
   max-width: var(--single-column-width);
@@ -243,6 +222,11 @@ section.v-card.theme--dark {
 }
 .v-footer .v-textarea .v-text-field__details {
   display: none;
+}
+.v-card.fixed-secondary {
+  position: fixed;
+  top: var(--top-bar-height);
+  right: 25px;
 }
 // a {
 //   color: var(--accent-color);
