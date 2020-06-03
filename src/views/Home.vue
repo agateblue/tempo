@@ -59,12 +59,14 @@
         </form>
       </aside>
 
-      <v-container class="narrow" v-if="shownEntries.length < entries.length">
-        <v-btn block color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
-      </v-container>
-      <timeline
-        :entries="shownEntries"
-        @delete="handleDelete"></timeline>
+      <template v-if="$store.state.logTab === 'timeline'">
+        <v-container class="narrow" v-if="shownEntries.length < entries.length">
+          <v-btn block color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
+        </v-container>
+        <timeline
+          :entries="shownEntries"
+          @delete="handleDelete"></timeline>
+      </template>
     </section>
     <modal name="export">
       <a href="" class="right floated" @click.prevent="$modal.hide('export')">Close</a>
@@ -85,7 +87,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import Timeline from '@/components/Timeline.vue'
-import alasql from 'alasql'
+import alasql from '@/alasql'
 
 import EntryForm from '@/components/EntryForm.vue'
 import {parseQuery, matchTokens, quoteFrontMatter, getCompleteEntry, } from '@/utils'

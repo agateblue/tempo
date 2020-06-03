@@ -59,6 +59,7 @@ const store = new Vuex.Store({
     cssVars,
     version,
     dark: true,
+    logTab: 'timeline',
 
     serviceWorker: {
       refreshing: false,
@@ -121,6 +122,9 @@ const store = new Vuex.Store({
     },
     serviceWorker: (state, value) => {
       state.serviceWorker = {...state.serviceWorker, ...value}
+    },
+    logTab: (state, value) => {
+      state.logTab = value || 'timeline'
     },
   },
   getters: {
