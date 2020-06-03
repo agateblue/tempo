@@ -16,8 +16,8 @@
       </v-col>
 
       <v-col offset="1" cols="2">
-        <v-card dense class="fixed-secondary">
-          <v-list dense>
+        <v-card :color="$theme.menu.color" dense class="fixed-secondary">
+          <v-list :color="$theme.menu.color"  dense>
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>{{ entries.length }} entries</v-list-item-title>
@@ -25,7 +25,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list dense>
+          <v-list :color="$theme.menu.color" dense>
             <v-list-item
               v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Charts', icon: 'mdiChartTimelineVariant'}]"
               :key="row.id"
@@ -42,7 +42,7 @@
 
           <template v-if="tab === 'timeline'">
             <v-divider></v-divider>
-            <v-list dense>
+            <v-list :color="$theme.menu.color" dense>
               <v-list-item>
                 <v-list-item-action>
                   <v-switch v-model="sortDesc" :color="$theme.switch.color"></v-switch>
@@ -64,7 +64,7 @@
               v-model="exportDialog"
               max-width="700"
             >
-              <v-card>
+              <v-card :color="$theme.card.color">
                 <v-card-title class="headline">Export your entries</v-card-title>
 
                 <v-card-text>
@@ -89,7 +89,7 @@
           </template>
           <template v-if="tab === 'visualization'">
             <v-divider></v-divider>
-            <v-list dense>
+            <v-list :color="$theme.menu.color" dense>
               <v-list-item>
                 <v-list-item-action>
                   <v-text-field v-model="graphDays" type="number" step="1" label="days"></v-text-field>
@@ -101,7 +101,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-footer inset padless app >
+    <v-footer :color="$theme.footer.color" inset padless app >
       <entry-form class="mx-3" @created="handleCreated" />
     </v-footer>
   </div>

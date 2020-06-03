@@ -22,6 +22,7 @@
       </v-simple-table>
 
       <v-textarea
+        :background-color="$theme.input.color"
         v-else-if="chartType === 'json'"
         auto-grow
         :value="JSON.stringify(queriedData, null, 2)"
@@ -65,7 +66,7 @@
 
 
           <v-textarea
-
+            :background-color="$theme.input.color"
             clearable
             v-model="dataQuery"
             ref="textarea"

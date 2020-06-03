@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app id="tempo" dark>
-      <v-navigation-drawer clipped left v-model="drawer" app >
+      <v-navigation-drawer clipped left v-model="drawer" app :color="$theme.drawer.color">
         <div class="vertical row">
           <div class="grow" v-if="$store.state.couchDbUrl">
             <v-list dense>
@@ -61,7 +61,7 @@
           </div>
         </div>
       </v-navigation-drawer>
-      <v-app-bar clipped-left app >
+      <v-app-bar clipped-left app :color="$theme.appBar.color">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <v-toolbar-title>
           Tempo
@@ -70,6 +70,7 @@
         <v-spacer></v-spacer>
         <v-text-field
           v-model="searchQuery"
+          :background-color="$theme.input.color"
           solo
           flat
           clearable
