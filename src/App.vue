@@ -67,13 +67,22 @@
           Tempo
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
+        <template v-if="$router.currentRoute.path === '/'">
+          <v-btn
+            :class="{'v-btn--active': $store.state.logTab === 'timeline'}"
+            @click="$store.commit('logTab', 'timeline')"
+            icon
+            title="Timeline">
+            <v-icon>{{ $icons.mdiFormatListBulleted }}</v-icon>
+          </v-btn>
+          <v-btn
+            :class="{'v-btn--active': $store.state.logTab ===  'visualization'}"
+            @click="$store.commit('logTab', 'visualization')"
+            icon
+            title="Statistics and visualization">
+            <v-icon>{{ $icons.mdiChartTimelineVariant }}</v-icon>
+          </v-btn>
+        </template>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="searchQuery"
@@ -104,7 +113,7 @@ export default {
       drawer: null,
       isSyncing: false,
       syncError: null,
-      searchQuery: ''
+      searchQuery: '',
     };
   },
   created () {
@@ -160,9 +169,16 @@ export default {
     "$router.currentRoute.query": {
       handler (v) {
         this.searchQuery = v.q
+        this.$store.commit('logTab', v.tab)
       },
       immediate: true,
       deep: true,
+    },
+    "$store.state.logTab" (v) {
+      this.$router.push({
+        path: this.$router.currentRoute.path,
+        query: {...this.$router.currentRoute.query, tab: v},
+      })
     },
     "$store.state.theme": {
       handler(theme) {
