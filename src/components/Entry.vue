@@ -1,55 +1,51 @@
 <template>
-  <v-row justify="space-between" vertical-align: to>
-    <v-col cols="10">
-      <time class="block font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
-      <div v-html="expand ? row.text : truncatedText"></div>
-      <template v-if="isTruncated">
-        <v-btn small class="mt-4"
-          @click="expand = !expand"
+  <div>
+
+    <div v-html="expand ? row.text : truncatedText"></div>
+    <template v-if="isTruncated">
+      <v-btn small class="mt-4"
+        @click="expand = !expand"
+      >
+        <template v-if="expand">
+          Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
+        </template>
+        <template v-else>
+          Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
+        </template>
+      </v-btn>
+    </template>
+    <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
+
+    <v-menu bottom left>
+      <template v-slot:activator="{ on }">
+        <v-btn
+          dark
+          icon
+          v-on="on"
         >
-          <template v-if="expand">
-            Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
-          </template>
-          <template v-else>
-            Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
-          </template>
+          <v-icon>{{ $icons.mdiDotsHorizontal}}</v-icon>
         </v-btn>
       </template>
-    </v-col>
-    <v-col class="text-right" cols="2">
-      <v-menu bottom left>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            dark
-            icon
-            v-on="on"
-          >
-            <v-icon>{{ $icons.mdiDotsVertical}}</v-icon>
-          </v-btn>
-        </template>
 
-        <v-list>
-          <v-list-item @click.stop="editDialog = true">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiPencil }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Edit</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item @click.stop="deleteDialog = true">
-            <v-list-item-icon>
-              <v-icon>{{ $icons.mdiDelete }}</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Delete</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-
-    </v-col>
-
+      <v-list>
+        <v-list-item @click.stop="editDialog = true">
+          <v-list-item-icon>
+            <v-icon>{{ $icons.mdiPencil }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Edit</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click.stop="deleteDialog = true">
+          <v-list-item-icon>
+            <v-icon>{{ $icons.mdiDelete }}</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>Delete</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-menu>
 
     <v-dialog
       v-model="editDialog"
@@ -121,7 +117,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-row>
+  </div>
 </template>
 <script>
 import EntryForm from '@/components/EntryForm.vue'

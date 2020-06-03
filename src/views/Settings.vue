@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-card tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Settings</v-card-title>
 
@@ -91,7 +91,7 @@
         </v-btn>
       </v-card-text>
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>

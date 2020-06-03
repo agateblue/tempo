@@ -1,22 +1,21 @@
 <template>
-  <v-container>
+  <div>
     <v-row>
-      <v-col cols="10">
+      <v-col cols="7">
         <template v-if="tab === 'timeline'">
           <v-container class="narrow" v-if="shownEntries.length < entries.length">
-            <v-btn block color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
+            <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
           </v-container>
           <timeline
             :entries="shownEntries"
             @delete="handleDelete"></timeline>
         </template>
         <template v-else-if="tab === 'visualization'">
-
           <dataviz :entries="entries"></dataviz>
         </template>
       </v-col>
 
-      <v-col cols="2">
+      <v-col offset="1" cols="2">
         <v-card class="fixed-secondary">
           <v-list>
             <v-list-item>
@@ -96,7 +95,7 @@
         <entry-form @created="handleCreated" />
       </v-container>
     </v-footer>
-  </v-container>
+  </div>
 </template>
 
 <script>

@@ -1,21 +1,25 @@
 <template>
   <v-card class="mb-8">
-
+    <v-card-title>
+      {{ config.label }}
+    </v-card-title>
     <v-card-text v-if="queriedData && queriedData[0]">
-      <table v-if="config.chartType === 'table'">
-        <thead>
-          <tr>
-            <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(row, idx) in queriedData" :key="idx">
-            <td v-for="field in dataQueryFields" :key="field">
-              {{ row[field] }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <v-simple-table v-if="config.chartType === 'table'">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th v-for="field in dataQueryFields" :key="field">{{ field }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, idx) in queriedData" :key="idx">
+              <td v-for="field in dataQueryFields" :key="field">
+                {{ row[field] }}
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
       <textarea v-else-if="config.chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
       <chart
         v-else-if="isFrappeChart"
@@ -38,7 +42,7 @@
         text
         @click="expand = !expand"
       >
-        Edit chart
+        Edit
         <v-icon right>{{ expand ? $icons.mdiChevronUp : $icons.mdiChevronDown  }}</v-icon>
       </v-btn>
     </v-card-actions>
@@ -97,7 +101,7 @@ export default {
           datasets: this.getDatasets(this.queriedData),
           labels: this.getLabels(this.queriedData),
         },
-        title: this.chartTitle,
+        // title: this.chartTitle,
         axisOptions: {
           xIsSeries: true,
         },
