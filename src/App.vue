@@ -228,6 +228,9 @@ section.v-card.theme--dark {
   top: var(--top-bar-height);
   right: 25px;
 }
+.v-timeline-item:last-child {
+  margin-bottom: 24px;
+}
 // a {
 //   color: var(--accent-color);
 // }
