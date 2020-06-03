@@ -1,7 +1,6 @@
 <template>
   <div class="chart">
     <div ref="chart"></div>
-    <a class="right floated link" v-if="chart" @click.stop.prevent="chart.export()">Export chart…</a>
   </div>
 </template>
 
