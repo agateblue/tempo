@@ -40,7 +40,7 @@ module.exports = {
       exclude: []
     },
     manifestOptions: {
-      display: 'minimal-ui',
+      display: "fullscreen",
       start_url: '.',
       description: 'Find yoour own rythm',
       scope: "/",
