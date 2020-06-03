@@ -51,7 +51,7 @@
       v-model="editDialog"
       max-width="800"
     >
-      <v-card>
+      <v-card :color="$theme.card.color">
         <v-card-title class="headline">Update entry</v-card-title>
 
         <v-card-text>
@@ -90,7 +90,7 @@
       v-model="deleteDialog"
       max-width="400"
     >
-      <v-card>
+      <v-card :color="$theme.card.color">
         <v-card-title class="headline">Delete this entry?</v-card-title>
 
         <v-card-text>
