@@ -223,6 +223,10 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
   --single-column-width: 550px;
   --top-bar-height: 60px;
+  --application-background: var(--v-secondary-darken1);
+}
+.theme--dark.v-application {
+  background: var(--application-background) !important;
 }
 .container.narrow {
   max-width: var(--single-column-width);

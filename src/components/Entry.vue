@@ -1,6 +1,6 @@
 <template>
   <v-card elevation="4">
-    <v-card-text>
+    <v-card-text :class="$theme.card.textSize">
       <div class="rendered-markdown" v-html="expand ? row.text : truncatedText"></div>
       <div v-if="isTruncated">
         <v-btn small class="mt-4"
