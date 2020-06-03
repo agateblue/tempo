@@ -16,8 +16,8 @@
       </v-col>
 
       <v-col offset="1" cols="2">
-        <v-card class="fixed-secondary">
-          <v-list>
+        <v-card dense class="fixed-secondary">
+          <v-list dense>
             <v-list-item>
               <v-list-item-content>
                 <v-list-item-title>{{ entries.length }} entries</v-list-item-title>
@@ -25,7 +25,7 @@
             </v-list-item>
           </v-list>
           <v-divider></v-divider>
-          <v-list>
+          <v-list dense>
             <v-list-item
               v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Stats and charts', icon: 'mdiChartTimelineVariant'}]"
               :key="row.id"
@@ -42,7 +42,7 @@
 
           <template v-if="tab === 'timeline'">
             <v-divider></v-divider>
-            <v-list>
+            <v-list dense>
               <v-list-item>
                 <v-list-item-action>
                   <v-switch v-model="sortDesc" :color="$theme.switch.color"></v-switch>

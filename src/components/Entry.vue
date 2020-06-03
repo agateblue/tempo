@@ -2,7 +2,7 @@
   <div>
 
     <div v-html="expand ? row.text : truncatedText"></div>
-    <template v-if="isTruncated">
+    <div v-if="isTruncated">
       <v-btn small class="mt-4"
         @click="expand = !expand"
       >
@@ -13,7 +13,7 @@
           Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
         </template>
       </v-btn>
-    </template>
+    </div>
     <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
 
     <v-menu bottom left>
@@ -117,6 +117,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-divider></v-divider>
   </div>
 </template>
 <script>
