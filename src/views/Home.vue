@@ -1,106 +1,17 @@
 <template>
   <div>
-    <v-row>
-      <v-col :cols="tab === 'timeline' ? 7 : 9">
-        <template v-if="tab === 'timeline'">
-          <v-container class="narrow" v-if="shownEntries.length < entries.length">
-            <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
-          </v-container>
-          <timeline
-            :entries="shownEntries"
-            @delete="handleDelete"></timeline>
-        </template>
-        <template v-else-if="tab === 'visualization'">
-          <dataviz :entries="entries" :days="graphDays"></dataviz>
-        </template>
-      </v-col>
-
-      <v-col offset="1" cols="2">
-        <v-card :color="$theme.menu.color" dense class="fixed-secondary">
-          <v-list :color="$theme.menu.color"  dense>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>{{ entries.length }} entries</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <v-divider></v-divider>
-          <v-list :color="$theme.menu.color" dense>
-            <v-list-item
-              v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Charts', icon: 'mdiChartTimelineVariant'}]"
-              :key="row.id"
-              @click="selectTab(row.id)"
-              :class="[{'v-list-item--active': tab === row.id}]">
-              <v-list-item-icon>
-                <v-icon>{{ $icons[row.icon] }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>{{ row.label }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-
-          <template v-if="tab === 'timeline'">
-            <v-divider></v-divider>
-            <v-list :color="$theme.menu.color" dense>
-              <v-list-item>
-                <v-list-item-action>
-                  <v-switch v-model="sortDesc" :color="$theme.switch.color"></v-switch>
-                </v-list-item-action>
-                <v-list-item-title>Newest first</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click.stop="exportDialog = true">
-                <v-list-item-icon>
-                  <v-icon>{{ $icons.mdiDownload }}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Export...</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-
-            <v-dialog
-
-              v-model="exportDialog"
-              max-width="700"
-            >
-              <v-card :color="$theme.card.color">
-                <v-card-title class="headline">Export your entries</v-card-title>
-
-                <v-card-text>
-                  <p>Export the selected {{ entries.length }} entries. Use JSON format if you want to reimport them in Tempo, or Markdown for a more text-based format that can be opened and read by text editors.</p>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn
-                    color="secondary"
-                    text
-                    @click="exportDialog = false"
-                  >
-                    Cancel
-                  </v-btn>
-                  <v-btn color="primary" @click="downloadMarkdown">Export as Markdown</v-btn>
-                  <v-btn color="primary" @click="downloadJSON">Export as JSON</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-          <template v-if="tab === 'visualization'">
-            <v-divider></v-divider>
-            <v-list :color="$theme.menu.color" dense>
-              <v-list-item>
-                <v-list-item-action>
-                  <v-text-field v-model="graphDays" type="number" step="1" label="days"></v-text-field>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-          </template>
-
-        </v-card>
-      </v-col>
-    </v-row>
+    <template v-if="tab === 'timeline'">
+      <v-container class="narrow" v-if="shownEntries.length < entries.length">
+        <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
+      </v-container>
+      <timeline
+        class="container narrow"
+        :entries="shownEntries"
+        @delete="handleDelete"></timeline>
+    </template>
+    <template v-else-if="tab === 'visualization'">
+      <dataviz :entries="entries" :days="graphDays"></dataviz>
+    </template>
     <v-footer :color="$theme.footer.color" inset padless app >
       <entry-form class="mx-3" @created="handleCreated" />
     </v-footer>
@@ -131,11 +42,15 @@ export default {
       graphDays: 60,
       tab: this.$router.currentRoute.query.tab || 'timeline',
       showAdditionalControls: false,
-      exportDialog: false,
     }
   },
   async created () {
     this.search()
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.scrollToBottom();
+    })
   },
   computed: {
 
