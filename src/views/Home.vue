@@ -379,6 +379,15 @@ ${quoteFrontMatter(e.text)}
         await this.search()
       }
     },
+
+    "$store.state.logTab" (v) {
+      if (v === 'timeline') {
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
+      }
+    },
+
     dataQuery: {
       handler: debounce(
         async function (v) {
