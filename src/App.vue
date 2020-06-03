@@ -59,7 +59,6 @@
             </v-list>
           </div>
         </div>
-
       </v-navigation-drawer>
       <v-app-bar clipped-left app :dark="$store.state.dark">
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -77,9 +76,13 @@
           ref="search"
           label="Search"
           :append-outer-icon="$icons.mdiMagnify"
-          @click:append-outer="$router.push({ path: '/', query: { q: searchQuery }})"
-          @keydown.enter="$router.push({ path: '/', query: { q: searchQuery }})"
-          @click:clear="$router.push({ path: '/', query: { q: '' }})"
+          @click:append-outer="
+            $router.push({ path: '/', query: { q: searchQuery } })
+          "
+          @keydown.enter="
+            $router.push({ path: '/', query: { q: searchQuery } })
+          "
+          @click:clear="$router.push({ path: '/', query: { q: '' } })"
         ></v-text-field>
       </v-app-bar>
       <v-content>
@@ -97,20 +100,18 @@ export default {
       drawer: null,
       isSyncing: false,
       syncError: null,
-      searchQuery: '',
+      searchQuery: "",
     };
   },
-  created () {
+  created() {
     if (navigator.serviceWorker) {
-      navigator.serviceWorker.addEventListener(
-        'controllerchange', () => {
-          if (this.$store.state.serviceWorker.refreshing) return;
-          this.$store.commit('serviceWorker', {
-            refreshing: true
-          })
-          window.location.reload();
-        }
-      );
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (this.$store.state.serviceWorker.refreshing) return;
+        this.$store.commit("serviceWorker", {
+          refreshing: true,
+        });
+        window.location.reload();
+      });
     }
   },
   mounted() {
@@ -121,39 +122,49 @@ export default {
       var className = "internal-link"; // any css selector for children
       if (e.target.localName == "a" && e.target.classList.contains(className)) {
         e.preventDefault();
-        self.searchQuery = e.target.getAttribute("data-query")
-        self.$router.push({ path: '/', query: { q: e.target.getAttribute("data-query") }})
+        self.searchQuery = e.target.getAttribute("data-query");
+        self.$router.push({
+          path: "/",
+          query: { q: e.target.getAttribute("data-query") },
+        });
       }
     };
   },
   methods: {
     async forceSync() {
-      this.isSyncing = true
-      this.syncError = null
+      this.isSyncing = true;
+      this.syncError = null;
       try {
-        await this.$store.dispatch('forceSync')
+        await this.$store.dispatch("forceSync");
       } catch (e) {
-        this.syncError = e
+        this.syncError = e;
       }
       if (!this.syncError) {
-        this.syncError = false
+        this.syncError = false;
       }
-      this.isSyncing = false
+      this.isSyncing = false;
       setTimeout(() => {
-        this.syncError = null
+        this.syncError = null;
       }, 3000);
     },
-    updateApp () {
-      this.$store.commit('serviceWorker', {updateAvailable: false})
-      if (!this.$store.state.serviceWorker.registration || !this.$store.state.serviceWorker.registration.waiting) { return; }
-      this.$store.state.serviceWorker.registration.waiting.postMessage({command: 'skipWaiting'})
-    }
+    updateApp() {
+      this.$store.commit("serviceWorker", { updateAvailable: false });
+      if (
+        !this.$store.state.serviceWorker.registration ||
+        !this.$store.state.serviceWorker.registration.waiting
+      ) {
+        return;
+      }
+      this.$store.state.serviceWorker.registration.waiting.postMessage({
+        command: "skipWaiting",
+      });
+    },
   },
   watch: {
     "$router.currentRoute.query": {
-      handler (v) {
-        this.searchQuery = v.q
-        this.$store.commit('logTab', v.tab)
+      handler(v) {
+        this.searchQuery = v.q;
+        this.$store.commit("logTab", v.tab);
       },
       immediate: true,
       deep: true,
@@ -210,7 +221,7 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --border-radius: 3px;
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
   --single-column-width: 550px;
-  --top-bar-height: 100px;
+  --top-bar-height: 60px;
 }
 .container.narrow {
   max-width: var(--single-column-width);
@@ -225,8 +236,15 @@ section.v-card.theme--dark {
 }
 .v-card.fixed-secondary {
   position: fixed;
-  top: var(--top-bar-height);
-  right: 25px;
+  top: 60px;
+  right: 5px;
+}
+@media screen and (min-width: 700px) {
+
+  .v-card.fixed-secondary {
+    top: 100px;
+    right: 25px;
+  }
 }
 .v-timeline-item:last-child {
   margin-bottom: 24px;

@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="submit">
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col cols="12" sm="6">
         <v-textarea
           solo
           clearable
@@ -17,7 +17,7 @@
           v-model="text"
         ></v-textarea>
       </v-col>
-      <v-col offset="1" cols="5" md="3" id="date-field">
+      <v-col offset="1" cols="5" sm="3" id="date-field">
         <v-menu
           top
           ref="dateMenu"
@@ -45,7 +45,7 @@
         </v-menu>
       </v-col>
 
-      <v-col cols="5" md="2" id="time-field">
+      <v-col cols="5" sm="2" id="time-field">
         <v-menu
           ref="timeMenu"
           top

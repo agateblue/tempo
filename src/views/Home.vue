@@ -27,7 +27,7 @@
           <v-divider></v-divider>
           <v-list dense>
             <v-list-item
-              v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Stats and charts', icon: 'mdiChartTimelineVariant'}]"
+              v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Charts', icon: 'mdiChartTimelineVariant'}]"
               :key="row.id"
               @click="selectTab(row.id)"
               :class="[{'v-list-item--active': tab === row.id}]">
@@ -47,7 +47,7 @@
                 <v-list-item-action>
                   <v-switch v-model="sortDesc" :color="$theme.switch.color"></v-switch>
                 </v-list-item-action>
-                <v-list-item-title>Newest entries first</v-list-item-title>
+                <v-list-item-title>Newest first</v-list-item-title>
               </v-list-item>
               <v-list-item @click.stop="exportDialog = true">
                 <v-list-item-icon>
@@ -91,9 +91,7 @@
       </v-col>
     </v-row>
     <v-footer inset padless app>
-      <v-container>
-        <entry-form @created="handleCreated" />
-      </v-container>
+      <entry-form class="mx-3" @created="handleCreated" />
     </v-footer>
   </div>
 </template>
