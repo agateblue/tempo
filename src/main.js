@@ -52,26 +52,26 @@ Vue.prototype.$icons = {
 
 Vue.prototype.$theme = {
   appBar: {
-    color: "deep-purple",
+    color: "deep-purple darken-2",
   },
   card: {
-    color: "deep-purple",
+    color: "deep-purple darken-2",
     textSize: "body-1",
   },
   drawer: {
-    color: "deep-purple",
+    color: "deep-purple darken-2",
   },
   menu: {
-    color: "deep-purple",
+    color: "deep-purple darken-2",
   },
   footer: {
-    color: "deep-purple",
+    color: "deep-purple darken-2",
   },
   switch: {
     color: "pink",
   },
   input: {
-    color: "deep-purple darken-3",
+    color: "deep-purple darken-4",
   },
 }
 new Vue({
