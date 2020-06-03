@@ -1,5 +1,5 @@
 <template>
-  <v-card :dark="$store.state.dark" class="mb-8">
+  <v-card class="mb-8">
     <v-card-title>
       {{ config.label }}
     </v-card-title>

@@ -20,7 +20,7 @@
       <v-col offset="1" cols="5" sm="3" id="date-field">
         <v-menu
           top left
-          :dark="$store.state.dark"
+
           ref="dateMenu"
           v-model="dateMenu"
           :close-on-content-click="true"
@@ -48,7 +48,7 @@
 
       <v-col cols="5" sm="2" id="time-field">
         <v-menu
-          :dark="$store.state.dark"
+
           ref="timeMenu"
           top left
           v-model="timeMenu"
