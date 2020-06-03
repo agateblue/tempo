@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="7">
+      <v-col :cols="tab === 'timeline' ? 7 : 9">
         <template v-if="tab === 'timeline'">
           <v-container class="narrow" v-if="shownEntries.length < entries.length">
             <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
@@ -11,7 +11,7 @@
             @delete="handleDelete"></timeline>
         </template>
         <template v-else-if="tab === 'visualization'">
-          <dataviz :entries="entries"></dataviz>
+          <dataviz :entries="entries" :days="graphDays"></dataviz>
         </template>
       </v-col>
 
@@ -86,6 +86,16 @@
               </v-card>
             </v-dialog>
           </template>
+          <template v-if="tab === 'visualization'">
+            <v-divider></v-divider>
+            <v-list dense>
+              <v-list-item>
+                <v-list-item-action>
+                  <v-text-field v-model="graphDays" type="number" step="1" label="days"></v-text-field>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+          </template>
 
         </v-card>
       </v-col>
@@ -117,6 +127,7 @@ export default {
       entriesCount: 0,
       count: this.$store.state.pageSize,
       sortDesc: true,
+      graphDays: 60,
       tab: this.$router.currentRoute.query.tab || 'timeline',
       showAdditionalControls: false,
       exportDialog: false,

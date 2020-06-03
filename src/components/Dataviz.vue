@@ -2,7 +2,7 @@
   <div>
     <chart-component
       v-for="chart in charts"
-      :key="chart.label"
+      :key="chart.label + days"
       :config="chart"
       :entries="queryableEntries"></chart-component>
   </div>
@@ -11,7 +11,7 @@
 import { getCompleteEntry, } from '@/utils'
 
 export default {
-  props: ['entries'],
+  props: ['entries', 'days'],
   components: {
     ChartComponent:  () => import(/* webpackChunkName: "visualization" */ "@/components/ChartComponent"),
   },
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     charts () {
-      let defaultDays = 60
+      let defaultDays = this.days
       return [
         {
           label: "Mood by day",
@@ -47,11 +47,11 @@ export default {
           query: `SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,
           chartType: 'line',
         },
-        {
-          label: "Mood for 'work' tag",
-          query: `SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood`,
-          chartType: 'json',
-        },
+        // {
+        //   label: "Mood for 'work' tag",
+        //   query: `SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood`,
+        //   chartType: 'json',
+        // },
         // {
         //   label: "Sleep quality",
         //   query: `SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,

@@ -20,7 +20,15 @@
           </tbody>
         </template>
       </v-simple-table>
-      <textarea v-else-if="config.chartType === 'json'" readonly :value="JSON.stringify(queriedData)"></textarea>
+
+      <v-textarea
+        v-else-if="config.chartType === 'json'"
+        auto-grow
+        :value="JSON.stringify(queriedData, null, 2)"
+        rows="2"
+        readonly
+        label="JSON data"
+      ></v-textarea>
       <chart
         v-else-if="isFrappeChart"
         ref="chart"
