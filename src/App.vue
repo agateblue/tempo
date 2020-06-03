@@ -165,7 +165,6 @@ export default {
     "$router.currentRoute.query": {
       handler(v) {
         this.searchQuery = v.q;
-        this.$store.commit("logTab", v.tab);
       },
       immediate: true,
       deep: true,
