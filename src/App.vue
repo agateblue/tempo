@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <v-app id="tempo" :dark="$store.state.dark">
-      <v-navigation-drawer clipped left v-model="drawer" app>
+    <v-app id="tempo" :class="$store.state.dark ? 'theme--dark' : 'theme--light'" :dark="$store.state.dark">
+      <v-navigation-drawer clipped left v-model="drawer" app :dark="$store.state.dark">
         <div class="vertical row">
           <div class="grow" v-if="$store.state.couchDbUrl">
             <v-list dense>
@@ -86,8 +86,8 @@
           @click:clear="$router.push({ path: '/', query: { q: '' } })"
         ></v-text-field>
       </v-app-bar>
-      <v-content>
-        <v-container fluid tag="main">
+      <v-content :dark="$store.state.dark">
+        <v-container :dark="$store.state.dark" fluid tag="main">
           <router-view></router-view>
         </v-container>
       </v-content>
@@ -226,10 +226,10 @@ $roboto-font-path: "~roboto-fontface/fonts";
 .container.narrow {
   max-width: var(--single-column-width);
 }
-section.v-card.theme--dark {
-  max-width: var(--single-column-width);
-  margin-left: auto;
-  margin-right: auto;
+section.v-card {
+  max-width: var(--single-column-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 .v-footer .v-textarea .v-text-field__details {
   display: none;

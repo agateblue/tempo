@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card tag="section" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Settings</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -12,7 +12,7 @@
         </ul>
       </v-card-text>
     </v-card>
-    <!-- <v-card tag="section" id="theming" class="mb-8" :color="$theme.card.color">
+    <!-- <v-card :dark="$store.state.dark" tag="section" id="theming" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Theming</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -21,7 +21,7 @@
       </v-card-text>
     </v-card> -->
 
-    <v-card tag="section" id="import" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="import" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Import entries</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -40,7 +40,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" id="sync" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="sync" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Syncing with other devices</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -79,7 +79,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" id="delete" class="mb-8" :color="$theme.card.color">
+    <v-card :dark="$store.state.dark" tag="section" id="delete" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Delete your data</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
