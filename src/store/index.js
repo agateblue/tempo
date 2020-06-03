@@ -7,7 +7,7 @@ PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
 
 Vue.use(Vuex)
-import {isEqual} from 'lodash'
+import isEqual from 'lodash/isEqual'
 
 const version = 1
 const cssVars = [
@@ -25,11 +25,6 @@ const cssVars = [
     id: "content-bg",
     default: 'rgba(39, 22, 58, 0.3)',
     label: 'Background color for sidebar and main content',
-  },
-  {
-    id: "modal-bg",
-    default: 'rgba(39, 22, 58, 1)',
-    label: 'Background color for modal windows',
   },
   {
     id: "secondary-bg-color",
@@ -58,6 +53,12 @@ const store = new Vuex.Store({
     theme,
     cssVars,
     version,
+    dark: true,
+    serviceWorker: {
+      refreshing: false,
+      registration: null,
+      updateAvailable: false,
+    }
   },
   mutations: {
     handleSync (state, info) {
@@ -111,6 +112,9 @@ const store = new Vuex.Store({
       state.db.createIndex({
         index: {fields: ['date', 'type']}
       })
+    },
+    serviceWorker: (state, value) => {
+      state.serviceWorker = {...state.serviceWorker, ...value}
     }
   },
   getters: {

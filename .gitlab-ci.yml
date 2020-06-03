@@ -1,5 +1,40 @@
 stages:
+  - review
   - build
+
+review:
+  interruptible: true
+  stage: review
+  image: node:latest
+  when: manual
+  allow_failure: true
+  variables:
+    GIT_STRATEGY: clone
+    VUE_APP_CACHE_ID: $CI_COMMIT_SHA
+  before_script:
+    - yarn install
+  script:
+    - yarn test:unit
+    - yarn build
+    - rm -rf public
+    - mv dist public
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
+  artifacts:
+    expire_in: 2 weeks
+    paths:
+      - public
+  cache:
+    key: front_node_modules
+    paths:
+      - "node_modules"
+  only:
+    - branches
+  tags:
+    - docker
+  environment:
+    name: review/front/$CI_COMMIT_REF_NAME
+    url: http://$CI_PROJECT_NAMESPACE.pages.eliotberriot.com/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/review/index.html
+
 
 pages:
   stage: build
@@ -9,12 +44,12 @@ pages:
     VUE_APP_CACHE_ID: $CI_COMMIT_SHA
   before_script:
     - yarn install
-
   script:
     - yarn test:unit
     - yarn build
     - rm -rf public
     - mv dist public
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
   cache:
     key: front_node_modules
     paths:

@@ -39,8 +39,8 @@ export function parseTags (text) {
 
 export function insertTagMarkup (text) {
   try {
-    return text.replace(tagRegex, (match, m1, m2) => {  // eslint-disable-line no-unused-vars
-      return ` <router-link :to="{name: 'Home', query: {q: '${m2}'}}">${m2}</router-link>`
+    return text.replace(tagRegex, (match, m1, m2, m3, m4) => {  // eslint-disable-line no-unused-vars
+      return ` [${m2}](/?q=tag:${encodeURIComponent(m4)}){.internal-link data-query="tag:${m4}"}`
     })
   } catch {
     return ''
@@ -93,6 +93,8 @@ export function parseQuery(query) {
       }
     } else if (stripped[0] == '@') {
       tokens.push({date: stripped.slice(1)})
+    } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
+      tokens.push({tagName: stripped.split(':')[1]})
     } else {
       tokens.push({text: stripped})
     }
@@ -109,6 +111,14 @@ export function matchTokens(entry, tokens) {
     if (token.tag) {
       let matching = entry.tags.filter((t) => {
         return t.text.toLowerCase() === token.tag.toLowerCase()
+      })
+      if (matching.length === 0) {
+        return false
+      }
+    }
+    if (token.tagName) {
+      let matching = entry.tags.filter((t) => {
+        return t.id.toLowerCase() === token.tagName.toLowerCase()
       })
       if (matching.length === 0) {
         return false
@@ -151,4 +161,61 @@ export function quoteFrontMatter(text) {
     text = '```\n' + text.replace('\n---\n', '\n```\n')
   }
   return text
+}
+
+export function getCompleteEntry (e) {
+  let fullDate = new Date(e.date)
+  let weekNumber = getWeekNumber(fullDate)
+  let year = fullDate.getFullYear()
+  let entry = {
+    text: e.text,
+    _id: e._id,
+    _rev: e._rev,
+    mood: e.mood,
+    fullDate: fullDate,
+    date: fullDate.toISOString().split('T')[0],
+    year: year,
+    month: fullDate.getMonth() + 1,
+    day: fullDate.getDate(),
+    weekday: fullDate.getDay() + 1,
+    weeknumber: weekNumber,
+    week: `${year}-${weekNumber}`,
+    tags: {},
+    event: e.event || null,
+    data: e.data || null,
+  }
+  e.tags.forEach((t) => {
+    entry.tags[t.id] = {
+      ...t,
+      present: true
+    }
+  })
+  return entry
+}
+
+
+export function getWeekNumber (d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
+  var dayNum = d.getUTCDay() || 7
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum)
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1))
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+}
+
+
+export function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+export function getPrettyTimeFromDate (v) {
+  let iso = v.toISOString().split('T')
+  let time = iso[1].slice(0, 5).split(':')
+  let hours = parseInt(time[0])
+  let minutes = parseInt(time[1]) + (hours * 60)
+  minutes = minutes - v.getTimezoneOffset()
+  let realHours = Math.floor(minutes / 60);
+  var realMinutes = minutes % 60;
+  return `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
 }
