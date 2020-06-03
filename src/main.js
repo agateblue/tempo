@@ -3,10 +3,8 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import VModal from 'vue-js-modal'
 import vuetify from './plugins/vuetify';
 
-Vue.use(VModal)
 Vue.config.productionTip = false
 
 // three shaking icons to reduce bundle size
@@ -17,6 +15,7 @@ import {
   mdiChartTimelineVariant,
   mdiHome,
   mdiFormatListBulleted,
+  mdiDownload,
   mdiSync,
   mdiPencil,
   mdiMagnify,
@@ -37,6 +36,7 @@ Vue.prototype.$icons = {
   mdiChartTimelineVariant,
   mdiHome,
   mdiFormatListBulleted,
+  mdiDownload,
   mdiSync,
   mdiPencil,
   mdiMagnify,
@@ -54,6 +54,9 @@ Vue.prototype.$theme = {
   card: {
     color: "grey darken-4",
     textSize: "body-1",
+  },
+  switch: {
+    color: "purple",
   }
 }
 new Vue({
