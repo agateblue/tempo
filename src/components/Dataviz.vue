@@ -1,15 +1,11 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col col="12">
-        <chart-component
-          v-for="chart in charts"
-          :key="chart.label"
-          :config="chart"
-          :entries="queryableEntries"></chart-component>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <chart-component
+      v-for="chart in charts"
+      :key="chart.label"
+      :config="chart"
+      :entries="queryableEntries"></chart-component>
+  </div>
 </template>
 <script>
 import { getCompleteEntry, } from '@/utils'
@@ -51,11 +47,11 @@ export default {
           query: `SELECT date, avg(length(text)) as chars FROM ? GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,
           chartType: 'line',
         },
-        // {
-        //   label: "Mood for 'work' tag",
-        //   query: `SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood`,
-        //   chartType: 'percentage',
-        // },
+        {
+          label: "Mood for 'work' tag",
+          query: `SELECT mood, sum(mood) as chars FROM ? WHERE tags->work->present = true GROUP BY mood`,
+          chartType: 'json',
+        },
         // {
         //   label: "Sleep quality",
         //   query: `SELECT date, sum(tags->sleep->mood) as sleep FROM ? WHERE tags->sleep->present GROUP BY date ORDER BY date DESC LIMIT ${defaultDays}`,

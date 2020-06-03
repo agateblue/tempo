@@ -1,6 +1,6 @@
 <template>
-  <v-container style="max-width: 600px;">
-    <v-timeline dense clipped>
+  <div>
+    <v-timeline align-top dense clipped>
       <v-slide-x-transition
         group
       >
@@ -8,14 +8,14 @@
           v-for="row in timelineRows"
           :key="row.id"
           :color="row.color"
-          class="pb-0"
+          class="pb-4"
           small
         >
           <entry v-if="row.type === 'entry'" @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
         </v-timeline-item>
       </v-slide-x-transition>
     </v-timeline>
-  </v-container>
+  </div>
 </template>
 <script>
 import MarkdownIt from 'markdown-it'

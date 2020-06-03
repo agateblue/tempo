@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-card tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">About Tempo</v-card-title>
 
@@ -208,7 +208,7 @@
         </p>
       </v-card-text>
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>
