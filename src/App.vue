@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <v-app id="tempo" :class="$store.state.dark ? 'theme--dark' : 'theme--light'" :dark="$store.state.dark">
-      <v-navigation-drawer clipped left v-model="drawer" app :dark="$store.state.dark">
+    <v-app id="tempo" dark>
+      <v-navigation-drawer clipped left v-model="drawer" app >
         <div class="vertical row">
           <div class="grow" v-if="$store.state.couchDbUrl">
             <v-list dense>
@@ -61,7 +61,7 @@
           </div>
         </div>
       </v-navigation-drawer>
-      <v-app-bar clipped-left app :dark="$store.state.dark">
+      <v-app-bar clipped-left app >
         <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         <v-toolbar-title>
           Tempo
@@ -86,8 +86,8 @@
           @click:clear="$router.push({ path: '/', query: { q: '' } })"
         ></v-text-field>
       </v-app-bar>
-      <v-content :dark="$store.state.dark">
-        <v-container :dark="$store.state.dark" fluid tag="main">
+      <v-content >
+        <v-container  fluid tag="main">
           <router-view></router-view>
         </v-container>
       </v-content>

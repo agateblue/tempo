@@ -16,7 +16,7 @@
     </div>
     <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
 
-    <v-menu :dark="$store.state.dark" bottom left>
+    <v-menu  bottom left>
       <template v-slot:activator="{ on }">
         <v-btn
           icon
@@ -47,7 +47,7 @@
     </v-menu>
 
     <v-dialog
-      :dark="$store.state.dark"
+
       v-model="editDialog"
       max-width="800"
     >
@@ -86,7 +86,7 @@
     </v-dialog>
 
     <v-dialog
-      :dark="$store.state.dark"
+
       v-model="deleteDialog"
       max-width="400"
     >
