@@ -112,9 +112,6 @@ export default {
     }
     this.date = date
   },
-  mounted () {
-    this.$refs.textarea.focus()
-  },
   computed: {
     date: {
       get () {
@@ -152,7 +149,6 @@ export default {
       } else {
         await this.addNew()
       }
-      this.$refs.textarea.focus()
     },
     async addNew () {
       let date = this.date ? new Date(this.date) : new Date()

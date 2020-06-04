@@ -121,7 +121,6 @@ export default {
         rows.push(row)
       })
       rows = insertAggregates(aggregateConfigs, rows, aggregates)
-      console.log(rows)
       return rows
     }
   }
