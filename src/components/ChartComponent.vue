@@ -70,7 +70,6 @@
             clearable
             v-model="dataQuery"
             ref="textarea"
-            autofocus
             auto-grow
             rows="2"
             label="SQL Query"

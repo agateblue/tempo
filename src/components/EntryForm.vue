@@ -8,7 +8,7 @@
           clearable
           :name="name"
           ref="textarea"
-          autofocus
+          id="composer"
           auto-grow
           rows="2"
           :append-outer-icon="entry ? '': $icons.mdiSend"
