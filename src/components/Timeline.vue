@@ -29,6 +29,7 @@ const RENDERER = new MarkdownIt({
   breaks: true,
 });
 RENDERER.use(require('markdown-it-attrs'))
+RENDERER.use(require('@toycode/markdown-it-class'), { blockquote: 'blockquote' })
 let aggregateConfigs = [
   {
     id: 'day',

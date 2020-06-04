@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mdi/font": "^3.6.95",
+    "@toycode/markdown-it-class": "^1.2.4",
     "alasql": "^0.6.0",
     "core-js": "^3.6.4",
     "frappe-charts": "^1.4.1",
