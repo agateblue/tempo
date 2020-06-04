@@ -156,6 +156,10 @@ ${quoteFrontMatter(e.text)}
       })
     },
     async handleCreated () {
+      this.$router.push({
+        path: "/",
+        query: {}
+      })
       await this.search()
     },
     scrollToBottom () {

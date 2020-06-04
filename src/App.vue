@@ -246,9 +246,11 @@ export default {
     },
   },
   watch: {
-    "$router.currentRoute.query": {
+    "$route": {
       handler(v) {
-        this.searchQuery = v.q;
+        if (v.path === '/') {
+          this.searchQuery = v.query.q;
+        }
       },
       immediate: true,
       deep: true,
