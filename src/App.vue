@@ -360,4 +360,10 @@ section.v-card {
 .rendered-markdown > *:last-child {
   margin-bottom: 0;
 }
+.v-timeline-item__body .date-entry.v-card {
+  &::before, &::after {
+    border-right: none !important;
+    left: 0 !important;
+  }
+}
 </style>
