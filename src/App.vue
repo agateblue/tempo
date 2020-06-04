@@ -366,4 +366,11 @@ section.v-card {
     left: 0 !important;
   }
 }
+.v-application pre > code {
+  display: block;
+  padding: 12px;
+  &::before, &::after {
+    content: none;
+  }
+}
 </style>
