@@ -12,6 +12,7 @@ import {
   mdiCalendar,
   mdiClock,
   mdiCog,
+  mdiClose,
   mdiChartTimelineVariant,
   mdiHome,
   mdiFormatListBulleted,
@@ -33,6 +34,7 @@ Vue.prototype.$icons = {
   mdiCalendar,
   mdiClock,
   mdiCog,
+  mdiClose,
   mdiChartTimelineVariant,
   mdiHome,
   mdiFormatListBulleted,
@@ -64,14 +66,14 @@ Vue.prototype.$theme = {
   menu: {
     color: "grey darken-4",
   },
-  footer: {
-    color: "pink darken-4",
-  },
   switch: {
     color: "pink",
   },
   input: {
     color: "grey darken-4",
+  },
+  mainButton: {
+    color: "pink darken-4",
   },
 }
 new Vue({

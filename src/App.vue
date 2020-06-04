@@ -319,9 +319,6 @@ section.v-card {
   margin-left: auto !important;
   margin-right: auto !important;
 }
-.v-footer .v-textarea .v-text-field__details {
-  display: none;
-}
 .v-timeline-item:last-child {
   margin-bottom: 42px;
 }

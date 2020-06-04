@@ -37,7 +37,7 @@
             </template>
 
             <v-list>
-              <v-list-item @click.stop="editDialog = true">
+              <v-list-item @click.stop="showEntryModal = true">
                 <v-list-item-icon>
                   <v-icon>{{ $icons.mdiPencil }}</v-icon>
                 </v-list-item-icon>
@@ -55,44 +55,14 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-dialog
+          <entry-modal
+            ref="updateForm"
+            :show.sync="showEntryModal"
+            :entry="row.rawEntry"
+            @updated="update"
+            :name="`how-${row.rawEntry._id}`">
+          </entry-modal>
 
-            v-model="editDialog"
-            max-width="800"
-          >
-            <v-card :color="$theme.card.color">
-              <v-card-title class="headline">Update entry</v-card-title>
-
-              <v-card-text>
-                <entry-form
-                  ref="updateForm"
-                  :entry="row.rawEntry"
-                  @updated="update"
-                  :name="`how-${row.rawEntry._id}`">
-                </entry-form>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn
-                  color="secondary"
-                  text
-                  @click="editDialog = false"
-                >
-                  Cancel
-                </v-btn>
-
-                <v-btn
-                  color="primary"
-                  text
-                  @click="editDialog = false;$refs.updateForm.submit()"
-                >
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
           <v-dialog
 
             v-model="deleteDialog"
@@ -131,7 +101,7 @@
   </v-card>
 </template>
 <script>
-import EntryForm from '@/components/EntryForm.vue'
+import EntryModal from '@/components/EntryModal.vue'
 import truncate from 'truncate-html'
 truncate.setup({byWords: true, length: 30, keepWhitespaces: true })
 
@@ -140,12 +110,12 @@ export default {
     row: Object
   },
   components: {
-    EntryForm
+    EntryModal
   },
   data () {
     return {
       deleteDialog: false,
-      editDialog: false,
+      showEntryModal: false,
       currentEntry: this.row.rawEntry,
       expand: false,
     }

@@ -13,16 +13,25 @@
     <template v-else-if="tab === 'visualization'">
       <dataviz :entries="entries" :days="graphDays"></dataviz>
     </template>
-    <v-footer :color="$theme.footer.color" inset padless app >
-      <entry-form class="mx-3" @created="handleCreated" />
-    </v-footer>
+    <v-btn
+      fixed
+      dark
+      fab
+      bottom
+      right
+      :color="$theme.mainButton.color"
+      @click="showEntryModal = true"
+    >
+      <v-icon>{{ $icons.mdiPencil }}</v-icon>
+    </v-btn>
+    <entry-modal :show.sync="showEntryModal" @created="handleCreated" />
   </div>
 </template>
 
 <script>
 import Timeline from '@/components/Timeline.vue'
 
-import EntryForm from '@/components/EntryForm.vue'
+import EntryModal from '@/components/EntryModal.vue'
 import {parseQuery, matchTokens, quoteFrontMatter } from '@/utils'
 
 export default {
@@ -31,11 +40,12 @@ export default {
   },
   components: {
     Timeline,
-    EntryForm,
+    EntryModal,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
   },
   data () {
     return {
+      showEntryModal: false,
       entries: [],
       entriesCount: 0,
       count: this.$store.state.pageSize,
