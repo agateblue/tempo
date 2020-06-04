@@ -104,7 +104,6 @@ export default {
         }
         let iso = v.toISOString().split('T')
         this.newDate = iso[0]
-        console.log('HELLOR', iso)
         this.newTime = getPrettyTimeFromDate(v)
 
       }
