@@ -6,11 +6,40 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.png">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+
+      body, html {
+        background: #2c2c2c;
+        font-family: sans-serif;
+      }
+      #app-shell header {
+        padding: 1em;
+        color: white;
+        background: #880e4f;
+      }
+      #app-shell main {
+        padding: 1em;
+        color: white;
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 100vh;
+        width: 100vw;
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
+    <div id="app-shell">
+      <header>Loadin Tempo...</header>
+      <main>
+        <noscript>
+          <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        </noscript>
+        <p>Loading in process...</p>
+      </main>
+    </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

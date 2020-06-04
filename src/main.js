@@ -83,16 +83,16 @@ new Vue({
   vuetify,
 
   beforeCreate() {
-
-      this.$store.commit('loadCachedState')
-      this.$store.commit('initDb')
-      this.$store.dispatch(
-    'setupSync',
-    {
-      url: this.$store.state.couchDbUrl,
-      username: this.$store.state.couchDbUsername,
-      password: this.$store.state.couchDbPassword,
-    }
-  )
+    window.document.getElementById('app-shell').remove()
+    this.$store.commit('loadCachedState')
+    this.$store.commit('initDb')
+    this.$store.dispatch(
+      'setupSync',
+      {
+        url: this.$store.state.couchDbUrl,
+        username: this.$store.state.couchDbUsername,
+        password: this.$store.state.couchDbPassword,
+      }
+    )
   }
 }).$mount('#app')

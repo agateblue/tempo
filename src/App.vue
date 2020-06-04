@@ -1,181 +1,179 @@
 <template>
-  <div id="app">
-    <v-app id="tempo" dark>
-      <v-navigation-drawer clipped left v-model="drawer" app :color="$theme.drawer.color">
-        <div class="vertical row">
-          <div class="grow">
-            <v-list dense>
-              <v-list-item-group>
-                <v-list-item to="/">
-                  <v-list-item-icon>
-                    <v-icon v-text="$icons.mdiHome"></v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>All entries</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
+  <v-app id="tempo" dark>
+    <v-navigation-drawer clipped left v-model="drawer" app :color="$theme.drawer.color">
+      <div class="vertical row">
+        <div class="grow">
+          <v-list dense>
+            <v-list-item-group>
+              <v-list-item to="/">
+                <v-list-item-icon>
+                  <v-icon v-text="$icons.mdiHome"></v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>All entries</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+          <template v-if="$router.currentRoute.path === '/' && $refs.view && $refs.view.entries">
+            <v-divider></v-divider>
+            <v-list :color="$theme.menu.color"  dense>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>{{ $refs.view.entries.length }} entries</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
             </v-list>
-            <template v-if="$router.currentRoute.path === '/' && $refs.view && $refs.view.entries">
-              <v-divider></v-divider>
-              <v-list :color="$theme.menu.color"  dense>
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ $refs.view.entries.length }} entries</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
+            <v-divider></v-divider>
+            <v-list :color="$theme.menu.color" dense>
+              <v-list-item
+                v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Charts', icon: 'mdiChartTimelineVariant'}]"
+                :key="row.id"
+                @click="$refs.view.selectTab(row.id)"
+                :class="[{'v-list-item--active': $refs.view.tab === row.id}]">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons[row.icon] }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>{{ row.label }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <template v-if="$refs.view.tab === 'timeline'">
               <v-divider></v-divider>
               <v-list :color="$theme.menu.color" dense>
-                <v-list-item
-                  v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Charts', icon: 'mdiChartTimelineVariant'}]"
-                  :key="row.id"
-                  @click="$refs.view.selectTab(row.id)"
-                  :class="[{'v-list-item--active': $refs.view.tab === row.id}]">
+                <v-list-item>
+                  <v-list-item-action>
+                    <v-switch v-model="$refs.view.sortDesc" :color="$theme.switch.color"></v-switch>
+                  </v-list-item-action>
+                  <v-list-item-title>Newest first</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click.stop="exportDialog = true">
                   <v-list-item-icon>
-                    <v-icon>{{ $icons[row.icon] }}</v-icon>
+                    <v-icon>{{ $icons.mdiDownload }}</v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title>{{ row.label }}</v-list-item-title>
+                    <v-list-item-title>Export...</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
-              <template v-if="$refs.view.tab === 'timeline'">
-                <v-divider></v-divider>
-                <v-list :color="$theme.menu.color" dense>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-switch v-model="$refs.view.sortDesc" :color="$theme.switch.color"></v-switch>
-                    </v-list-item-action>
-                    <v-list-item-title>Newest first</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click.stop="exportDialog = true">
-                    <v-list-item-icon>
-                      <v-icon>{{ $icons.mdiDownload }}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>Export...</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
 
-                <v-dialog
+              <v-dialog
 
-                  v-model="exportDialog"
-                  max-width="700"
-                >
-                  <v-card :color="$theme.card.color">
-                    <v-card-title class="headline">Export your entries</v-card-title>
+                v-model="exportDialog"
+                max-width="700"
+              >
+                <v-card :color="$theme.card.color">
+                  <v-card-title class="headline">Export your entries</v-card-title>
 
-                    <v-card-text>
-                      <p>Export the selected {{ $refs.view.entries.length }} entries. Use JSON format if you want to reimport them in Tempo, or Markdown for a more text-based format that can be opened and read by text editors.</p>
-                    </v-card-text>
+                  <v-card-text>
+                    <p>Export the selected {{ $refs.view.entries.length }} entries. Use JSON format if you want to reimport them in Tempo, or Markdown for a more text-based format that can be opened and read by text editors.</p>
+                  </v-card-text>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
 
-                      <v-btn
-                        color="secondary"
-                        text
-                        @click="exportDialog = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn color="primary" @click="$refs.view.downloadMarkdown">Export as Markdown</v-btn>
-                      <v-btn color="primary" @click="$refs.view.downloadJSON">Export as JSON</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </template>
-              <template v-if="$refs.view.tab === 'visualization'">
-                <v-divider></v-divider>
-                <v-list :color="$theme.menu.color" dense>
-                  <v-list-item>
-                    <v-list-item-action>
-                      <v-text-field v-model="$refs.view.graphDays" type="number" step="1" label="days"></v-text-field>
-                    </v-list-item-action>
-                  </v-list-item>
-                </v-list>
-              </template>
+                    <v-btn
+                      color="secondary"
+                      text
+                      @click="exportDialog = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn color="primary" @click="$refs.view.downloadMarkdown">Export as Markdown</v-btn>
+                    <v-btn color="primary" @click="$refs.view.downloadJSON">Export as JSON</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </template>
-          </div>
-          <div v-if="$store.state.couchDbUrl">
-            <v-btn
-            text
-              class="ma-4 mr-4"
-              :loading="isSyncing"
-              :disabled="isSyncing"
-              @click.stop.prevent="forceSync"
-            >
-              <v-icon left>{{ $icons.mdiSync }}</v-icon>
-              Sync now
-              <template v-slot:loader>
-                <span>Loading...</span>
-              </template>
-            </v-btn>
-            <p v-if="!isSyncing && syncError">
-              Sync error:
-              <span v-if="syncError.name">{{ syncError.name }}</span>
-              <span v-else>Unknown</span>
-            </p>
-          </div>
-          <div>
-            <v-list dense>
-              <v-list-item-group>
-                <v-list-item to="/settings">
-                  <v-list-item-icon>
-                    <v-icon v-text="$icons.mdiCog"></v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Settings</v-list-item-title>
-                  </v-list-item-content>
+            <template v-if="$refs.view.tab === 'visualization'">
+              <v-divider></v-divider>
+              <v-list :color="$theme.menu.color" dense>
+                <v-list-item>
+                  <v-list-item-action>
+                    <v-text-field v-model="$refs.view.graphDays" type="number" step="1" label="days"></v-text-field>
+                  </v-list-item-action>
                 </v-list-item>
-                <v-list-item to="/about">
-                  <v-list-item-icon>
-                    <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>Help</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </div>
+              </v-list>
+            </template>
+          </template>
         </div>
-      </v-navigation-drawer>
-      <v-app-bar clipped-left app :color="$theme.appBar.color">
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-toolbar-title>
-          Tempo
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="searchQuery"
-          :background-color="$theme.input.color"
-          solo
-          flat
-          clearable
-          hide-details
-          ref="search"
-          label="Search"
-          :append-outer-icon="$icons.mdiMagnify"
-          @click:append-outer="
-            $router.push({ path: '/', query: { q: searchQuery } })
-          "
-          @keydown.enter="
-            $router.push({ path: '/', query: { q: searchQuery } })
-          "
-          @click:clear="$router.push({ path: '/', query: { q: '' } })"
-        ></v-text-field>
-      </v-app-bar>
-      <v-content >
-        <v-container  fluid tag="main">
-          <router-view ref="view"></router-view>
-        </v-container>
-      </v-content>
-    </v-app>
-  </div>
+        <div v-if="$store.state.couchDbUrl">
+          <v-btn
+          text
+            class="ma-4 mr-4"
+            :loading="isSyncing"
+            :disabled="isSyncing"
+            @click.stop.prevent="forceSync"
+          >
+            <v-icon left>{{ $icons.mdiSync }}</v-icon>
+            Sync now
+            <template v-slot:loader>
+              <span>Loading...</span>
+            </template>
+          </v-btn>
+          <p v-if="!isSyncing && syncError">
+            Sync error:
+            <span v-if="syncError.name">{{ syncError.name }}</span>
+            <span v-else>Unknown</span>
+          </p>
+        </div>
+        <div>
+          <v-list dense>
+            <v-list-item-group>
+              <v-list-item to="/settings">
+                <v-list-item-icon>
+                  <v-icon v-text="$icons.mdiCog"></v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Settings</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item to="/about">
+                <v-list-item-icon>
+                  <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Help</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </div>
+      </div>
+    </v-navigation-drawer>
+    <v-app-bar clipped-left app :color="$theme.appBar.color">
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>
+        Tempo
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="searchQuery"
+        :background-color="$theme.input.color"
+        solo
+        flat
+        clearable
+        hide-details
+        ref="search"
+        label="Search"
+        :append-outer-icon="$icons.mdiMagnify"
+        @click:append-outer="
+          $router.push({ path: '/', query: { q: searchQuery } })
+        "
+        @keydown.enter="
+          $router.push({ path: '/', query: { q: searchQuery } })
+        "
+        @click:clear="$router.push({ path: '/', query: { q: '' } })"
+      ></v-text-field>
+    </v-app-bar>
+    <v-content >
+      <v-container  fluid tag="main">
+        <router-view ref="view"></router-view>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 <script>
 export default {
