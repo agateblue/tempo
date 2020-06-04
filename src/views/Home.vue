@@ -7,6 +7,7 @@
       <timeline
         class="container narrow"
         :entries="shownEntries"
+        @updated="handleUpdate"
         @delete="handleDelete"></timeline>
     </template>
     <template v-else-if="tab === 'visualization'">
@@ -109,6 +110,13 @@ ${quoteFrontMatter(e.text)}
     async handleDelete (entry) {
       this.entries = this.entries.filter((e) => {
         return e._id != entry._id
+      })
+    },
+    async handleUpdate (entry) {
+      this.entries.forEach((e) => {
+        if (e._id === entry._id) {
+          Object.assign(e, entry)
+        }
       })
     },
     filterEntries (entries, queryTokens) {

@@ -323,7 +323,7 @@ section.v-card {
   display: none;
 }
 .v-timeline-item:last-child {
-  margin-bottom: 24px;
+  margin-bottom: 42px;
 }
 .line-vertical {
   display: none;
