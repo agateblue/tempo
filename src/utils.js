@@ -16,6 +16,7 @@ const signToType = {
   '@': 'annotation',
 }
 const tagRegex = /(^|\s)((?!---)(#|\+{1,3}|-{1,3}|~|\?|!|@)([:A-zÀ-ÿ=\d-]+))/gi
+
 export function parseTags (text) {
   const tags = []
   const regex = new RegExp(tagRegex)
@@ -51,7 +52,7 @@ export function parseTags (text) {
 export function insertTagMarkup (text) {
   try {
     return text.replace(tagRegex, (match, m1, m2, m3, m4) => {  // eslint-disable-line no-unused-vars
-      return ` [${m2}](/?q=tag:${encodeURIComponent(m4)}){.internal-link data-query="tag:${m4}"}`
+      return ` [${m2}](/?q=tag:${encodeURIComponent(m4)}){.internal-link data-query="tag:${m4.split('=')[0]}"}`
     })
   } catch {
     return ''
@@ -105,7 +106,7 @@ export function parseQuery(query) {
     }  else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
       tokens.push({date: stripped.split(':')[1]})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
-      tokens.push({tagName: stripped.split(':')[1]})
+      tokens.push({tagName: stripped.split(/:(.+)/)[1]})
     } else {
       tokens.push({text: stripped})
     }
@@ -150,7 +151,7 @@ export function matchTokens(entry, tokens) {
   return true
 }
 
-export function getCompleteEntry (e, annotationsConfig) {
+export function getCompleteEntry (e) {
   let fullDate = new Date(e.date)
   let weekNumber = getWeekNumber(fullDate)
   let year = fullDate.getFullYear()
@@ -178,8 +179,8 @@ export function getCompleteEntry (e, annotationsConfig) {
   })
   if (entry.data) {
     Object.keys(entry.data).forEach(k => {
-      if (annotationsConfig[k] && annotationsConfig[k].cast) {
-        entry.data[k] = annotationsConfig[k].cast(entry.data[k])
+      if (entry.data[k]) {
+        entry.data[k] = JSON.parse(entry.data[k])
       }
     })
   }

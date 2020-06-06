@@ -189,7 +189,7 @@ describe('utils', () => {
       }
     }
     expected.week = `${expected.year}-${expected.weeknumber}`
-    const result = getCompleteEntry(entry, {'work:duration': {cast: parseInt}})
+    const result = getCompleteEntry(entry)
     expect(result).to.deep.equal(expected)
   })
 
