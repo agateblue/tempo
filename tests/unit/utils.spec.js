@@ -12,12 +12,13 @@ import {
 
 describe('utils', () => {
   it('can extract tags from text', () => {
-    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work.'
+    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work. @work:duration=8'
     const expected = [
       {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
       {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
       {text: "--anxious", id: "anxious", type: "feeling", mood: -2, sign: '-'},
       {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
+      {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
     ]
     expect(parseTags(msg)).to.deep.equal(expected)
   })
@@ -44,7 +45,7 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'hello #world + - @2020 t:mytag'
+    const query = 'hello #world + - date:2020 t:mytag'
     const expected = [
       {text: 'hello'},
       {tag: '#world'},

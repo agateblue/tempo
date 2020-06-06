@@ -7,6 +7,7 @@ const signToMood = {
   '?': null,
   '#': null,
   '!': null,
+  '@': null,
 }
 const signToType = {
   '+': 'feeling',
@@ -14,8 +15,9 @@ const signToType = {
   '~': 'feeling',
   '?': 'feeling',
   '#': 'tag',
+  '@': 'annotation',
 }
-const tagRegex = /(^|\s)((?!---)(#|\+{1,3}|-{1,3}|~|\?|!)([A-zÀ-ÿ\d-]+))/gi
+const tagRegex = /(^|\s)((?!---)(#|\+{1,3}|-{1,3}|~|\?|!|@)([:A-zÀ-ÿ=\d-]+))/gi
 export function parseTags (text) {
   const tags = []
   const regex = new RegExp(tagRegex)
@@ -27,6 +29,11 @@ export function parseTags (text) {
       id: match[4],
     }
     tag.type = signToType[tag.sign]
+    if (tag.type === 'annotation') {
+      let parts = tag.id.split('=')
+      tag.id = parts[0]
+      tag.value = parts[1]
+    }
     tag.mood = signToMood[tag.sign]
     if (tag.mood) {
       tag.mood = tag.mood * match[3].length
@@ -91,8 +98,8 @@ export function parseQuery(query) {
       } else {
         tokens.push({tag: stripped})
       }
-    } else if (stripped[0] == '@') {
-      tokens.push({date: stripped.slice(1)})
+    }  else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
+      tokens.push({date: stripped.split(':')[1]})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(':')[1]})
     } else {
