@@ -37,14 +37,14 @@
           <v-col cols="12" md="6">
             <v-date-picker
               v-model="newDate"
-              landscape
+              :landscape="$vuetify.breakpoint.mdAndUp"
               scrollable
               ></v-date-picker>
           </v-col>
           <v-col cols="12" md="6">
             <v-time-picker
               v-model="newTime"
-              landscape
+              :landscape="$vuetify.breakpoint.mdAndUp"
               scrollable
               ></v-time-picker>
           </v-col>
