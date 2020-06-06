@@ -150,7 +150,7 @@ export function matchTokens(entry, tokens) {
   return true
 }
 
-export function getCompleteEntry (e) {
+export function getCompleteEntry (e, annotationsConfig) {
   let fullDate = new Date(e.date)
   let weekNumber = getWeekNumber(fullDate)
   let year = fullDate.getFullYear()
@@ -176,6 +176,13 @@ export function getCompleteEntry (e) {
       present: true
     }
   })
+  if (entry.data) {
+    Object.keys(entry.data).forEach(k => {
+      if (annotationsConfig[k] && annotationsConfig[k].cast) {
+        entry.data[k] = annotationsConfig[k].cast(entry.data[k])
+      }
+    })
+  }
   return entry
 }
 

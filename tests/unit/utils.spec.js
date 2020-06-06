@@ -5,6 +5,8 @@ import {
   insertTagMarkup,
   parseQuery,
   matchTokens,
+  getCompleteEntry,
+  getWeekNumber,
 } from '@/utils'
 
 describe('utils', () => {
@@ -128,6 +130,67 @@ describe('utils', () => {
     }
     const result = matchTokens(entry, tokens)
     expect(result).equal(true)
+  })
+  it('getCompleteEntry', () => {
+    let date = new Date()
+    const entry = {
+      _id: 'id',
+      _rev: 'rev',
+      text: "hello",
+      mood: 3,
+      date: date.toISOString(),
+      tags: [
+        {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
+        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+        {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
+      ],
+      data: {
+        'work:duration': "8"
+      }
+    }
+    const expected = {
+      ...entry,
+      data: {
+        'work:duration': 8,
+      },
+      fullDate: date,
+      date: date.toISOString().split('T')[0],
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+      weekday: date.getDay() + 1,
+      weeknumber: getWeekNumber(date),
+      tags: {
+        "happy": {
+          id: "happy",
+          mood: 3,
+          present: true,
+          sign: "+",
+          text: "+++happy",
+          type: "feeling",
+        },
+        "tired": {
+          id: "tired",
+          mood: 0,
+          present: true,
+          sign: "~",
+          text: "~tired",
+          type: "feeling",
+        },
+        "work:duration": {
+          id: "work:duration",
+          mood: null,
+          present: true,
+          sign: "@",
+          text: "@work:duration=8",
+          type: "annotation",
+          value: "8",
+        }
+      }
+    }
+    expected.week = `${expected.year}-${expected.weeknumber}`
+    const result = getCompleteEntry(entry, {'work:duration': {cast: parseInt}})
+    expect(result).to.deep.equal(expected)
   })
 
 })
