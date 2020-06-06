@@ -180,7 +180,11 @@ export function getCompleteEntry (e) {
   if (entry.data) {
     Object.keys(entry.data).forEach(k => {
       if (entry.data[k]) {
-        entry.data[k] = JSON.parse(entry.data[k])
+        try {
+          entry.data[k] = JSON.parse(entry.data[k])
+        } catch (e) {
+          // pass
+        }
       }
     })
   }
