@@ -62,10 +62,11 @@ export default {
     entry: {type: Object, default: null},
     show: {type: Boolean, default: false},
     name: {type: String, default: 'how'},
+    initialText: {type: String, default: ''},
   },
   data () {
     return {
-      text: null,
+      text: this.initialText,
       dateDialog: false,
       newDate: null,
       newTime: null,
