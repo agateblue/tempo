@@ -5,14 +5,11 @@ import {
   insertTagMarkup,
   parseQuery,
   matchTokens,
-  getFrontMatter,
-  parseFrontMatter,
-  quoteFrontMatter
 } from '@/utils'
 
 describe('utils', () => {
   it('can extract tags from text', () => {
-    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work. @work:duration=8'
+    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work. @work:duration=8. @a was mean.'
     const expected = [
       {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
       {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
@@ -26,12 +23,28 @@ describe('utils', () => {
     const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
     const expected = {
       type: 'entry',
-      event: null,
       data: null,
       tags: [
         {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
         {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
         {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
+      ],
+      text: msg,
+      mood: 1
+    }
+    expect(getNewEntryData(msg)).to.deep.equal(expected)
+  })
+  it('can get entry data with annotations', () => {
+    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work. @work:duration=8'
+    const expected = {
+      type: 'entry',
+      data: {'work:duration': '8'},
+      tags: [
+        {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
+        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+        {text: "--anxious", id: "anxious", type: "feeling", mood: -2, sign: '-'},
+        {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
+        {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
       ],
       text: msg,
       mood: 1
@@ -117,59 +130,4 @@ describe('utils', () => {
     expect(result).equal(true)
   })
 
-  it('get front matter', () => {
-    let entry = `event: id\nfield: value\n---
-    This is the entry text
-    `
-    let expected = 'event: id\nfield: value'
-    const result = getFrontMatter(entry)
-    expect(result).equal(expected)
-  })
-  it('parse front matter', () => {
-    let entry = `event: id\nfield: value`
-    let expected = {event: 'id', field: 'value'}
-    const result = parseFrontMatter(entry)
-    expect(result).deep.equal(expected)
-  })
-  it('get entry data with front matter', () => {
-    const msg = `event: hello\nfoo: bar\namount: 10\n---\nToday was quite +happy, but I feel ~tired because of #work.`
-    const expected = {
-      type: 'entry',
-      tags: [
-        {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
-        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
-        {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
-      ],
-      text: msg,
-      event: 'hello',
-      data: {
-        foo: 'bar',
-        amount: 10,
-      },
-      mood: 1
-    }
-    expect(getNewEntryData(msg)).to.deep.equal(expected)
-  })
-
-  it('get entry data with invalid matter', () => {
-    const msg = `- event: hello\n- foo: bar\n- amount: 10\n---\nToday was quite +happy, but I feel ~tired because of #work.`
-    const expected = {
-      type: 'entry',
-      event: null,
-      data: null,
-      tags: [
-        {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
-        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
-        {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
-      ],
-      text: msg,
-      mood: 1
-    }
-    expect(getNewEntryData(msg)).to.deep.equal(expected)
-  })
-  it('quote front matter', () => {
-    const msg = `event: hello\nfoo: bar\namount: 10\n---\nToday was quite +happy, but I feel ---tired because of #work.`
-    const expected = '```\nevent: hello\nfoo: bar\namount: 10\n```\nToday was quite +happy, but I feel ---tired because of #work.'
-    expect(quoteFrontMatter(msg)).to.deep.equal(expected)
-  })
 })

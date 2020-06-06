@@ -32,7 +32,7 @@
 import Timeline from '@/components/Timeline.vue'
 
 import EntryModal from '@/components/EntryModal.vue'
-import {parseQuery, matchTokens, quoteFrontMatter } from '@/utils'
+import {parseQuery, matchTokens } from '@/utils'
 
 export default {
   props: {
@@ -79,7 +79,7 @@ event: ${e.event}
 data: ${JSON.stringify(e.data || {})}
 ---
 
-${quoteFrontMatter(e.text)}
+${e.text}
 
 `
       })
