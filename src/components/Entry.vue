@@ -45,6 +45,14 @@
                   <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item @click.stop="showDuplicateModal = true">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons.mdiPlusCircleMultipleOutline }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Copy</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
               <v-list-item @click.stop="deleteDialog = true">
                 <v-list-item-icon>
                   <v-icon>{{ $icons.mdiDelete }}</v-icon>
@@ -56,11 +64,15 @@
             </v-list>
           </v-menu>
           <entry-modal
-            ref="updateForm"
             :show.sync="showEntryModal"
             :entry="row.rawEntry"
             @updated="update"
             :name="`how-${row.rawEntry._id}`">
+          </entry-modal>
+          <entry-modal
+            :show.sync="showDuplicateModal"
+            :initial-text="row.rawEntry.text"
+            :name="`how-${row.rawEntry._id}-dup`">
           </entry-modal>
 
           <v-dialog
@@ -116,6 +128,7 @@ export default {
     return {
       deleteDialog: false,
       showEntryModal: false,
+      showDuplicateModal: false,
       currentEntry: this.row.rawEntry,
       expand: false,
     }

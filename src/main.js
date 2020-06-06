@@ -11,6 +11,7 @@ Vue.config.productionTip = false
 import {
   mdiCalendar,
   mdiClock,
+  mdiPlusCircleMultipleOutline,
   mdiCog,
   mdiClose,
   mdiChartTimelineVariant,
@@ -33,6 +34,7 @@ import {
 Vue.prototype.$icons = {
   mdiCalendar,
   mdiClock,
+  mdiPlusCircleMultipleOutline,
   mdiCog,
   mdiClose,
   mdiChartTimelineVariant,
