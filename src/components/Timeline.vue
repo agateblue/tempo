@@ -27,7 +27,7 @@
 </template>
 <script>
 import MarkdownIt from 'markdown-it'
-import {getCompleteEntry, insertTagMarkup, quoteFrontMatter, getPrettyTimeFromDate} from '@/utils'
+import {getCompleteEntry, insertTagMarkup, getPrettyTimeFromDate} from '@/utils'
 import Entry from './Entry'
 import DateEntry from './DateEntry'
 
@@ -103,7 +103,7 @@ export default {
       reversedEntries.forEach((e) => {
         let entry = getCompleteEntry(e)
         let row = {
-          text: RENDERER.render(insertTagMarkup(quoteFrontMatter(entry.text))),
+          text: RENDERER.render(insertTagMarkup(entry.text)),
           id: Math.random(),
           color: 'grey',
           type: "entry",

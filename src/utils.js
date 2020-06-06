@@ -1,5 +1,3 @@
-import yaml from 'yamljs'
-
 const signToMood = {
   '+': 1,
   '-': -1,
@@ -28,8 +26,12 @@ export function parseTags (text) {
       sign: match[3][0],
       id: match[4],
     }
+    let include = true
     tag.type = signToType[tag.sign]
     if (tag.type === 'annotation') {
+      if (!tag.id.includes('=')) {
+        include = false
+      }
       let parts = tag.id.split('=')
       tag.id = parts[0]
       tag.value = parts[1]
@@ -38,7 +40,9 @@ export function parseTags (text) {
     if (tag.mood) {
       tag.mood = tag.mood * match[3].length
     }
-    tags.push(tag)
+    if (include) {
+      tags.push(tag)
+    }
     match = regex.exec(text)
   }
   return tags
@@ -60,24 +64,24 @@ export function getNewEntryData(text) {
     tags: parseTags(text),
     mood: 0,
     type: 'entry',
-    event: null,
     data: null,
   }
-  let frontMatter = getFrontMatter(text)
-
-  if (frontMatter) {
-    let eventData = parseFrontMatter(frontMatter)
-    if (eventData && typeof eventData === "object" && eventData.event) {
-      entryData.event = String(eventData.event)
-      entryData.data = eventData
-      delete entryData.data.event
-    }
-  }
+  let annotations = []
   entryData.tags.forEach(t => {
     if (t.mood != null && t.mood != undefined) {
       entryData.mood += t.mood
     }
+    if (t.type === 'annotation' && t.value) {
+      annotations.push([t.id, t.value])
+    }
   })
+  if (annotations.length > 0) {
+    entryData.data = {}
+    annotations.forEach((r) => {
+      entryData.data[r[0]] = r[1]
+    })
+  }
+
   return entryData
 }
 
@@ -146,30 +150,6 @@ export function matchTokens(entry, tokens) {
   return true
 }
 
-export function getFrontMatter (entry) {
-  let parts = entry.split('\n---\n')
-  if (parts.length > 1) {
-    return parts[0]
-  }
-  return null
-}
-
-export function parseFrontMatter(raw) {
-  try {
-    return yaml.parse(raw)
-  } catch (e) {
-    console.log('Invalid front matter', raw)
-    return null
-  }
-
-}
-export function quoteFrontMatter(text) {
-  if (getFrontMatter(text)) {
-    text = '```\n' + text.replace('\n---\n', '\n```\n')
-  }
-  return text
-}
-
 export function getCompleteEntry (e) {
   let fullDate = new Date(e.date)
   let weekNumber = getWeekNumber(fullDate)
@@ -188,7 +168,6 @@ export function getCompleteEntry (e) {
     weeknumber: weekNumber,
     week: `${year}-${weekNumber}`,
     tags: {},
-    event: e.event || null,
     data: e.data || null,
   }
   e.tags.forEach((t) => {
