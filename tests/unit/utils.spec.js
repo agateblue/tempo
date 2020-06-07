@@ -37,19 +37,18 @@ describe('utils', () => {
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
   it('can get entry data with annotations', () => {
-    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work. @work:duration=8'
+    const msg = '@work:duration=8.5, @work:project=tempo @work:lunch=true @work:perf=-12'
     const expected = {
       type: 'entry',
-      data: {'work:duration': '8'},
+      data: {'work:duration': '8.5', 'work:project': 'tempo', 'work:lunch': 'true', 'work:perf': '-12'},
       tags: [
-        {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
-        {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
-        {text: "--anxious", id: "anxious", type: "feeling", mood: -2, sign: '-'},
-        {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
-        {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
+        {text: "@work:duration=8.5", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8.5"},
+        {text: "@work:project=tempo", id: "work:project", type: "annotation", mood: null, sign: '@', value: "tempo"},
+        {text: "@work:lunch=true", id: "work:lunch", type: "annotation", mood: null, sign: '@', value: "true"},
+        {text: "@work:perf=-12", id: "work:perf", type: "annotation", mood: null, sign: '@', value: "-12"},
       ],
       text: msg,
-      mood: 1
+      mood: 0
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -142,16 +141,16 @@ describe('utils', () => {
       tags: [
         {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
         {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
-        {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
+        {text: "@work:duration=8.5", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8.5"},
       ],
       data: {
-        'work:duration': "8"
+        'work:duration': "8.5"
       }
     }
     const expected = {
       ...entry,
       data: {
-        'work:duration': 8,
+        'work:duration': 8.5,
       },
       fullDate: date,
       date: date.toISOString().split('T')[0],
@@ -182,9 +181,9 @@ describe('utils', () => {
           mood: null,
           present: true,
           sign: "@",
-          text: "@work:duration=8",
+          text: "@work:duration=8.5",
           type: "annotation",
-          value: "8",
+          value: "8.5",
         }
       }
     }
