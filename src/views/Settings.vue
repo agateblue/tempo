@@ -86,6 +86,39 @@
       </v-card-text>
     </v-card>
 
+    <v-card tag="section" id="webhook" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Webhook</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>Notify an URL via a POST request when an entry is created, updated or deleted.</p>
+          <v-text-field
+            v-model="webhookUrl"
+            label="Webhook URL"
+            name="webhookurl"
+            type="url"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="webhookQuery"
+            label="Restrict to specific entries"
+            placeholder="tag:publish"
+            name="webhookquery"
+          ></v-text-field>
+        <v-btn
+          class="mr-4"
+          :disabled="!webhookUrl"
+          @click="$store.dispatch('triggerWebhook', webhookUrl)">
+          Send webhook now
+        </v-btn>
+        <v-btn
+          color="primary"
+          :disabled="!webhookUrl"
+          @click="$store.dispatch('setWebhook', {url: webhookUrl, query: webhookQuery})">
+          Save
+        </v-btn>
+      </v-card-text>
+    </v-card>
+
     <v-card tag="section" id="delete" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Delete your data</v-card-title>
 
@@ -119,6 +152,8 @@ export default {
       couchDbUrl: this.$store.state.couchDbUrl,
       couchDbUsername: this.$store.state.couchDbUsername,
       couchDbPassword: this.$store.state.couchDbPassword,
+      webhookUrl: this.$store.state.webhook.url,
+      webhookQuery: this.$store.state.webhook.query,
     }
   },
   methods: {

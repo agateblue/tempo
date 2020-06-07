@@ -58,6 +58,10 @@ const store = new Vuex.Store({
       refreshing: false,
       registration: null,
       updateAvailable: false,
+    },
+    webhook: {
+      query: null,
+      url: null,
     }
   },
   mutations: {
@@ -78,6 +82,10 @@ const store = new Vuex.Store({
           state.theme[v.id] = vars[v.id]
         }
       })
+    },
+    webhook (state, {url, query}) {
+      state.webhook.url = url || null
+      state.webhook.query = query || null
     },
     resetTheme (state) {
       state.cssVars.forEach((v) => {
@@ -194,7 +202,34 @@ const store = new Vuex.Store({
         data._rev = existing._rev
       }
       await state.db.put(data)
-    }
+    },
+    async setWebhook ({state, commit}, {url, query}) {
+      commit('webhook', {url, query})
+      let existing
+      try {
+        existing = await state.db.get('webhook')
+      } catch {
+        console.debug('No existing wehook')
+      }
+      if (existing && isEqual(existing.webhook, state.webhook)) {
+        return
+      }
+      let data = {
+        _id: 'webhook',
+        webook: {url, query},
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async triggerWebhook ({state}, url) {
+      return await fetch(url || state.webhook.url, {
+        method: "POST",
+        body: ""
+      })
+    },
   },
   modules: {
   }
@@ -205,6 +240,7 @@ store.subscribe((mutation, state) => {
 		couchDbUrl: state.couchDbUrl,
 		couchDbUsername: state.couchDbUsername,
 		couchDbPassword: state.couchDbPassword,
+		webhook: state.webhook,
 		version: state.version,
     theme: state.theme,
 	};

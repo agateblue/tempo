@@ -271,10 +271,19 @@ export default {
           t = await this.$store.state.db.get("theme");
         } catch (e) {
           console.log("No theme found");
-          return;
         }
+        console.log("Loading webhook…");
         if (t && t.theme) {
           await this.$store.dispatch("setTheme", t.theme);
+        }
+        let w;
+        try {
+          t = await this.$store.state.db.get("webhook");
+        } catch (e) {
+          console.log("No webhhook found");
+        }
+        if (w && w.webhook) {
+          await this.$store.dispatch("setWebhook", w.webhook);
         }
       },
       immediate: true,
