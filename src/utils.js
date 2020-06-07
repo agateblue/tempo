@@ -25,7 +25,7 @@ export function parseTags (text) {
     let tag = {
       text: match[2],
       sign: match[3][0],
-      id: match[4],
+      id: match[4].replace(/"/g, ""),
     }
     let include = true
     tag.type = signToType[tag.sign]
