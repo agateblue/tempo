@@ -37,13 +37,13 @@ describe('utils', () => {
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
   it('can get entry data with annotations', () => {
-    const msg = '@work:duration=8.5, @work:project=tempo @work:lunch=true @work:perf=-12'
+    const msg = '@work:duration=8.5, @work:project="tempo stuff" @work:lunch=true @work:perf=-12'
     const expected = {
       type: 'entry',
-      data: {'work:duration': '8.5', 'work:project': 'tempo', 'work:lunch': 'true', 'work:perf': '-12'},
+      data: {'work:duration': '8.5', 'work:project': 'tempo stuff', 'work:lunch': 'true', 'work:perf': '-12'},
       tags: [
         {text: "@work:duration=8.5", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8.5"},
-        {text: "@work:project=tempo", id: "work:project", type: "annotation", mood: null, sign: '@', value: "tempo"},
+        {text: '@work:project="tempo stuff"', id: "work:project", type: "annotation", mood: null, sign: '@', value: "tempo stuff"},
         {text: "@work:lunch=true", id: "work:lunch", type: "annotation", mood: null, sign: '@', value: "true"},
         {text: "@work:perf=-12", id: "work:perf", type: "annotation", mood: null, sign: '@', value: "-12"},
       ],
