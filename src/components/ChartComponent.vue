@@ -133,8 +133,22 @@ export default {
         height: 300,
         type: this.chartType,
         maxSlices: 7,
-        colors: ["magenta", "orange"]
-      }
+        colors: [
+          'light-green',
+          'purple',
+          'green',
+          'orange',
+          'light-blue',
+          'magenta',
+          'blue',
+          'red',
+          'yellow',
+          'violet',
+          'light-grey',
+          'dark-grey',
+        ]
+
+    }
     },
   },
   methods: {
