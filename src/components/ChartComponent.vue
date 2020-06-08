@@ -84,7 +84,7 @@ import debounce from 'lodash/debounce'
 import alasql from '@/alasql'
 
 export default {
-  props: ['entries', 'config'],
+  props: ['entries', 'tags', 'config'],
   components: {
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
   },
@@ -96,6 +96,7 @@ export default {
 
       chartType: this.config.chartType,
       chartTitle: this.config.label,
+      source: this.config.source || 'entries'
     }
   },
   computed: {
@@ -148,7 +149,14 @@ export default {
           'dark-grey',
         ]
 
-    }
+      }
+    },
+
+    dataSource () {
+      if (this.source === 'tags') {
+        return this.tags
+      }
+      return this.entries
     },
   },
   methods: {
@@ -156,7 +164,7 @@ export default {
       if (!query) {
         return null
       }
-      return await alasql(this.dataQuery,[this.entries]);
+      return await alasql(this.dataQuery,[this.dataSource]);
     },
 
     getLabels (data) {
