@@ -31,27 +31,65 @@
         ></v-textarea>
       </v-container>
       <v-divider></v-divider>
-      <v-container>
-        <v-expansion-panels flat>
+      <v-container class="narrow mt-4">
+        <v-expansion-panels v-model="panel" flat>
+          <v-expansion-panel>
+            <v-expansion-panel-header>Shortcuts</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <template v-if="$store.state.shortcuts.length > 0">
+                <h3 class="my-4">Existing shortcuts</h3>
+                <v-list dense>
+                  <v-list-item
+                    v-for="shortcut in $store.state.shortcuts"
+                    :key="shortcut"
+                    @click="text = shortcut;$refs.textarea.focus();panel = null"
+                  >
+
+                    <v-list-item-content>
+                      {{ shortcut }}
+                    </v-list-item-content>
+                    <v-list-item-icon>
+                      <v-btn icon @click.stop.prevent="$store.dispatch('removeShortcut', shortcut)">
+                        <v-icon>{{ $icons.mdiClose }}</v-icon>
+                      </v-btn>
+                    </v-list-item-icon>
+
+                  </v-list-item>
+                </v-list>
+              </template>
+
+              <h3 class="my-4">New shortcut</h3>
+              <p>Add a new shortcut to quickly log a given entry in the future.</p>
+              <v-form>
+                <v-text-field
+                  v-model="newShortcut"
+                  label="Shortcut content"
+                  placeholder="Feeling +good"
+                  required
+                ></v-text-field>
+                <v-btn
+                  :disabled="!newShortcut"
+                  @click="$store.dispatch('newShortcut', newShortcut)"
+                >
+                  Add
+                </v-btn>
+              </v-form>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
           <v-expansion-panel>
             <v-expansion-panel-header>Date and time</v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-row>
-                <v-col cols="12" md="6">
-                  <v-date-picker
-                    v-model="newDate"
-                    :landscape="$vuetify.breakpoint.mdAndUp"
-                    scrollable
-                    ></v-date-picker>
-                </v-col>
-                <v-col cols="12" md="6">
-                  <v-time-picker
-                    v-model="newTime"
-                    :landscape="$vuetify.breakpoint.mdAndUp"
-                    scrollable
-                    ></v-time-picker>
-                </v-col>
-              </v-row>
+              <v-date-picker
+                v-model="newDate"
+                :landscape="$vuetify.breakpoint.mdAndUp"
+                scrollable
+                ></v-date-picker>
+              <v-time-picker
+                class="mt-2"
+                v-model="newTime"
+                :landscape="$vuetify.breakpoint.mdAndUp"
+                scrollable
+                ></v-time-picker>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -81,9 +119,11 @@ export default {
       dateMenu: false,
       maxDate: null,
       maxTime: null,
+      newShortcut: null,
+      panel: null,
     }
   },
-  created () {
+  async created () {
     this.setMaxDate()
     let date = new Date()
     if (this.entry) {
@@ -91,6 +131,7 @@ export default {
       date = new Date(this.entry.date)
     }
     this.date = date
+    await this.$store.dispatch('loadShortcuts')
   },
   computed: {
     date: {
