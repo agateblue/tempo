@@ -95,6 +95,6 @@ new Vue({
         username: this.$store.state.couchDbUsername,
         password: this.$store.state.couchDbPassword,
       }
-    )
+      )
   }
 }).$mount('#app')

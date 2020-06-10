@@ -54,6 +54,7 @@ const store = new Vuex.Store({
     cssVars,
     version,
     dark: true,
+    shortcuts: [],
     serviceWorker: {
       refreshing: false,
       registration: null,
@@ -123,6 +124,9 @@ const store = new Vuex.Store({
     },
     serviceWorker: (state, value) => {
       state.serviceWorker = {...state.serviceWorker, ...value}
+    },
+    shortcuts (state, shortcuts) {
+      state.shortcuts = shortcuts
     }
   },
   getters: {
@@ -229,6 +233,54 @@ const store = new Vuex.Store({
         method: "POST",
         body: ""
       })
+    },
+
+    async newShortcut ({state, commit}, content) {
+      commit('shortcuts', [...state.shortcuts, content])
+      let existing
+      try {
+        existing = await state.db.get('shortcuts')
+      } catch {
+        console.debug('No existing shortcuts')
+      }
+      if (existing && isEqual(existing.shortcuts, state.shortcuts)) {
+        return
+      }
+      let data = {
+        _id: 'shortcuts',
+        shortcuts: state.shortcuts,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async removeShortcut ({state, commit}, content) {
+      let remaining = state.shortcuts.filter(s => {
+        return s != content
+      })
+      commit('shortcuts', remaining)
+      let existing = await state.db.get('shortcuts')
+      let data = {
+        _id: 'shortcuts',
+        shortcuts: state.shortcuts,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async loadShortcuts ({state, commit}) {
+      let sc = []
+      try {
+        sc = await state.db.get("shortcuts")
+      } catch (e) {
+        console.debug('No existing shortcuts')
+        return
+      }
+      commit('shortcuts', sc.shortcuts)
     },
   },
   modules: {
