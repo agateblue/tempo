@@ -11,6 +11,8 @@
       body, html {
         background: #2c2c2c;
         font-family: sans-serif;
+        padding: 0;
+        margin: 0;
       }
       #app-shell header {
         padding: 1em;
@@ -18,6 +20,7 @@
         background: #880e4f;
       }
       #app-shell main {
+        margin: 0;
         padding: 1em;
         color: white;
         position: fixed;
@@ -32,12 +35,12 @@
   </head>
   <body>
     <div id="app-shell">
-      <header>Loadin Tempo...</header>
+      <header>Loading Tempo...</header>
       <main>
         <noscript>
           <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
         </noscript>
-        <p>Loading in process...</p>
+        <p>Loading in progress...</p>
       </main>
     </div>
     <div id="app"></div>
