@@ -37,7 +37,7 @@
             </template>
 
             <v-list>
-              <v-list-item @click.stop="showEntryModal = true">
+              <v-list-item @click="showEntryModal = true">
                 <v-list-item-icon>
                   <v-icon>{{ $icons.mdiPencil }}</v-icon>
                 </v-list-item-icon>
@@ -45,7 +45,7 @@
                   <v-list-item-title>Edit</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item @click.stop="showDuplicateModal = true">
+              <v-list-item @click="showDuplicateModal = true">
                 <v-list-item-icon>
                   <v-icon>{{ $icons.mdiPlusCircleMultipleOutline }}</v-icon>
                 </v-list-item-icon>
@@ -53,7 +53,15 @@
                   <v-list-item-title>Copy</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item @click.stop="deleteDialog = true">
+              <v-list-item @click="$store.dispatch('newShortcut', row.entry.text)">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons.mdiPlusCircleMultipleOutline }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Save as shortcut</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item @click="deleteDialog = true">
                 <v-list-item-icon>
                   <v-icon>{{ $icons.mdiDelete }}</v-icon>
                 </v-list-item-icon>
