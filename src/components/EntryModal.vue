@@ -32,23 +32,30 @@
       </v-container>
       <v-divider></v-divider>
       <v-container>
-        <h2 class="text-center font-weight-light">Date and time</h2>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-date-picker
-              v-model="newDate"
-              :landscape="$vuetify.breakpoint.mdAndUp"
-              scrollable
-              ></v-date-picker>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-time-picker
-              v-model="newTime"
-              :landscape="$vuetify.breakpoint.mdAndUp"
-              scrollable
-              ></v-time-picker>
-          </v-col>
-        </v-row>
+        <v-expansion-panels flat>
+          <v-expansion-panel>
+            <v-expansion-panel-header>Date and time</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-date-picker
+                    v-model="newDate"
+                    :landscape="$vuetify.breakpoint.mdAndUp"
+                    scrollable
+                    ></v-date-picker>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-time-picker
+                    v-model="newTime"
+                    :landscape="$vuetify.breakpoint.mdAndUp"
+                    scrollable
+                    ></v-time-picker>
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
       </v-container>
     </v-card>
   </v-dialog>
