@@ -169,6 +169,10 @@ const store = new Vuex.Store({
           retry: true
         }).on('change', (info) => {
           commit('handleSync', info)
+        }).on('active', (info) => {
+          commit('handleSync', info)
+        }).on('complete', (info) => {
+          commit('handleSync', info)
         })
         commit('syncHandler', syncHandler)
       }
