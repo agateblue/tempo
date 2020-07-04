@@ -107,7 +107,7 @@
         <v-btn
           class="mr-4"
           :disabled="!webhookUrl"
-          @click="$store.dispatch('triggerWebhook', webhookUrl)">
+          @click="triggerWebhook(webhookUrl)">
           Send webhook now
         </v-btn>
         <v-btn
@@ -157,6 +157,10 @@ export default {
     }
   },
   methods: {
+    async triggerWebhook (url) {
+      await this.$store.dispatch("forceSync")
+      await this.$store.dispatch('triggerWebhook', url)
+    },
     async importEntries () {
       if (!this.toImport) {
         console.log('No file to import')
