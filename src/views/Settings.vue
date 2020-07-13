@@ -12,6 +12,22 @@
         </ul>
       </v-card-text>
     </v-card>
+    <!-- <v-card tag="section" id="theming" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Theming</v-card-title>
+      <v-card-text :class="$theme.card.textSize">
+        <p>Customize Tempo's look and feel</p>
+        <v-list dense>
+          <v-list-item>
+            <v-list-item-action>
+              <v-switch :color="$theme.switch.color" v-model="darkTheme"></v-switch>
+            </v-list-item-action>
+            <v-list-item-title>Dark theme</v-list-item-title>
+          </v-list-item>
+        </v-list>
+        <theme-form></theme-form>
+      </v-card-text>
+    </v-card> -->
+
     <v-card tag="section" id="import" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Import entries</v-card-title>
 
@@ -119,8 +135,12 @@
 </template>
 
 <script>
+// import ThemeForm from '@/components/ThemeForm'
 
 export default {
+  components: {
+    // ThemeForm
+  },
   data () {
 
     return {

@@ -9,11 +9,49 @@ Vue.config.productionTip = false
 
 // three shaking icons to reduce bundle size
 import {
-  mdiDatabase,
+  mdiCalendar,
+  mdiClock,
+  mdiPlusCircleMultipleOutline,
+  mdiCog,
+  mdiClose,
+  mdiChartTimelineVariant,
+  mdiHome,
+  mdiFormatListBulleted,
+  mdiDownload,
+  mdiSync,
+  mdiPencil,
+  mdiMagnify,
+  mdiEye,
+  mdiEyeOff,
+  mdiDotsHorizontal,
+  mdiDelete,
+  mdiSend,
+  mdiChevronUp,
+  mdiChevronDown,
+  mdiHelpCircleOutline,
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
-  mdiDatabase
+  mdiCalendar,
+  mdiClock,
+  mdiPlusCircleMultipleOutline,
+  mdiCog,
+  mdiClose,
+  mdiChartTimelineVariant,
+  mdiHome,
+  mdiFormatListBulleted,
+  mdiDownload,
+  mdiSync,
+  mdiPencil,
+  mdiMagnify,
+  mdiEye,
+  mdiEyeOff,
+  mdiDotsHorizontal,
+  mdiDelete,
+  mdiSend,
+  mdiChevronUp,
+  mdiChevronDown,
+  mdiHelpCircleOutline,
 }
 
 Vue.prototype.$theme = {
