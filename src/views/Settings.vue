@@ -135,12 +135,8 @@
 </template>
 
 <script>
-// import ThemeForm from '@/components/ThemeForm'
 
 export default {
-  components: {
-    // ThemeForm
-  },
   data () {
 
     return {
