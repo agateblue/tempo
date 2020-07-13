@@ -86,12 +86,14 @@ const store = new Vuex.Store({
   },
   getters: {},
   actions: {
-    async addEntry ({state}, entryData) {
+    async addEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
+      dispatch('forceSync')
       return await state.db.get(entryData._id)
     },
-    async updateEntry ({state}, entryData) {
+    async updateEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
+      dispatch('forceSync')
       return await state.db.get(entryData._id)
     },
     async reset ({commit, state, dispatch}) {
