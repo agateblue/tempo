@@ -253,34 +253,14 @@ export default {
       immediate: true,
       deep: true,
     },
-    "$store.state.theme": {
-      handler(theme) {
-        let style = document.documentElement.style;
-        this.$store.state.cssVars.forEach((v) => {
-          style.setProperty(`--${v.id}`, theme[v.id] || v.default);
-        });
-      },
-      deep: true,
-      immediate: true,
-    },
     "$store.state.lastSync": {
       async handler() {
-        console.log("Loading theme…");
-        let t;
-        try {
-          t = await this.$store.state.db.get("theme");
-        } catch (e) {
-          console.log("No theme found");
-        }
         console.log("Loading webhook…");
-        if (t && t.theme) {
-          await this.$store.dispatch("setTheme", t.theme);
-        }
         let w;
         try {
-          t = await this.$store.state.db.get("webhook");
+          w = await this.$store.state.db.get("webhook");
         } catch (e) {
-          console.log("No webhhook found");
+          console.log("No webhook found");
         }
         if (w && w.webhook) {
           await this.$store.dispatch("setWebhook", w.webhook);

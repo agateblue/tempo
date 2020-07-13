@@ -10,37 +10,6 @@ Vue.use(Vuex)
 import isEqual from 'lodash/isEqual'
 
 const version = 1
-const cssVars = [
-  {
-    id: "main-bg",
-    default: '#422D62',
-    label: 'Background color or image (CSS supported)',
-  },
-  {
-    id: "main-text-color",
-    default: 'rgba(255, 255, 255, 0.904)',
-    label: 'Text color',
-  },
-  {
-    id: "content-bg",
-    default: 'rgba(39, 22, 58, 0.3)',
-    label: 'Background color for sidebar and main content',
-  },
-  {
-    id: "secondary-bg-color",
-    default: 'rgba(66, 45, 98, 1)',
-    label: 'Secondary background color',
-  },
-  {
-    id: "accent-color",
-    default: '#FF65A0',
-    label: 'Accent color used for links and tags',
-  }
-]
-let theme = {}
-cssVars.forEach(v => {
-  theme[v.id] = null
-})
 const store = new Vuex.Store({
   state: {
     db: null,
@@ -50,8 +19,6 @@ const store = new Vuex.Store({
     couchDbUsername: null,
     couchDbPassword: null,
     lastSync: new Date(),
-    theme,
-    cssVars,
     version,
     dark: true,
     shortcuts: [],
@@ -77,21 +44,9 @@ const store = new Vuex.Store({
       }
       state.syncHandler = newValue
     },
-    theme (state, vars) {
-      state.cssVars.forEach((v) => {
-        if (vars[v.id] != undefined) {
-          state.theme[v.id] = vars[v.id]
-        }
-      })
-    },
     webhook (state, {url, query}) {
       state.webhook.url = url || null
       state.webhook.query = query || null
-    },
-    resetTheme (state) {
-      state.cssVars.forEach((v) => {
-        state.theme[v.id] = null
-      })
     },
     couchDbConfig (state, {url, username, password}) {
       state.couchDbUrl = url
@@ -129,14 +84,7 @@ const store = new Vuex.Store({
       state.shortcuts = shortcuts
     }
   },
-  getters: {
-    cssVarValue: (state) => (id) => {
-      let v = state.cssVars.filter(v => {
-        return v.id === id
-      })[0]
-      return state.theme[v] || v.default
-    }
-  },
+  getters: {},
   actions: {
     async addEntry ({state}, entryData) {
       await state.db.put(entryData)
@@ -185,31 +133,6 @@ const store = new Vuex.Store({
       let remoteDb = new PouchDB(state.couchDbUrl)
       await remoteDb.logIn(state.couchDbUsername, state.couchDbPassword)
       return await state.db.sync(remoteDb)
-    },
-    async setTheme ({state, commit}, theme) {
-      if (theme) {
-        commit('theme', theme)
-      } else {
-        commit('resetTheme')
-      }
-      let existing
-      try {
-        existing = await state.db.get('theme')
-      } catch {
-        console.debug('No existing theme')
-      }
-      if (existing && isEqual(existing.theme, theme)) {
-        return
-      }
-      let data = {
-        _id: 'theme',
-        theme: theme,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
     },
     async setWebhook ({state, commit}, {url, query}) {
       commit('webhook', {url, query})
@@ -298,7 +221,6 @@ store.subscribe((mutation, state) => {
 		couchDbPassword: state.couchDbPassword,
 		webhook: state.webhook,
 		version: state.version,
-    theme: state.theme,
 	};
 
   console.log('Updating localstorage cache…')
