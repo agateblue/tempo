@@ -15,7 +15,7 @@
         </v-toolbar-items>
       </v-toolbar>
       <v-divider></v-divider>
-      <v-container class="narrow mt-4">
+      <v-container class="mt-4">
         <h1>Chart configuration</h1>
         <v-form>
           <v-row>
@@ -66,13 +66,13 @@
         </v-form>
       </v-container>
       <v-divider></v-divider>
-      <v-container class="narrow mt-4">
+      <v-container class="mt-4">
         <h1>Preview</h1>
         <chart-component
           :key="previewKey"
           :config="chartConfig"
-          :tags="queryableTags"
-          :entries="queryableEntries"
+          :tags="tags"
+          :entries="entries"
           :builtin="false"
           @query:updated="query = $event"></chart-component>
       </v-container>
@@ -81,11 +81,12 @@
 </template>
 
 <script>
-import { getQueryableEntries, getQueryableTags, CHARTTYPES} from '@/utils'
+import {CHARTTYPES} from '@/utils'
 
 export default {
   props: {
     entries: {type: Array},
+    tags: {type: Array},
     show: {type: Boolean, default: false},
     config: {type: Object, default: null},
     days: {type: Number, default: null},
@@ -105,30 +106,14 @@ export default {
     }
   },
   computed: {
-    queryableEntries () {
-      if (this.show) {
-        return getQueryableEntries(this.entries, this.days)
-      } else {
-        return []
-      }
-    },
-    queryableTags () {
-      if (this.show) {
-        return getQueryableTags(this.queryableEntries)
-      } else {
-        return []
-      }
-    },
     chartConfig () {
-      if (this.config) {
-        return this.config
-      }
-      return {
+      let config = this.config || {}
+      return {...config, ...{
         label: this.label,
         query: this.query,
         chartType: this.chartType,
         source: this.source,
-      }
+      }}
     },
     previewKey () {
       return JSON.stringify(this.chartConfig)
@@ -154,7 +139,7 @@ export default {
 
     },
     async update () {
-      let e = {}
+      let e = await this.$store.dispatch('updateChart', this.chartConfig)
       this.$emit('updated', e)
     }
   },

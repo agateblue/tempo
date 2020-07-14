@@ -83,6 +83,13 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <visualization-modal
+        :show.sync="showVisualizationModal"
+        :config="config"
+        :entries="entries"
+        :tags="tags"
+        @updated="update">
+      </visualization-modal>
 
       <v-dialog
 
@@ -146,14 +153,16 @@ export default {
   props: ['entries', 'tags', 'config', 'builtin'],
   components: {
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
+    VisualizationModal:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationModal"),
   },
   data () {
     return {
+      currentConfig: this.config,
       deleteDialog: false,
+      showVisualizationModal: false,
       expandQuery: false,
       dataQuery: this.config.query,
       queriedData: null,
-
       chartType: this.config.chartType,
       chartTitle: this.config.label,
       source: this.config.source || 'entries'
@@ -247,6 +256,11 @@ export default {
     async handleDelete () {
       await this.$store.dispatch('removeChart', this.config._id)
       this.$emit('delete', this.config)
+    },
+
+    async update (e) {
+      this.currentConfig = e
+      this.$emit('updated', e)
     },
   },
   watch: {

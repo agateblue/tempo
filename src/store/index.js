@@ -255,6 +255,28 @@ const store = new Vuex.Store({
       }
       await state.db.put(data)
     },
+    async updateChart ({state, commit}, chart) {
+      
+      let charts = []
+      state.charts.forEach((c) => {
+        if (c._id === chart._id) {
+          charts.push(chart)
+        } else {
+          charts.push(c)
+        }
+      })
+      commit('charts', charts)
+      let existing = await state.db.get('charts')
+      let data = {
+        _id: 'charts',
+        charts: state.charts,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
     async loadCharts ({state, commit}) {
       let sc = []
       try {
