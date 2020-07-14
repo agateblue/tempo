@@ -144,8 +144,11 @@ export default {
     }
   },
   watch: {
-    "field" () {
-      this.setQuery()
+    "field": {
+      handler: function () {
+        this.setQuery()
+      },
+      immediate: true,
     },
   }
 }
