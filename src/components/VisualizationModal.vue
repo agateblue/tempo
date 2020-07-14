@@ -122,7 +122,9 @@ export default {
   methods: {
 
     setQuery () {
-      this.query = `SELECT date, ${this.field} FROM ? GROUP BY date ORDER BY date DESC`
+      if (this.field && this.field.length > 0) {
+        this.query = `SELECT date, ${this.field} FROM ? GROUP BY date ORDER BY date DESC`
+      }
     },
     async submit () {
     
