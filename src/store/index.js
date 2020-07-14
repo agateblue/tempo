@@ -239,6 +239,22 @@ const store = new Vuex.Store({
       }
       await state.db.put(data)
     },
+    async removeChart ({state, commit}, id) {
+      let remaining = state.charts.filter(c => {
+        return c._id != id
+      })
+      commit('charts', remaining)
+      let existing = await state.db.get('charts')
+      let data = {
+        _id: 'charts',
+        charts: state.charts,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
     async loadCharts ({state, commit}) {
       let sc = []
       try {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pb-8">
     <template v-if="tab === 'timeline'">
       <v-container class="narrow" v-if="shownEntries.length < entries.length">
         <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
