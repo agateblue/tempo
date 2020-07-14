@@ -23,6 +23,7 @@ const store = new Vuex.Store({
     version,
     dark: true,
     shortcuts: [],
+    charts: [],
     serviceWorker: {
       refreshing: false,
       registration: null,
@@ -83,6 +84,9 @@ const store = new Vuex.Store({
     },
     shortcuts (state, shortcuts) {
       state.shortcuts = shortcuts
+    },
+    charts (state, charts) {
+      state.charts = charts
     }
   },
   getters: {},
@@ -211,6 +215,39 @@ const store = new Vuex.Store({
         return
       }
       commit('shortcuts', sc.shortcuts)
+    },
+    async addChart ({state, commit}, config) {
+      let id = (new Date()).toISOString()
+      config._id = id
+      commit('charts', [...state.charts, config])
+      let existing
+      try {
+        existing = await state.db.get('charts')
+      } catch {
+        console.debug('No existing charts')
+      }
+      if (existing && isEqual(existing.charts, state.charts)) {
+        return
+      }
+      let data = {
+        _id: 'charts',
+        charts: state.charts,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async loadCharts ({state, commit}) {
+      let sc = []
+      try {
+        sc = await state.db.get("charts")
+      } catch (e) {
+        console.debug('No existing charts')
+        return
+      }
+      commit('charts', sc.charts)
     },
   },
   modules: {

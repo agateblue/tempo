@@ -27,6 +27,7 @@ import {
   mdiDelete,
   mdiSend,
   mdiChevronUp,
+  mdiPlus,
   mdiChevronDown,
   mdiHelpCircleOutline,
 } from '@mdi/js'
@@ -50,6 +51,7 @@ Vue.prototype.$icons = {
   mdiDelete,
   mdiSend,
   mdiChevronUp,
+  mdiPlus,
   mdiChevronDown,
   mdiHelpCircleOutline,
 }

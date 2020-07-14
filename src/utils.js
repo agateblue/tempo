@@ -191,6 +191,30 @@ export function getCompleteEntry (e) {
   return entry
 }
 
+export function getQueryableEntries (entries, defaultDays) {
+  let limit = (new Date((new Date()).getTime() - (defaultDays * 24 * 3600 * 1000))).getTime()
+  return entries.filter((e) => {
+    return new Date(e.date) >= limit
+  }).map((e) => {
+    return getCompleteEntry(e)
+  })
+}
+
+export function getQueryableTags (queryableEntries) {
+  let data = {}
+  queryableEntries.forEach((e) => {
+    Object.keys(e.tags).forEach(tid => {
+      let t = data[tid] || {id: tid, entries: 0, mood: 0}
+      t.entries += 1
+      t.mood += e.mood
+      data[tid] = t
+    })
+  })
+
+  return Object.keys(data).map((t) => {
+    return data[t]
+  })
+}
 
 export function getWeekNumber (d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
@@ -217,3 +241,11 @@ export function getPrettyTimeFromDate (v) {
   var realMinutes = minutes % 60;
   return `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
 }
+
+export const CHARTTYPES = [
+  {value: "line", text: "Plot line"},
+  {value: "pie", text: "Pie chart"},
+  {value: "percentage", text: "Percentage bar"},
+  {value: "table", text: "Table"},
+  {value: "json", text: "JSON"},
+]
