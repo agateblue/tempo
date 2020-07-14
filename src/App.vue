@@ -326,6 +326,10 @@ section.v-card {
 .chart .chart-container .title {
   fill: var(--main-text-color);
 }
+.chart-container .dataset-units circle {
+  stroke-width: 0;
+  r: 0.2em;
+}
 .row {
   display: flex;
 }

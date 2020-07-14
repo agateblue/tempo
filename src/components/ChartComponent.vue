@@ -191,9 +191,6 @@ export default {
         axisOptions: {
           xIsSeries: true,
         },
-        lineOptions: {
-          hideDots: 1,
-        },
         height: 300,
         type: this.chartType,
         maxSlices: 7,
