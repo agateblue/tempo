@@ -295,6 +295,10 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --single-column-width: 550px;
   --top-bar-height: 60px;
   --application-background: var(--v-secondary-darken1);
+  --main-text-color: rgba(255, 255, 255, 0.904);
+  --content-bg: rgb(26, 23, 38);
+  --secondary-bg-color: rgb(43, 30, 39);
+  --accent-color: rgb(253, 186, 146);
 }
 .theme--dark.v-application {
   background: var(--application-background) !important;
