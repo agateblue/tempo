@@ -74,7 +74,7 @@
           :tags="tags"
           :entries="entries"
           :builtin="false"
-          @query:updated="query = $event"></chart-component>
+          @query:updated="query = $event;field = null"></chart-component>
       </v-container>
     </v-card>
   </v-dialog>
