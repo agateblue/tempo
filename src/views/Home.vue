@@ -9,22 +9,34 @@
         :entries="shownEntries"
         @updated="handleUpdate"
         @delete="handleDelete"></timeline>
+      <v-btn
+        fixed
+        dark
+        fab
+        bottom
+        right
+        :color="$theme.mainButton.color"
+        @click="showEntryModal = true"
+      >
+        <v-icon>{{ $icons.mdiPencil }}</v-icon>
+      </v-btn>
     </template>
     <template v-else-if="tab === 'visualization'">
       <dataviz :entries="entries" :days="graphDays"></dataviz>
+      <v-btn
+        fixed
+        dark
+        fab
+        bottom
+        right
+        :color="$theme.mainButton.color"
+        @click="showvisualizationModal = true"
+      >
+        <v-icon>{{ $icons.mdiPlus }}</v-icon>
+      </v-btn>
     </template>
-    <v-btn
-      fixed
-      dark
-      fab
-      bottom
-      right
-      :color="$theme.mainButton.color"
-      @click="showEntryModal = true"
-    >
-      <v-icon>{{ $icons.mdiPencil }}</v-icon>
-    </v-btn>
     <entry-modal :show.sync="showEntryModal" @created="handleCreated" />
+    <visualization-modal :days="graphDays" :entries="entries" :show.sync="showvisualizationModal" />
   </div>
 </template>
 
@@ -32,7 +44,8 @@
 import Timeline from '@/components/Timeline.vue'
 
 import EntryModal from '@/components/EntryModal.vue'
-import {parseQuery, matchTokens } from '@/utils'
+import VisualizationModal from '@/components/VisualizationModal.vue'
+import {parseQuery, matchTokens} from '@/utils'
 
 export default {
   props: {
@@ -41,11 +54,13 @@ export default {
   components: {
     Timeline,
     EntryModal,
+    VisualizationModal,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
   },
   data () {
     return {
       showEntryModal: false,
+      showvisualizationModal: false,
       entries: [],
       entriesCount: 0,
       count: this.$store.state.pageSize,

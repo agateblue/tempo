@@ -186,7 +186,8 @@ export default {
       exportDialog: false,
     };
   },
-  created() {
+  async created() {
+    await this.$store.dispatch('loadCharts')
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (this.$store.state.serviceWorker.refreshing) return;

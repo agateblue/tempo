@@ -49,22 +49,17 @@
 
       <v-btn
         text
-        @click="expand = !expand"
+        @click="expandQuery = !expandQuery"
       >
-        Edit
-        <v-icon right>{{ expand ? $icons.mdiChevronUp : $icons.mdiChevronDown  }}</v-icon>
+        Query
+        <v-icon right>{{ expandQuery ? $icons.mdiChevronUp : $icons.mdiChevronDown  }}</v-icon>
       </v-btn>
     </v-card-actions>
 
     <v-expand-transition>
-      <div v-show="expand">
+      <div v-show="expandQuery">
         <v-divider></v-divider>
         <v-card-text>
-          <v-select label="Output" v-model="chartType" :items="chartTypes">
-
-          </v-select>
-
-
           <v-textarea
             :background-color="$theme.input.color"
             clearable
@@ -83,14 +78,15 @@
 import debounce from 'lodash/debounce'
 import alasql from '@/alasql'
 
+import {CHARTTYPES} from '@/utils'
 export default {
-  props: ['entries', 'tags', 'config'],
+  props: ['entries', 'tags', 'config', 'builtin'],
   components: {
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
   },
   data () {
     return {
-      expand: false,
+      expandQuery: false,
       dataQuery: this.config.query,
       queriedData: null,
 
@@ -104,13 +100,7 @@ export default {
       return ['json', 'table'].indexOf(this.chartType) < 0
     },
     chartTypes () {
-      return [
-        {value: "line", text: "Plot line"},
-        {value: "pie", text: "Pie chart"},
-        {value: "percentage", text: "Percentage bar"},
-        {value: "table", text: "Table"},
-        {value: "json", text: "JSON"},
-      ]
+      return CHARTTYPES
     },
     dataQueryFields () {
       if (this.queriedData && this.queriedData[0]) {
@@ -195,6 +185,7 @@ export default {
     dataQuery: {
       handler: debounce(
         async function (v) {
+          this.$emit('query:updated', v)
           try {
             this.queriedData = await this.queryData(v)
           } catch (e) {
