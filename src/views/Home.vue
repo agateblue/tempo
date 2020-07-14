@@ -22,7 +22,10 @@
       </v-btn>
     </template>
     <template v-else-if="tab === 'visualization'">
-      <dataviz :entries="entries" :days="graphDays"></dataviz>
+      <dataviz       
+        :entries="queryableEntries"
+        :tags="queryableTags"
+        :days="graphDays"></dataviz>
       <v-btn
         fixed
         dark
@@ -36,7 +39,11 @@
       </v-btn>
     </template>
     <entry-modal :show.sync="showEntryModal" @created="handleCreated" />
-    <visualization-modal :days="graphDays" :entries="entries" :show.sync="showvisualizationModal" />
+    <visualization-modal
+      :days="graphDays"
+      :entries="queryableEntries"
+      :tags="queryableTags"
+      :show.sync="showvisualizationModal" />
   </div>
 </template>
 
@@ -45,7 +52,7 @@ import Timeline from '@/components/Timeline.vue'
 
 import EntryModal from '@/components/EntryModal.vue'
 import VisualizationModal from '@/components/VisualizationModal.vue'
-import {parseQuery, matchTokens} from '@/utils'
+import {parseQuery, matchTokens, getQueryableEntries, getQueryableTags} from '@/utils'
 
 export default {
   props: {
@@ -83,8 +90,15 @@ export default {
     shownEntries () {
       return this.entries.slice(0, this.count)
     },
+    queryableEntries () {
+      return getQueryableEntries(this.entries, this.graphDays)
+    },
+    queryableTags () {
+      return getQueryableTags(this.queryableEntries)
+    },
   },
   methods: {
+    
     downloadMarkdown () {
       let markdownParts = this.entries.map((e) => {
         return `---

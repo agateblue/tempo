@@ -2,18 +2,17 @@
   <div>
     <chart-component
       v-for="chart in charts"
-      :key="chart.label + days"
+      :key="getPreviewKey(chart)"
       :config="chart"
-      :tags="queryableTags"
+      :tags="tags"
       :builtin="chart.builtin"
-      :entries="queryableEntries"></chart-component>
+      :entries="entries"></chart-component>
   </div>
 </template>
 <script>
-import { getQueryableEntries, getQueryableTags} from '@/utils'
 
 export default {
-  props: ['entries', 'days'],
+  props: ['entries', 'tags', 'days'],
   components: {
     ChartComponent:  () => import(/* webpackChunkName: "visualization" */ "@/components/ChartComponent"),
   },
@@ -49,14 +48,12 @@ export default {
         },
         ...this.$store.state.charts
       ] 
-    },
-
-    queryableEntries () {
-      return getQueryableEntries(this.entries, this.days)
-    },
-    queryableTags () {
-      return getQueryableTags(this.queryableEntries)
-    },
+    }
+  },
+  methods: {
+    getPreviewKey (chart) {
+      return JSON.stringify(chart)
+    }
   }
 }
 </script>
