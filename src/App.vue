@@ -97,6 +97,17 @@
               </v-list>
             </template>
           </template>
+          <v-divider></v-divider>
+          <v-list :color="$theme.menu.color" dense>
+            <v-list-item to="/tasks">
+              <v-list-item-icon>
+                <v-icon>{{ $icons.mdiCheck }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Tasks</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
         </div>
         <div v-if="$store.state.couchDbUrl">
           <v-btn
@@ -188,6 +199,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch('loadCharts')
+    await this.$store.dispatch('loadTaskLists')
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (this.$store.state.serviceWorker.refreshing) return;
@@ -370,5 +382,14 @@ section.v-card {
 #composer {
   max-height: 30vh;
   overflow-y: auto;
+}
+
+.board {
+  display: flex;
+  .task-list {
+    width: 80vh;
+    max-width: 400px; 
+    min-width: 400px; 
+  }
 }
 </style>
