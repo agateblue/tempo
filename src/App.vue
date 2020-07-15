@@ -393,5 +393,8 @@ section.v-card {
     max-width: 300px; 
     min-width: 300px; 
   }
+  .list-group {
+    min-height: 300px;
+  }
 }
 </style>

@@ -96,6 +96,11 @@ const store = new Vuex.Store({
   getters: {
     boardLists: (state) => {
       return [...state.boardConfig.lists, {label: "Done"}]
+    },
+    taskCategoryChoices: (state) => {
+      return state.boardConfig.categories.map((c) => {
+        return {value: c.label, text: c.label}
+      })
     }
   },
   actions: {
