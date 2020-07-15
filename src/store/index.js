@@ -33,7 +33,7 @@ const store = new Vuex.Store({
       query: null,
       url: null,
     },
-    taskLists: null,
+    boardConfig: null,
   },
   mutations: {
     handleSync (state, info) {
@@ -89,13 +89,13 @@ const store = new Vuex.Store({
     charts (state, charts) {
       state.charts = charts
     },
-    taskLists (state, taskLists) {
-      state.taskLists = taskLists
+    boardConfig (state, boardConfig) {
+      state.boardConfig = boardConfig
     }
   },
   getters: {
-    taskLists: (state) => {
-      return [...state.taskLists, {label: "Done"}]
+    boardLists: (state) => {
+      return [...state.boardConfig.lists, {label: "Done"}]
     }
   },
   actions: {
@@ -295,20 +295,20 @@ const store = new Vuex.Store({
       }
       commit('charts', sc.charts)
     },
-    async taskLists ({state, commit}, taskLists) {
-      commit('taskLists', taskLists)
+    async boardConfig ({state, commit}, boardConfig) {
+      commit('boardConfig', boardConfig)
       let existing
       try {
-        existing = await state.db.get('taskLists')
+        existing = await state.db.get('boardConfig')
       } catch {
         console.debug('No existing lists')
       }
-      if (existing && isEqual(existing.taskLists, state.taskLists)) {
+      if (existing && isEqual(existing.boardConfig, state.boardConfig)) {
         return
       }
       let data = {
-        _id: 'taskLists',
-        taskLists: state.taskLists,
+        _id: 'boardConfig',
+        boardConfig: state.boardConfig,
         type: 'settings',
       }
       if (existing) {
@@ -317,15 +317,15 @@ const store = new Vuex.Store({
       await state.db.put(data)
     },
 
-    async loadTaskLists ({state, commit}) {
+    async loadBoardConfig ({state, commit}) {
       let tl = []
       try {
-        tl = await state.db.get("taskLists")
+        tl = await state.db.get("boardConfig")
       } catch (e) {
-        console.debug('No existing taskLists')
+        console.debug('No existing boardConfig')
         return
       }
-      commit('taskLists', tl.taskLists)
+      commit('boardConfig', tl.boardConfig)
     },
   },
   modules: {

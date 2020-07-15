@@ -199,7 +199,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch('loadCharts')
-    await this.$store.dispatch('loadTaskLists')
+    await this.$store.dispatch('loadBoardConfig')
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (this.$store.state.serviceWorker.refreshing) return;
@@ -386,10 +386,12 @@ section.v-card {
 
 .board {
   display: flex;
+  overflow-x: auto;
+  min-height: 80vh;
   .task-list {
-    width: 80vh;
-    max-width: 400px; 
-    min-width: 400px; 
+    width: 80vw;
+    max-width: 300px; 
+    min-width: 300px; 
   }
 }
 </style>
