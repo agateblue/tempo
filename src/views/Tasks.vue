@@ -75,7 +75,7 @@
               class="mb-5"
               v-for="(task, taskIdx) in tasksByList[idx]"
               :key="`task${taskIdx}`">
-              <v-card-text :class="$theme.card.textSize">{{ task.text }}</v-card-text>
+              <v-card-text :class="$theme.nestedCard.textSize">{{ task.text }}</v-card-text>
             </v-card>
           </v-card-text>
         </v-card>
@@ -135,8 +135,7 @@ export default {
         selector: {
           type: 'task',
           date: { $gt: 0 }
-        },
-        sort: [{"date": "desc"}]
+        }
       })
       return result.docs
     },
@@ -152,6 +151,7 @@ export default {
         date,
         text: this.newTaskText,
         list: idx,
+        index: this.tasks.length,
         category: null, 
       }
       let result = await this.$store.state.db.put(task)
