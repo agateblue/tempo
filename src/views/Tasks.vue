@@ -44,39 +44,50 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
-            <v-card v-if="showTaskForm[idx]" :color="$theme.nestedCard.color">
-              <v-card-text class="pb-0 px-2 pt-1">
-                <v-form :ref="`form${idx}`">
-                  <v-text-field
-                    label="Task"
-                    autofocus
-                    v-model="newTaskText"
-                    @keydown.enter="submitTask(idx)"
-                    required></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions class="py-0 px-2 mb-5">
-                <v-row>
-                  <v-col>
-                    <v-btn class="float-left" text @click.prevent="showTaskForm[idx] = false">
-                      Cancel
-                    </v-btn>
-                  </v-col>
-                  <v-col>
-                    <v-btn class="float-right" color="primary" @click.prevent="submitTask(idx)">
-                      Add
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-actions>
-            </v-card>
-            <v-card
-              :color="$theme.nestedCard.color"
-              class="mb-5"
-              v-for="(task, taskIdx) in tasksByList[idx]"
-              :key="`task${taskIdx}`">
-              <v-card-text :class="$theme.nestedCard.textSize">{{ task.text }}</v-card-text>
-            </v-card>
+            <draggable
+              class="list-group"
+              :list="tasksByList[idx]"
+              :group="{ name: 'tasks' }"
+              @add="moveCard($event, idx)">
+              <v-card v-if="showTaskForm[idx]" :color="$theme.nestedCard.color">
+                <v-card-text class="pb-0 px-2 pt-1">
+                  <v-form :ref="`form${idx}`">
+                    <v-text-field
+                      label="Task"
+                      autofocus
+                      v-model="newTaskText"
+                      @keydown.enter="submitTask(idx)"
+                      required></v-text-field>
+                    <v-select
+                      :items="$store.getters['taskCategoryChoices']"
+                      v-model="newTaskCategory"
+                      label="Category"
+                    ></v-select>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions class="py-0 px-2 mb-5">
+                  <v-row>
+                    <v-col>
+                      <v-btn class="float-left" text @click.prevent="showTaskForm[idx] = false">
+                        Cancel
+                      </v-btn>
+                    </v-col>
+                    <v-col>
+                      <v-btn class="float-right" color="primary" @click.prevent="submitTask(idx)">
+                        Add
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-actions>
+              </v-card>
+              <task-card
+                class="mb-5"
+                :task="task"
+                :data-id="task._id"
+                v-for="task in tasksByList[idx]"
+                @deleted="updateTasks"
+                :key="`task-${task._id}`"></task-card>
+            </draggable>
           </v-card-text>
         </v-card>
       </div>
@@ -89,6 +100,8 @@
 export default {
   components: {
     BoardForm:  () => import(/* webpackChunkName: "tasks" */ "@/components/BoardForm"),
+    TaskCard:  () => import(/* webpackChunkName: "tasks" */ "@/components/TaskCard"),
+    draggable:  () => import(/* webpackChunkName: "tasks" */ "vuedraggable"),
   },
   data () {
     return {
@@ -107,6 +120,7 @@ export default {
       },
       tasks: [],
       newTaskText: '',
+      newTaskCategory: null,
     }
   },
   async created () {
@@ -152,13 +166,23 @@ export default {
         text: this.newTaskText,
         list: idx,
         index: this.tasks.length,
-        category: null, 
+        category: this.newTaskCategory, 
       }
       let result = await this.$store.state.db.put(task)
       task._rev = result.rev
       this.tasks.push(task)
       this.newTaskText = null
+      this.newTaskCategory = null
+    },
+    async updateTasks () {
+      this.tasks = await this.getTasks()
+    },
+    async moveCard (evt, list) {
+      let task = await this.$store.state.db.get(evt.item.dataset.id)
+      task.list = list
+      await this.$store.state.db.put(task)
+      await this.updateTasks()
     }
-  }
+  },
 }
 </script>

@@ -24,6 +24,7 @@
     "truncate-html": "^1.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
+    "vuedraggable": "^2.24.0",
     "vuetify": "^2.2.11",
     "vuex": "^3.1.2"
   },

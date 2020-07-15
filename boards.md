@@ -1,0 +1,7 @@
+- separate "task" type
+- task can have a category to filter them
+- task can be recurrent
+- task have a description
+- task can have subtasks, using checkbox
+- board have configurable columns (=state)
+- y
