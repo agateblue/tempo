@@ -32,7 +32,8 @@ const store = new Vuex.Store({
     webhook: {
       query: null,
       url: null,
-    }
+    },
+    taskLists: null,
   },
   mutations: {
     handleSync (state, info) {
@@ -87,9 +88,16 @@ const store = new Vuex.Store({
     },
     charts (state, charts) {
       state.charts = charts
+    },
+    taskLists (state, taskLists) {
+      state.taskLists = taskLists
     }
   },
-  getters: {},
+  getters: {
+    taskLists: (state) => {
+      return [...state.taskLists, {label: "Done"}]
+    }
+  },
   actions: {
     async addEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
@@ -286,6 +294,38 @@ const store = new Vuex.Store({
         return
       }
       commit('charts', sc.charts)
+    },
+    async taskLists ({state, commit}, taskLists) {
+      commit('taskLists', taskLists)
+      let existing
+      try {
+        existing = await state.db.get('taskLists')
+      } catch {
+        console.debug('No existing lists')
+      }
+      if (existing && isEqual(existing.taskLists, state.taskLists)) {
+        return
+      }
+      let data = {
+        _id: 'taskLists',
+        taskLists: state.taskLists,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+
+    async loadTaskLists ({state, commit}) {
+      let tl = []
+      try {
+        tl = await state.db.get("taskLists")
+      } catch (e) {
+        console.debug('No existing taskLists')
+        return
+      }
+      commit('taskLists', tl.taskLists)
     },
   },
   modules: {
