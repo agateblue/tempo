@@ -387,11 +387,24 @@ section.v-card {
 .board {
   display: flex;
   overflow-x: auto;
-  min-height: 75vh;
-  .task-list {
+  .task-list.expanded {
+    min-height: 75vh;
     width: 80vw;
     max-width: 250px; 
     min-width: 250px; 
+  }
+  .task-list.collapsed {
+    position: relative;
+    width: 3em;
+    .row {
+      position: absolute;
+      left: -8.8em;
+      top:  7.6em;
+      width: 20em;
+      height: 5em;
+      transform: rotate(90deg);
+      transform-origin: center;
+    }
   }
   .list-group {
     min-height: 75vh;
