@@ -101,6 +101,16 @@ const store = new Vuex.Store({
       return state.boardConfig.categories.map((c) => {
         return {value: c.label, text: c.label}
       })
+    },
+    taskListChoices: (state) => {
+      let index = 0
+      let choices = []
+      state.boardConfig.lists.forEach(l => {
+        choices.push({value: index, text: l.label})
+        index += 1
+      })
+      choices.push({value: index, text: 'Done'})
+      return choices
     }
   },
   actions: {
