@@ -7,24 +7,29 @@
             <v-list-item-group>
               <v-list-item to="/">
                 <v-list-item-icon>
-                  <v-icon v-text="$icons.mdiHome"></v-icon>
+                  <v-icon v-text="$icons.mdiBook"></v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>All entries</v-list-item-title>
+                  <v-list-item-title>Diary
+                    <template v-if="$router.currentRoute.path === '/' && $refs.view && $refs.view.entries">
+                    · {{ $refs.view.entries.length }} entries
+                    </template>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-list-item to="/tasks">
+                <v-list-item-icon>
+                  <v-icon>{{ $icons.mdiCheck }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Tasks</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
           </v-list>
           <template v-if="$router.currentRoute.path === '/' && $refs.view && $refs.view.entries">
-            <v-divider></v-divider>
-            <v-list :color="$theme.menu.color"  dense>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>{{ $refs.view.entries.length }} entries</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <v-divider></v-divider>
+            <v-divider class="my-0"></v-divider>
             <v-list :color="$theme.menu.color" dense>
               <v-list-item
                 v-for="row in [{id: 'timeline', label: 'Timeline', icon: 'mdiFormatListBulleted'}, {id: 'visualization', label: 'Charts', icon: 'mdiChartTimelineVariant'}]"
@@ -97,17 +102,6 @@
               </v-list>
             </template>
           </template>
-          <v-divider></v-divider>
-          <v-list :color="$theme.menu.color" dense>
-            <v-list-item to="/tasks">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiCheck }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Tasks</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
         </div>
         <div v-if="$store.state.couchDbUrl">
           <v-btn
