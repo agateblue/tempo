@@ -7,6 +7,7 @@
         <ul>
           <li><a href="#theming">Theming</a></li>
           <li><a href="#import">Import entries</a></li>
+          <li><a href="#import-tasks">Import tasks</a></li>
           <li><a href="#sync">Sync</a></li>
           <li><a href="#delete">Delete data</a></li>
         </ul>
@@ -34,11 +35,30 @@
       <v-card-text :class="$theme.card.textSize">
         <p>Import entries from a JSON file exported from another Tempo session.</p>
         <v-form>
-          <v-file-input accept=".json,application/json" label="JSON export" v-model="toImport"></v-file-input>
+          <v-file-input accept=".json,application/json" label="JSON export" v-model="toImportEntries"></v-file-input>
           <v-btn
-            :disabled="!toImport"
+            :disabled="!toImportEntries"
             color="primary"
-            @click="importEntries">
+            @click="importEntries('toImportEntries')">
+            Import
+          </v-btn>
+          <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
+          <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
+        </v-form>
+      </v-card-text>
+    </v-card>
+
+    <v-card tag="section" id="import-tasks" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Import tasks</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>Import tasks from a JSON file exported from another Tempo session.</p>
+        <v-form>
+          <v-file-input accept=".json,application/json" label="JSON export" v-model="toImportTasks"></v-file-input>
+          <v-btn
+            :disabled="!toImportTasks"
+            color="primary"
+            @click="importEntries('toImportTasks')">
             Import
           </v-btn>
           <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
@@ -141,7 +161,8 @@ export default {
 
     return {
       syncStatus: null,
-      toImport: null,
+      toImportEntries: null,
+      toImportTasks: null,
       importedEntries: 0,
       failedEntries: 0,
       showdbPassword: false,
@@ -157,15 +178,15 @@ export default {
       await this.$store.dispatch("forceSync")
       await this.$store.dispatch('triggerWebhook', url)
     },
-    async importEntries () {
-      if (!this.toImport) {
+    async importEntries (source) {
+      if (!this[source]) {
         console.log('No file to import')
         return
       }
       this.importedEntries = 0
       this.failedEntries = 0
       console.log('Importing entries…')
-      let text = await this.toImport.text()
+      let text = await this[source].text()
       let entries = JSON.parse(text)
       entries.forEach((e) => {
         delete e._rev
