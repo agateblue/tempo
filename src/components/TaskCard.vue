@@ -13,6 +13,10 @@
       <v-chip
         class="px-1"
         x-small
+        @click.prevent="$router.push({
+          path: '/tasks',
+          query: { q: `category:${category.label}`},
+        })"
         :color="category.color[0]"
         :text-color="category.color[1]"
       >

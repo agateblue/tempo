@@ -107,6 +107,8 @@ export function parseQuery(query) {
       tokens.push({date: stripped.split(':')[1]})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(/:(.+)/)[1]})
+    } else if (stripped.startsWith('c:') || stripped.startsWith('category:') ) {
+      tokens.push({categoryName: stripped.split(/:(.+)/)[1]})
     } else {
       tokens.push({text: stripped})
     }
@@ -135,6 +137,9 @@ export function matchTokens(entry, tokens) {
       if (matching.length === 0) {
         return false
       }
+    }
+    if (token.categoryName) {
+      return entry.category && token.categoryName.toLowerCase() == entry.category.toLowerCase()
     }
     if (token.sign) {
       let matching = entry.tags.filter((t) => {

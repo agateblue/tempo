@@ -260,7 +260,7 @@ export default {
   watch: {
     "$route": {
       handler(v) {
-        if (v.path === '/') {
+        if (v.path === '/' || v.path === '/tasks') {
           this.searchQuery = v.query.q;
         }
         if (v.path === '/tasks') {
