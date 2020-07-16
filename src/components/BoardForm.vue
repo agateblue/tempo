@@ -1,5 +1,12 @@
 <template>
   <v-form @submit.prevent="submit">
+    <v-btn
+      color="secondary"
+      class="mb-4"
+      @click.prevent="$emit('updated')"
+    >
+      Cancel
+    </v-btn>
     <h2 class="mb-4">Lists</h2>
     <p>Add one or more lists to your board, or use the defaults.</p>
     <v-row v-for="(list, idx) in lists" :key="`l${idx}`">

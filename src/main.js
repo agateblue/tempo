@@ -68,7 +68,7 @@ Vue.prototype.$theme = {
   },
   nestedCard: {
     color: "blue-grey darken-4",
-    textSize: "body-1",
+    textSize: "body-2",
   },
   drawer: {
     color: "grey darken-4",

@@ -20,8 +20,34 @@
         </v-col>
         <v-col>
           <v-btn class="float-right" @click="isEditing = true" color="secondary">Edit...</v-btn>
+          <v-btn class="float-right mx-2" @click.stop="exportDialog = true" color="secondary">Export...</v-btn>
         </v-col>
       </v-row>
+      <v-dialog
+        v-model="exportDialog"
+        max-width="700"
+      >
+        <v-card :color="$theme.card.color">
+          <v-card-title class="headline">Export your tasks</v-card-title>
+
+          <v-card-text>
+            <p>Export the selected {{ tasks.length }} tasks.</p>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="secondary"
+              text
+              @click="exportDialog = false"
+            >
+              Cancel
+            </v-btn>
+            <v-btn color="primary" @click="downloadJSON">Export as JSON</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <div class="board">
         <v-card class="task-list mr-4" v-for="(list, idx) in $store.getters['boardLists']" :key="idx">
           <v-card-title class="px-2 py-0">
@@ -125,6 +151,7 @@ export default {
       tasksByList: {},
       newTaskText: '',
       newTaskCategory: null,
+      exportDialog: false,
     }
   },
   async created () {
@@ -186,7 +213,28 @@ export default {
       task.list = list
       await this.$store.state.db.put(task)
       await this.updateTasks()
-    }
+    },
+    downloadJSON () {
+      this.downloadFile(JSON.stringify(this.tasks), 'application/json', 'tempo.json')
+    },
+    downloadFile (text, mimetype, name) {
+      let f = this.makeFile(text, mimetype)
+      var link = document.createElement('a')
+      link.setAttribute('download', name)
+      link.href = f
+      document.body.appendChild(link)
+
+      window.requestAnimationFrame(function () {
+        var event = new MouseEvent('click')
+        link.dispatchEvent(event)
+        document.body.removeChild(link)
+      })
+    },
+    makeFile (text, mimetype) {
+      let data = new Blob([text], {type: mimetype})
+      let textFile = window.URL.createObjectURL(data)
+      return textFile
+    },
   },
   watch: {
     tasks: {

@@ -9,7 +9,7 @@
       <v-icon>{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
     </v-btn>
     <v-card-text :class="[$theme.nestedCard.textSize, 'py-3 px-3']">{{ task.text }}</v-card-text>
-    <v-card-text class="pt-0" v-if="category">
+    <v-card-text class="px-3 pt-0 pb-2" v-if="category">
       <v-chip
         class="px-1"
         x-small

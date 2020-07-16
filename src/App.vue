@@ -387,14 +387,14 @@ section.v-card {
 .board {
   display: flex;
   overflow-x: auto;
-  min-height: 80vh;
+  min-height: 75vh;
   .task-list {
     width: 80vw;
-    max-width: 300px; 
-    min-width: 300px; 
+    max-width: 250px; 
+    min-width: 250px; 
   }
   .list-group {
-    min-height: 300px;
+    min-height: 75vh;
   }
 }
 </style>
