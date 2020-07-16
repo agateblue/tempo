@@ -31,7 +31,7 @@
           <v-card-title class="headline">Export your tasks</v-card-title>
 
           <v-card-text>
-            <p>Export the selected {{ tasks.length }} tasks.</p>
+            <p>Export the selected {{ tasks.length }} tasks and your board configuration.</p>
           </v-card-text>
 
           <v-card-actions>
@@ -125,8 +125,12 @@
 <script>
 
 import sortBy from 'lodash/sortBy'
+import {parseQuery, matchTokens} from '@/utils'
 
 export default {
+  props: {
+    query: String
+  },
   components: {
     BoardForm:  () => import(/* webpackChunkName: "tasks" */ "@/components/BoardForm"),
     TaskCard:  () => import(/* webpackChunkName: "tasks" */ "@/components/TaskCard"),
@@ -175,6 +179,15 @@ export default {
       })
       return d
     },
+    filterTasks (tasks, queryTokens) {
+      console.log('Tokens', queryTokens)
+      if (queryTokens.length === 0) {
+        return tasks
+      }
+      return tasks.filter((e) => {
+        return matchTokens(e, queryTokens)
+      })
+    },
     async getTasks () {
       let result = await this.$store.state.db.find({
         selector: {
@@ -182,7 +195,12 @@ export default {
           date: { $gt: 0 }
         }
       })
-      return result.docs
+      let tasks = result.docs
+
+      return this.filterTasks(
+        tasks,
+        parseQuery(this.query),
+      )
     },
     async submitTask(idx) {
       if (!this.newTaskText || this.newTaskText.length === 0) {
@@ -215,7 +233,11 @@ export default {
       await this.updateTasks()
     },
     downloadJSON () {
-      this.downloadFile(JSON.stringify(this.tasks), 'application/json', 'tempo.json')
+      let payload = JSON.stringify({
+        tasks: this.tasks,
+        boardConfig: this.$store.state.boardConfig
+      })
+      this.downloadFile(payload, 'application/json', 'tempo.json')
     },
     downloadFile (text, mimetype, name) {
       let f = this.makeFile(text, mimetype)
@@ -237,6 +259,12 @@ export default {
     },
   },
   watch: {
+    query: {
+      handler: async function () {
+        this.tasks = await this.getTasks()
+      },
+      immediate: true,
+    },
     tasks: {
       handler () {
         if (!this.isConfigured) {

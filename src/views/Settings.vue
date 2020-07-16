@@ -39,7 +39,7 @@
           <v-btn
             :disabled="!toImportEntries"
             color="primary"
-            @click="importEntries('toImportEntries')">
+            @click="importEntries">
             Import
           </v-btn>
           <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
@@ -52,13 +52,13 @@
       <v-card-title class="headline">Import tasks</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
-        <p>Import tasks from a JSON file exported from another Tempo session.</p>
+        <p>Import tasks and board configuration from a JSON file exported from another Tempo session.</p>
         <v-form>
           <v-file-input accept=".json,application/json" label="JSON export" v-model="toImportTasks"></v-file-input>
           <v-btn
             :disabled="!toImportTasks"
             color="primary"
-            @click="importEntries('toImportTasks')">
+            @click="importTasks">
             Import
           </v-btn>
           <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
@@ -178,20 +178,43 @@ export default {
       await this.$store.dispatch("forceSync")
       await this.$store.dispatch('triggerWebhook', url)
     },
-    async importEntries (source) {
-      if (!this[source]) {
+    async importEntries () {
+      if (!this.toImportEntries) {
         console.log('No file to import')
         return
       }
       this.importedEntries = 0
       this.failedEntries = 0
       console.log('Importing entries…')
-      let text = await this[source].text()
+      let text = await this.toImportEntries.text()
       let entries = JSON.parse(text)
       entries.forEach((e) => {
         delete e._rev
       })
       let result = await this.$store.state.db.bulkDocs(entries)
+      this.importedEntries = result.filter((e) => {
+        return e.ok
+      }).length
+      this.failedEntries = result.filter((e) => {
+        return !e.ok
+      }).length
+    },
+    async importTasks () {
+      if (!this.toImportTasks) {
+        console.log('No file to import')
+        return
+      }
+      this.importedEntries = 0
+      this.failedEntries = 0
+      console.log('Importing tasks')
+      let text = await this.toImportTasks.text()
+      let parsed = JSON.parse(text)
+      let tasks = parsed.tasks
+      tasks.forEach((e) => {
+        delete e._rev
+      })
+      await this.$store.dispatch('boardConfig', parsed.boardConfig)
+      let result = await this.$store.state.db.bulkDocs(tasks)
       this.importedEntries = result.filter((e) => {
         return e.ok
       }).length
