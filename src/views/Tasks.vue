@@ -113,7 +113,7 @@
                 v-for="task in tasksByList[idx]"
                 @deleted="updateTasks"
                 @updated="updateTasks"
-                :key="`task-${task._id}`"></task-card>
+                :key="`task-${task._id}-${task._rev}`"></task-card>
             </draggable>
           </v-card-text>
         </v-card>
