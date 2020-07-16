@@ -22,6 +22,7 @@ const routes = [
   {
     path: '/tasks',
     component: Tasks,
+    props: (route) => ({ query: route.query.q }),
   },
   {
     path: '/settings',

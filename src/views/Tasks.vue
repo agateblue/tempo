@@ -196,7 +196,6 @@ export default {
         }
       })
       let tasks = result.docs
-
       return this.filterTasks(
         tasks,
         parseQuery(this.query),
