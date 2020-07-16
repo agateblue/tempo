@@ -180,7 +180,6 @@ export default {
       return d
     },
     filterTasks (tasks, queryTokens) {
-      console.log('Tokens', queryTokens)
       if (queryTokens.length === 0) {
         return tasks
       }
@@ -264,6 +263,13 @@ export default {
       },
       immediate: true,
     },
+
+    "$store.state.lastSync": {
+      async handler () {
+        this.tasks = await this.getTasks()
+      }
+    },
+
     tasks: {
       handler () {
         if (!this.isConfigured) {
