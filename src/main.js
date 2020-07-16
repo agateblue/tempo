@@ -9,6 +9,7 @@ Vue.config.productionTip = false
 
 // three shaking icons to reduce bundle size
 import {
+  mdiBook,
   mdiCalendar,
   mdiClock,
   mdiPlusCircleMultipleOutline,
@@ -34,6 +35,7 @@ import {
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
+  mdiBook,
   mdiCalendar,
   mdiClock,
   mdiPlusCircleMultipleOutline,
