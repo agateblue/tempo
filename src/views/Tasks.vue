@@ -49,19 +49,26 @@
         </v-card>
       </v-dialog>
       <div class="board">
-        <v-card class="task-list mr-4" v-for="(list, idx) in $store.getters['boardLists']" :key="idx">
-          <v-card-title class="px-2 py-0">
+        <v-card
+          :class="['task-list mr-4', {collapsed: !lists[idx].expanded}, {expanded: lists[idx].expanded}]"
+          v-for="(list, idx) in $store.getters['boardLists']"
+          :key="idx">
+          <v-card-title class="px-2 py-0 body-1">
             <v-row>
-              <v-col>
-                {{ list.label }}
+              <v-col cols="10">
+                <v-btn x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
+                  <v-icon v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
+                  <v-icon v-else>{{ $icons.mdiChevronRight }}</v-icon>
+                </v-btn>
+                {{ list.label }} · {{ tasksByList[idx].length }}
               </v-col>
-              <v-col>
+              <v-col cols="2" v-if="lists[idx].expanded">
                 <v-btn
                   class="float-right"
                   fab
                   dark
                   x-small
-                  @click.prevent="showTaskForm[idx] = !showTaskForm[idx]"
+                  @click.prevent="lists[idx].showForm = !lists[idx].showForm"
                   color="secondary">
                   <v-icon>{{ $icons.mdiPlus }}</v-icon>
                 </v-btn>
@@ -69,8 +76,8 @@
             </v-row>
           </v-card-title>
           <v-divider></v-divider>
-          <v-card-text class="py-2 px-2">
-            <v-card v-if="showTaskForm[idx]" :color="$theme.nestedCard.color">
+          <v-card-text v-if="lists[idx].expanded" class="py-2 px-2">
+            <v-card v-if="lists[idx].showForm" :color="$theme.nestedCard.color">
               <v-card-text class="pb-0 px-2 pt-1">
                 <v-form :ref="`form${idx}`">
                   <v-text-field
@@ -82,6 +89,7 @@
                   <v-select
                     :items="$store.getters['taskCategoryChoices']"
                     v-model="newTaskCategory"
+                    @keydown.enter="submitTask(idx)"
                     label="Category"
                   ></v-select>
                 </v-form>
@@ -89,7 +97,7 @@
               <v-card-actions class="py-0 px-2 mb-5">
                 <v-row>
                   <v-col>
-                    <v-btn class="float-left" text @click.prevent="showTaskForm[idx] = false">
+                    <v-btn class="float-left" text @click.prevent="lists[idx].showForm = false">
                       Cancel
                     </v-btn>
                   </v-col>
@@ -139,17 +147,17 @@ export default {
   data () {
     return {
       isEditing: false,
-      showTaskForm: {
-        0: false,
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false,
-        7: false,
-        8: false,
-        9: false,
+      lists: {
+        0: {showForm: false, expanded: true},
+        1: {showForm: false, expanded: true},
+        2: {showForm: false, expanded: true},
+        3: {showForm: false, expanded: true},
+        4: {showForm: false, expanded: true},
+        5: {showForm: false, expanded: true},
+        6: {showForm: false, expanded: true},
+        7: {showForm: false, expanded: true},
+        8: {showForm: false, expanded: true},
+        9: {showForm: false, expanded: true},
       },
       tasks: [],
       tasksByList: {},
@@ -204,7 +212,7 @@ export default {
       if (!this.newTaskText || this.newTaskText.length === 0) {
         return
       }
-      this.showTaskForm[idx] = false
+      this.lists[idx].showForm = false
       let date = (new Date()).toISOString()
       let task = {
         type: 'task',
