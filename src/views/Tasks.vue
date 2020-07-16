@@ -58,7 +58,7 @@
               <v-col cols="10">
                 <v-btn x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
                   <v-icon v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
-                  <v-icon v-else>{{ $icons.mdiChevronRight }}</v-icon>
+                  <v-icon v-else>{{ $icons.mdiChevronUp }}</v-icon>
                 </v-btn>
                 {{ list.label }} · {{ tasksByList[idx].length }}
               </v-col>
