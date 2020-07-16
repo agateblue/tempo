@@ -24,7 +24,7 @@
       </v-row>
       <div class="board">
         <v-card class="task-list mr-4" v-for="(list, idx) in $store.getters['boardLists']" :key="idx">
-          <v-card-title class="px-3">
+          <v-card-title class="px-2 py-0">
             <v-row>
               <v-col>
                 {{ list.label }}
@@ -34,7 +34,7 @@
                   class="float-right"
                   fab
                   dark
-                  small
+                  x-small
                   @click.prevent="showTaskForm[idx] = !showTaskForm[idx]"
                   color="secondary">
                   <v-icon>{{ $icons.mdiPlus }}</v-icon>
@@ -43,7 +43,7 @@
             </v-row>
           </v-card-title>
           <v-divider></v-divider>
-          <v-card-text>
+          <v-card-text class="py-2 px-2">
             <v-card v-if="showTaskForm[idx]" :color="$theme.nestedCard.color">
               <v-card-text class="pb-0 px-2 pt-1">
                 <v-form :ref="`form${idx}`">
@@ -77,15 +77,16 @@
             </v-card>
             <draggable
               class="list-group"
-              :list="tasksByList[idx]"
+              v-model="tasksByList[idx]"
               :group="{ name: 'tasks' }"
               @add="moveCard($event, idx)">
               <task-card
-                class="mb-5"
+                class="mb-2"
                 :task="task"
                 :data-id="task._id"
                 v-for="task in tasksByList[idx]"
                 @deleted="updateTasks"
+                @updated="updateTasks"
                 :key="`task-${task._id}`"></task-card>
             </draggable>
           </v-card-text>
@@ -97,6 +98,7 @@
 
 <script>
 
+import sortBy from 'lodash/sortBy'
 export default {
   components: {
     BoardForm:  () => import(/* webpackChunkName: "tasks" */ "@/components/BoardForm"),
@@ -136,12 +138,12 @@ export default {
     getTasksByList () {
       let d = {}
       let i = -1
-      this.$store.state.boardConfig.lists.forEach(() => {
+      this.$store.getters["boardLists"].forEach(() => {
         i += 1
-        d[i] = this.tasks.filter((t) => {
+        d[i] = sortBy(this.tasks.filter((t) => {
           return t.list === i
-        })
-        d[i].reverse()
+        }, ['index']))
+        d[i]
       })
       return d
     },
@@ -164,9 +166,9 @@ export default {
         type: 'task',
         _id: date,
         date,
+        index: -this.tasksByList[idx].length,
         text: this.newTaskText,
         list: idx,
-        index: this.tasks.length,
         category: this.newTaskCategory, 
       }
       let result = await this.$store.state.db.put(task)
