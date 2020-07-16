@@ -44,42 +44,42 @@
           </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
+            <v-card v-if="showTaskForm[idx]" :color="$theme.nestedCard.color">
+              <v-card-text class="pb-0 px-2 pt-1">
+                <v-form :ref="`form${idx}`">
+                  <v-text-field
+                    label="Task"
+                    autofocus
+                    v-model="newTaskText"
+                    @keydown.enter="submitTask(idx)"
+                    required></v-text-field>
+                  <v-select
+                    :items="$store.getters['taskCategoryChoices']"
+                    v-model="newTaskCategory"
+                    label="Category"
+                  ></v-select>
+                </v-form>
+              </v-card-text>
+              <v-card-actions class="py-0 px-2 mb-5">
+                <v-row>
+                  <v-col>
+                    <v-btn class="float-left" text @click.prevent="showTaskForm[idx] = false">
+                      Cancel
+                    </v-btn>
+                  </v-col>
+                  <v-col>
+                    <v-btn class="float-right" color="primary" @click.prevent="submitTask(idx)">
+                      Add
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-actions>
+            </v-card>
             <draggable
               class="list-group"
               :list="tasksByList[idx]"
               :group="{ name: 'tasks' }"
               @add="moveCard($event, idx)">
-              <v-card v-if="showTaskForm[idx]" :color="$theme.nestedCard.color">
-                <v-card-text class="pb-0 px-2 pt-1">
-                  <v-form :ref="`form${idx}`">
-                    <v-text-field
-                      label="Task"
-                      autofocus
-                      v-model="newTaskText"
-                      @keydown.enter="submitTask(idx)"
-                      required></v-text-field>
-                    <v-select
-                      :items="$store.getters['taskCategoryChoices']"
-                      v-model="newTaskCategory"
-                      label="Category"
-                    ></v-select>
-                  </v-form>
-                </v-card-text>
-                <v-card-actions class="py-0 px-2 mb-5">
-                  <v-row>
-                    <v-col>
-                      <v-btn class="float-left" text @click.prevent="showTaskForm[idx] = false">
-                        Cancel
-                      </v-btn>
-                    </v-col>
-                    <v-col>
-                      <v-btn class="float-right" color="primary" @click.prevent="submitTask(idx)">
-                        Add
-                      </v-btn>
-                    </v-col>
-                  </v-row>
-                </v-card-actions>
-              </v-card>
               <task-card
                 class="mb-5"
                 :task="task"
@@ -119,6 +119,7 @@ export default {
         9: false,
       },
       tasks: [],
+      tasksByList: {},
       newTaskText: '',
       newTaskCategory: null,
     }
@@ -130,7 +131,9 @@ export default {
     isConfigured () {
       return this.$store.state.boardConfig && this.$store.state.boardConfig.lists.length > 0  
     },
-    tasksByList () {
+  },
+  methods: {
+    getTasksByList () {
       let d = {}
       let i = -1
       this.$store.state.boardConfig.lists.forEach(() => {
@@ -141,9 +144,7 @@ export default {
         d[i].reverse()
       })
       return d
-    }
-  },
-  methods: {
+    },
     async getTasks () {
       let result = await this.$store.state.db.find({
         selector: {
@@ -184,5 +185,17 @@ export default {
       await this.updateTasks()
     }
   },
+  watch: {
+    tasks: {
+      handler () {
+        if (!this.isConfigured) {
+          return
+        }
+        this.tasksByList = this.getTasksByList()
+      },
+      immediate: true,
+      deep: true,
+    }
+  }
 }
 </script>
