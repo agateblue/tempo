@@ -3,6 +3,7 @@
     <v-btn
       color="secondary"
       class="mb-4"
+      v-if="$store.state.boardConfig"
       @click.prevent="$emit('updated')"
     >
       Cancel

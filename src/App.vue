@@ -171,12 +171,12 @@
         label="Search"
         :append-outer-icon="$icons.mdiMagnify"
         @click:append-outer="
-          $router.push({ path: '/', query: { q: searchQuery } })
+          $router.push({ path: searchRoute, query: { q: searchQuery } })
         "
         @keydown.enter="
-          $router.push({ path: '/', query: { q: searchQuery } })
+          $router.push({ path: searchRoute, query: { q: searchQuery } })
         "
-        @click:clear="$router.push({ path: '/', query: { q: '' } })"
+        @click:clear="$router.push({ path: searchRoute, query: { q: '' } })"
       ></v-text-field>
     </v-app-bar>
     <v-content >
@@ -195,6 +195,7 @@ export default {
       syncError: null,
       searchQuery: "",
       exportDialog: false,
+      searchRoute: '/'
     };
   },
   async created() {
@@ -261,6 +262,11 @@ export default {
       handler(v) {
         if (v.path === '/') {
           this.searchQuery = v.query.q;
+        }
+        if (v.path === '/tasks') {
+          this.searchRoute = v.path
+        } else {
+          this.searchRoute = '/'
         }
       },
       immediate: true,

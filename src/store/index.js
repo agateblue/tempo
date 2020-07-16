@@ -126,6 +126,7 @@ const store = new Vuex.Store({
     },
     async reset ({commit, state, dispatch}) {
       await state.db.destroy()
+      commit("boardConfig", null)
       commit('initDb')
       await dispatch('setupSync', {
         url: state.couchDbUrl,
