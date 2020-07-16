@@ -99,6 +99,7 @@
 <script>
 
 import sortBy from 'lodash/sortBy'
+
 export default {
   components: {
     BoardForm:  () => import(/* webpackChunkName: "tasks" */ "@/components/BoardForm"),
@@ -142,8 +143,8 @@ export default {
         i += 1
         d[i] = sortBy(this.tasks.filter((t) => {
           return t.list === i
-        }, ['index']))
-        d[i]
+        }, ['_id']))
+        d[i].reverse()
       })
       return d
     },

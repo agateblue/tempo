@@ -191,5 +191,23 @@ describe('utils', () => {
     const result = getCompleteEntry(entry)
     expect(result).to.deep.equal(expected)
   })
+  // it('sortChain', () => {
+  //   const entries = [
+  //     {id: "d", nextId: "e", previousId: "c"},
+  //     {id: "c"},
+  //     {id: "a", nextId: "c", previousId: null},
+  //     {id: "b", nextId: "c", previousId: null},
+  //     {id: "e", nextId: null, previousId: "d"},
+  //   ]
+  //   const expected = [
+  //     {id: "a", nextId: "c", previousId: null},
+  //     {id: "b", nextId: "c", previousId: null},
+  //     {id: "c"},
+  //     {id: "d", nextId: "e", previousId: "c"},
+  //     {id: "e", nextId: null, previousId: "d"},
+  //   ]
+  //   const result = sortChained(entries)
+  //   expect(result).deep.equal(expected)
+  // })
 
 })

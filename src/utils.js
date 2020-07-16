@@ -249,3 +249,19 @@ export const CHARTTYPES = [
   {value: "table", text: "Table"},
   {value: "json", text: "JSON"},
 ]
+
+export function sortChained(list) {
+  let byKey = {}
+  list.forEach(e => {
+    let previous = e.previousId || 'a'
+    let next = e.nextId || 'z'
+    let sortKey = `${previous}-${next}-${e._id}`
+    byKey[sortKey] = e
+  })
+  let sortedKeys = Object.keys(byKey)
+  sortedKeys.sort()
+  return sortedKeys.map(k => {
+    return byKey[k]
+  })
+
+}
