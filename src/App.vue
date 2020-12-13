@@ -409,6 +409,14 @@ section.v-card {
   .list-group {
     min-height: 75vh;
   }
+  .task-checkbox {
+    .v-input__slot {
+      margin-bottom: 0;
+    }
+    .v-messages {
+      display: none;
+    }
+  }
 }
 .v-align {
   align-items: center;
