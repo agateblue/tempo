@@ -14,13 +14,21 @@
       </v-card-text>
     </v-card>
     <template v-else>
-      <v-row>
+      <v-row class="v-align">
         <v-col>
           <h1>Your board</h1>
         </v-col>
         <v-col>
-          <v-btn class="float-right" @click="isEditing = true" color="secondary">Edit...</v-btn>
-          <v-btn class="float-right mx-2" @click.stop="exportDialog = true" color="secondary">Export...</v-btn>
+          <v-btn 
+            class="float-right"
+            @click="isEditing = true" 
+            small
+            color="secondary">Edit...</v-btn>
+          <v-btn 
+            class="float-right mx-2"
+            @click.stop="exportDialog = true" 
+            small
+            color="secondary">Export...</v-btn>
         </v-col>
       </v-row>
       <v-dialog

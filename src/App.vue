@@ -410,4 +410,7 @@ section.v-card {
     min-height: 75vh;
   }
 }
+.v-align {
+  align-items: center;
+}
 </style>
