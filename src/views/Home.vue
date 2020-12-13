@@ -1,13 +1,13 @@
 <template>
   <div class="pb-8">
     <template v-if="tab === 'timeline'">
-      <v-container class="narrow" v-if="shownEntries.length < entries.length" :key="$store.state.lastSync">
+      <v-container class="narrow" v-if="shownEntries.length < entries.length" :key="String($store.state.lastSync)">
         <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
       </v-container>
       <timeline
         class="container narrow"
         :entries="shownEntries"
-        :key="$store.state.lastSync"
+        :key="String($store.state.lastSync)"
         @updated="handleUpdate"
         @delete="handleDelete"></timeline>
       <v-btn
@@ -16,7 +16,7 @@
         fab
         bottom
         right
-        :key="$store.state.lastSync"
+        :key="String($store.state.lastSync)"
         :color="$theme.mainButton.color"
         @click="showEntryModal = true"
       >
