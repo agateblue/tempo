@@ -121,12 +121,14 @@
               class="list-group"
               v-model="tasksByList[idx]"
               :group="{ name: 'tasks' }"
-              @add="moveCard($event, idx)">
+              @add="moveCard($event.item.dataset.id, idx)">
               <task-card
                 class="mb-2"
                 :task="task"
                 :data-id="task._id"
+                :is-done="idx === $store.getters['boardLists'].length - 1"
                 v-for="task in tasksByList[idx]"
+                @done="moveCard($event._id, $store.getters['boardLists'].length - 1)"
                 @deleted="updateTasks"
                 @updated="updateTasks"
                 :key="`task-${task._id}-${task._rev}`"></task-card>
@@ -240,8 +242,8 @@ export default {
     async updateTasks () {
       this.tasks = await this.getTasks()
     },
-    async moveCard (evt, list) {
-      let task = await this.$store.state.db.get(evt.item.dataset.id)
+    async moveCard (id, list) {
+      let task = await this.$store.state.db.get(id)
       task.list = list
       await this.$store.state.db.put(task)
       await this.updateTasks()

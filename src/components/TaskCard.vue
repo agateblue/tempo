@@ -8,7 +8,14 @@
     >
       <v-icon>{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
     </v-btn>
-    <v-card-text :class="[$theme.nestedCard.textSize, 'py-3 px-3']">{{ task.text }}</v-card-text>
+    <v-card-text :class="[$theme.nestedCard.textSize, 'py-3 px-3']">
+      <v-checkbox
+        class="task-checkbox my-0 py-0"
+        :disabled="isDone"
+        v-model="completed"
+        :label="task.text"
+      ></v-checkbox>
+    </v-card-text>
     <v-card-text class="px-3 pt-0 pb-2" v-if="category">
       <v-chip
         class="px-1"
@@ -63,11 +70,12 @@ const COLOR_CHOICES = [
   ["black", "white"],
 ]
 export default {
-  props: ['task'],
+  props: ['task', 'isDone'],
   data () {
     return {
       expanded: false,
-      newTask: cloneDeep(this.task)
+      newTask: cloneDeep(this.task),
+      completed: this.isDone,
     }
   },
   computed: {
@@ -103,6 +111,13 @@ export default {
       this.expanded = false
       this.$emit('updated', this.newTask)
     },
+  },
+  watch: {
+    completed (v) {
+      if (v) {
+        this.$emit('done', this.task)
+      }
+    }
   }
 }
 </script>
