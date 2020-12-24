@@ -11,11 +11,11 @@ import {
 
 describe('utils', () => {
   it('can extract tags from text', () => {
-    const msg = 'Today was quite +++happy, but I feel ~tired and --anxious because of #work. @work:duration=8. @a was mean.'
+    const msg = 'Today was quite +++happy, but I feel ~tired and ---anxious because of #work. @work:duration=8. @a was mean.'
     const expected = [
       {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
       {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
-      {text: "--anxious", id: "anxious", type: "feeling", mood: -2, sign: '-'},
+      {text: "---anxious", id: "anxious", type: "feeling", mood: -3, sign: '-'},
       {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
       {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
     ]

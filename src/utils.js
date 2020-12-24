@@ -15,7 +15,7 @@ const signToType = {
   '#': 'tag',
   '@': 'annotation',
 }
-const tagRegex = /(^|\s)((?!---)(#|\+{1,3}|-{1,3}|~|\?|!|@)([:A-zÀ-ÿ\d-]+(=(true|false|[:A-zÀ-ÿ\d-]+|".*")?(-?\d*(\.(\d+))?)?)?))/gi
+const tagRegex = /(^|\s)((#|\+{1,5}|-{1,5}|~|\?|!|@)([:A-zÀ-ÿ\d-]+(=(true|false|[:A-zÀ-ÿ\d-]+|".*")?(-?\d*(\.(\d+))?)?)?))/gi
 
 export function parseTags (text) {
   const tags = []
