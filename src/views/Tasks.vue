@@ -294,6 +294,7 @@ export default {
           return
         }
         this.tasksByList = this.getTasksByList()
+        this.lists[this.$store.getters['boardLists'].length - 1].expanded = false
       },
       immediate: true,
       deep: true,
