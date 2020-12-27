@@ -14,7 +14,7 @@ const version = 1
 const store = new Vuex.Store({
   state: {
     db: null,
-    pageSize: 15,
+    pageSize: 30,
     syncHandler: null,
     couchDbUrl: null,
     couchDbUsername: null,
