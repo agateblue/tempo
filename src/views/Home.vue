@@ -2,10 +2,20 @@
   <div class="pb-8">
     <template v-if="tab === 'timeline'">
       <v-container class="narrow" v-if="shownEntries.length < entries.length" :key="String($store.state.lastSync)">
-        <v-btn color="secondary" @click.prevent="count += $store.state.pageSize">Show more</v-btn>
+        <v-btn
+          v-if="showShowMoreButton"
+          color="secondary"
+          @click.prevent="showMore"
+          v-intersect="{
+            handler: showMore,
+            options: {
+              threshold: 0.5
+            }
+          }">Show more</v-btn>
       </v-container>
       <timeline
-        class="container narrow"
+        ref="timeline"
+        class="container narrow pt-12"
         :entries="shownEntries"
         :key="String($store.state.lastSync)"
         @updated="handleUpdate"
@@ -51,7 +61,7 @@
 
 <script>
 import Timeline from '@/components/Timeline.vue'
-
+import debounce from 'lodash/debounce'
 import EntryModal from '@/components/EntryModal.vue'
 import VisualizationModal from '@/components/VisualizationModal.vue'
 import {parseQuery, matchTokens, getQueryableEntries, getQueryableTags} from '@/utils'
@@ -70,6 +80,7 @@ export default {
     return {
       showEntryModal: false,
       showvisualizationModal: false,
+      showShowMoreButton: false,
       entries: [],
       entriesCount: 0,
       count: this.$store.state.pageSize,
@@ -195,7 +206,14 @@ ${e.text}
     },
     scrollToBottom () {
       window.scrollTo(0,document.body.scrollHeight)
-    }
+    },
+    showMore: debounce(function (data) {
+      if (data && !data[0].isIntersecting) {
+        return
+      }
+      this.count += this.$store.state.pageSize
+      this.$refs.timeline.$el.scrollIntoView({block: 'start'})
+    }, 1000, {leading: true, trailing: false, maxWait: 500})
   },
   watch: {
     async query () {
@@ -209,7 +227,14 @@ ${e.text}
         await this.search()
       }
     },
-
+    shownEntries () {
+      if (!this.showShowMoreButton) {
+        this.scrollToBottom()
+      } 
+      setTimeout(() => {
+        this.showShowMoreButton = true
+      }, 1000)
+    },
     "tab" (v) {
       this.$router.push({
         path: this.$router.currentRoute.path,
