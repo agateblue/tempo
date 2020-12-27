@@ -30,12 +30,9 @@ export function parseTags (text) {
     let include = true
     tag.type = signToType[tag.sign]
     if (tag.type === 'annotation') {
-      if (!tag.id.includes('=')) {
-        include = false
-      }
       let parts = tag.id.replace(/"/g, "").split('=')
       tag.id = parts[0]
-      tag.value = parts[1]
+      tag.value = parts[1] || null
     }
     tag.mood = signToMood[tag.sign]
     if (tag.mood) {

@@ -18,6 +18,7 @@ describe('utils', () => {
       {text: "---anxious", id: "anxious", type: "feeling", mood: -3, sign: '-'},
       {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
       {text: "@work:duration=8", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8"},
+      {text: "@a", id: "a", type: "annotation", mood: null, sign: '@', value: null},
     ]
     expect(parseTags(msg)).to.deep.equal(expected)
   })
