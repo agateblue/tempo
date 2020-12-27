@@ -17,7 +17,7 @@
           v-else
           :key="row.repr"
           hide-dot
-          class="py-8"
+          class="py-4"
         >
           <date-entry :row="row"></date-entry>
         </v-timeline-item>
