@@ -367,6 +367,7 @@ section.v-card {
   margin-bottom: 0;
 }
 .v-timeline-item__body .date-entry.v-card {
+  background: var(--application-background);
   &::before, &::after {
     border-right: none !important;
     left: 0 !important;
