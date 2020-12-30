@@ -100,6 +100,7 @@
 </template>
 
 <script>
+import throttle from 'lodash/throttle'
 
 import {getNewEntryData, pad, getPrettyTimeFromDate} from '@/utils'
 export default {
@@ -129,6 +130,8 @@ export default {
     if (this.entry) {
       this.text = this.entry.text
       date = new Date(this.entry.date)
+    } else if (!this.text) {
+      this.text = localStorage.getItem('entry-draft')
     }
     this.date = date
     await this.$store.dispatch('loadShortcuts')
@@ -198,6 +201,15 @@ export default {
       }
       let e = await this.$store.dispatch('updateEntry', data)
       this.$emit('updated', e)
+    }
+  },
+  watch: {
+    text: {
+      handler: throttle(function (v) {
+        if (!this.entry) {
+          localStorage.setItem('entry-draft', v)
+        }
+      }, 1000, {leading: true, trailing: true})
     }
   }
 }
