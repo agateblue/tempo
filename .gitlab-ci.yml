@@ -5,7 +5,7 @@ stages:
 review:
   interruptible: true
   stage: review
-  image: node:latest
+  image: node:16
   when: manual
   allow_failure: true
   variables:
@@ -38,7 +38,7 @@ review:
 
 pages:
   stage: build
-  image: node:latest
+  image: node:16
   variables:
     GIT_STRATEGY: clone
     VUE_APP_CACHE_ID: $CI_COMMIT_SHA
