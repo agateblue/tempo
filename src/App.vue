@@ -363,6 +363,12 @@ section.v-card {
 .block {
   display: block;
 }
+.rendered-markdown > * {
+  margin-bottom: 21px;
+}
+.rendered-markdown > ul > li:not(:last-child) {
+  margin-bottom: 6px;
+}
 .rendered-markdown > *:last-child {
   margin-bottom: 0;
 }
