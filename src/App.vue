@@ -173,11 +173,11 @@
         @click:clear="$router.push({ path: searchRoute, query: { q: '' } })"
       ></v-text-field>
     </v-app-bar>
-    <v-content >
+    <v-main >
       <v-container  fluid tag="main">
         <router-view ref="view"></router-view>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 <script>
