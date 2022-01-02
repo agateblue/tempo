@@ -1,5 +1,5 @@
 <template>
-  <div :key="`tasks-${$store.state.lastSync}`">
+  <div>
     <v-card
       tag="section"
       v-if="!isConfigured || isEditing"
@@ -122,16 +122,27 @@
               v-model="tasksByList[idx]"
               :group="{ name: 'tasks' }"
               @add="moveCard($event.item.dataset.id, idx)">
-              <task-card
-                class="mb-2"
-                :task="task"
+              <v-lazy
+                :options="{
+                  threshold: .5
+                }"
                 :data-id="task._id"
-                :is-done="idx === $store.getters['boardLists'].length - 1"
+                min-height="50"
+                transition="fade-transition"
+                :key="`task-${task._id}-${task._rev}`"
                 v-for="task in tasksByList[idx]"
-                @done="moveCard($event._id, $store.getters['boardLists'].length - 1)"
-                @deleted="updateTasks"
-                @updated="updateTasks"
-                :key="`task-${task._id}-${task._rev}`"></task-card>
+              >
+                <task-card
+                  class="mb-2"
+                  :task="task"
+                  
+                  :is-done="idx === $store.getters['boardLists'].length - 1"
+                  
+                  @done="moveCard($event._id, $store.getters['boardLists'].length - 1)"
+                  @deleted="updateTasks"
+                  @updated="updateTasks"
+                  ></task-card>
+              </v-lazy>
             </draggable>
           </v-card-text>
         </v-card>
@@ -246,7 +257,9 @@ export default {
       let task = await this.$store.state.db.get(id)
       task.list = list
       await this.$store.state.db.put(task)
-      await this.updateTasks()
+      if (list === this.$store.getters['boardLists'].length - 1) {
+        await this.updateTasks()
+      }
     },
     downloadJSON () {
       let payload = JSON.stringify({
@@ -282,19 +295,12 @@ export default {
       immediate: true,
     },
 
-    "$store.state.lastSync": {
-      async handler () {
-        this.tasks = await this.getTasks()
-      }
-    },
-
     tasks: {
       handler () {
         if (!this.isConfigured) {
           return
         }
         this.tasksByList = this.getTasksByList()
-        this.lists[this.$store.getters['boardLists'].length - 1].expanded = false
       },
       immediate: true,
       deep: true,
