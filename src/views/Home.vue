@@ -150,14 +150,18 @@ ${e.text}
       return textFile
     },
     async getEntries () {
-      let result = await this.$store.state.db.find({
-        selector: {
-          type: 'entry',
-          date: { $gt: 0 }
-        },
-        sort: [{"date": this.sortDesc ? "desc": 'asc'}]
+      let options = {
+        include_docs: true,
+        descending: this.sortDesc,
+      }
+      let result = await this.$store.state.db.allDocs(options)
+      let entries = result.rows.map(r => {
+        return r.doc
       })
-      return result.docs
+      entries = entries.filter((e) => {
+        return e.type == 'entry'
+      })
+      return entries
     },
     async handleDelete (entry) {
       this.entries = this.entries.filter((e) => {
