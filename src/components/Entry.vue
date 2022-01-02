@@ -158,6 +158,7 @@ export default {
     async handleDelete () {
       await this.$store.state.db.remove(this.row.rawEntry)
       this.$emit('delete', this.row.rawEntry)
+      await this.$store.dispatch('triggerWebhook')
     },
   }
 }
