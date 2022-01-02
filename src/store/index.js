@@ -147,23 +147,27 @@ const store = new Vuex.Store({
           live: true,
           retry: true
         }).on('change', () => {
+          console.log("Sync change…")
           // commit('handleSync', info)
-        }).on('active', (info) => {
-          commit('handleSync', info)
-        }).on('complete', (info) => {
-          commit('handleSync', info)
+        }).on('active', () => {
+          console.log("Sync active…")
+          // commit('handleSync', info)
+        }).on('complete', () => {
+          console.log("Sync complete…")
+          // commit('handleSync', info)
         })
         commit('syncHandler', syncHandler)
       }
     },
-    async forceSync({state}) {
+    async forceSync({state, commit}) {
       if (!state.couchDbUrl) {
         return
       }
       console.log('Forcing sync…')
       let remoteDb = new PouchDB(state.couchDbUrl)
       await remoteDb.logIn(state.couchDbUsername, state.couchDbPassword)
-      return await state.db.sync(remoteDb)
+      await state.db.sync(remoteDb)
+      commit('handleSync', null)
     },
     async setWebhook ({state, commit}, {url, query}) {
       commit('webhook', {url, query})
