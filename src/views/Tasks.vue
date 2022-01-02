@@ -1,5 +1,5 @@
 <template>
-  <div :key="String($store.state.lastSync)">
+  <div :key="`tasks-${$store.state.lastSync}`">
     <v-card
       tag="section"
       v-if="!isConfigured || isEditing"
