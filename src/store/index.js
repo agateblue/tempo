@@ -146,8 +146,8 @@ const store = new Vuex.Store({
         let syncHandler = state.db.sync(remoteDb, {
           live: true,
           retry: true
-        }).on('change', (info) => {
-          commit('handleSync', info)
+        }).on('change', () => {
+          // commit('handleSync', info)
         }).on('active', (info) => {
           commit('handleSync', info)
         }).on('complete', (info) => {
