@@ -267,7 +267,8 @@ export default {
       deep: true,
     },
     "$store.state.lastSync": {
-      async handler() {
+      async handler(v) {
+        console.log("lastSync updated", v)
         let w;
         try {
           w = await this.$store.state.db.get("webhook");
