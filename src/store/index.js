@@ -187,7 +187,13 @@ const store = new Vuex.Store({
       await state.db.put(data)
     },
     async triggerWebhook ({state}, url) {
-      return await fetch(url || state.webhook.url, {
+      url = url || state.webhook.url
+      if (!url) {
+        console.log("No webhook configured, skipping", state.webhook.url)
+        return
+      }
+      console.log("Sending webhook to", url)
+      return await fetch(url, {
         method: "POST",
         body: ""
       })

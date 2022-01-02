@@ -177,6 +177,7 @@ export default {
         await this.addNew()
       }
       this.$emit('update:show', false)
+      await this.$store.dispatch('triggerWebhook')
     },
     async addNew () {
       let date = this.date ? new Date(this.date) : new Date()
