@@ -403,7 +403,7 @@ section.v-card {
   }
 }
 #composer {
-  max-height: 30vh;
+  max-height: 900px;
   overflow-y: auto;
 }
 

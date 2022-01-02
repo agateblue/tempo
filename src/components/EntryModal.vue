@@ -23,7 +23,6 @@
           id="composer"
           auto-grow
           autofocus
-          rows="5"
           @keydown.ctrl.enter.exact="submit"
           label="Entry content"
           placeholder="How do you feel?"
