@@ -133,7 +133,6 @@ export default {
       this.text = localStorage.getItem('entry-draft')
     }
     this.date = date
-    await this.$store.dispatch('loadShortcuts')
   },
   computed: {
     date: {
@@ -210,6 +209,11 @@ export default {
           localStorage.setItem('entry-draft', v)
         }
       }, 1000, {leading: true, trailing: true})
+    },
+    async show (v) {
+      if (v) {
+        await this.$store.dispatch('loadShortcuts')
+      }
     }
   }
 }
