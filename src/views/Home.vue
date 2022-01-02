@@ -198,10 +198,12 @@ ${e.text}
       })
     },
     async handleCreated () {
-      this.$router.push({
-        path: "/",
-        query: {}
-      })
+      if (this.$router.currentRoute.query.q) {
+        this.$router.push({
+          path: "/",
+          query: {}
+        })
+      }
       await this.search()
     },
     scrollToBottom () {
