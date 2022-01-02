@@ -113,15 +113,22 @@ export function parseQuery(query) {
   return tokens
 }
 
+export function matchString(q, s) {
+  if (!q) {
+    return false
+  }
+  let r = new RegExp(q, 'gi')
+  return s.match(r)
+}
 export function matchTokens(entry, tokens) {
   for (let index = 0; index < tokens.length; index++) {
     const token = tokens[index];
     if (token.text && !entry.text.toLowerCase().includes(token.text.toLowerCase())) {
-      return false
+      return matchString(token.text, entry.text)
     }
     if (token.tag) {
       let matching = entry.tags.filter((t) => {
-        return t.text.toLowerCase() === token.tag.toLowerCase()
+        return matchString(token.tag.text, t.text)
       })
       if (matching.length === 0) {
         return false
@@ -129,14 +136,14 @@ export function matchTokens(entry, tokens) {
     }
     if (token.tagName) {
       let matching = entry.tags.filter((t) => {
-        return t.id.toLowerCase() === token.tagName.toLowerCase()
+        return matchString(token.tagName, t.id)
       })
       if (matching.length === 0) {
         return false
       }
     }
     if (token.categoryName) {
-      return entry.category && token.categoryName.toLowerCase() == entry.category.toLowerCase()
+      return matchString(token.categoryName, entry.category)
     }
     if (token.sign) {
       let matching = entry.tags.filter((t) => {
