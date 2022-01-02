@@ -117,7 +117,7 @@ export function matchString(q, s) {
   if (!q) {
     return false
   }
-  let r = new RegExp(q, 'gi')
+  let r = new RegExp(q, 'i')
   return s.match(r) || false
 }
 export function matchTokens(entry, tokens) {
