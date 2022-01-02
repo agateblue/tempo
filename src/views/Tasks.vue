@@ -62,7 +62,7 @@
           v-for="(list, idx) in $store.getters['boardLists']"
           :key="idx">
           <v-card-title class="px-2 py-0 body-1">
-            <v-row>
+            <v-row class="py-3">
               <v-col cols="10">
                 <v-btn x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
                   <v-icon v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
