@@ -154,7 +154,7 @@
 <script>
 
 import sortBy from 'lodash/sortBy'
-import {parseQuery, matchTokens} from '@/utils'
+import {parseFullQuery, matchOrTokens} from '@/utils'
 
 export default {
   props: {
@@ -213,7 +213,7 @@ export default {
         return tasks
       }
       return tasks.filter((e) => {
-        return matchTokens(e, queryTokens)
+        return matchOrTokens(e, queryTokens)
       })
     },
     async getTasks () {
@@ -226,7 +226,7 @@ export default {
       let tasks = result.docs
       return this.filterTasks(
         tasks,
-        parseQuery(this.query),
+        parseFullQuery(this.query),
       )
     },
     async submitTask(idx) {

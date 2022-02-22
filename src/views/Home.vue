@@ -64,7 +64,7 @@ import Timeline from '@/components/Timeline.vue'
 import debounce from 'lodash/debounce'
 import EntryModal from '@/components/EntryModal.vue'
 import VisualizationModal from '@/components/VisualizationModal.vue'
-import {parseQuery, matchTokens, getQueryableEntries, getQueryableTags} from '@/utils'
+import {parseFullQuery, matchOrTokens, getQueryableEntries, getQueryableTags} from '@/utils'
 
 export default {
   props: {
@@ -180,7 +180,7 @@ ${e.text}
         return entries
       }
       return entries.filter((e) => {
-        return matchTokens(e, queryTokens)
+        return matchOrTokens(e, queryTokens)
       })
     },
 
@@ -195,7 +195,7 @@ ${e.text}
       this.entriesCount = allEntries.length
       this.entries = this.filterEntries(
         allEntries,
-        parseQuery(this.query),
+        parseFullQuery(this.query),
       )
       this.$nextTick(() => {
         this.scrollToBottom()
