@@ -10,13 +10,13 @@
       >
         <entry @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
       </v-card>
-      <h1
+      <h2
         v-else
         :key="row.repr"
         class="py-4 mt-5"
       >
         <date-entry :row="row"></date-entry>
-      </h1>
+      </h2>
     </template>
   </div>
 </template>

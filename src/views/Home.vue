@@ -1,6 +1,6 @@
 <template>
   <div class="pb-8">
-    <template v-if="tab === 'timeline'">
+    <div v-if="tab === 'timeline'">
       <v-container class="narrow" v-if="shownEntries.length < entries.length" :key="`container-${$store.state.lastSync}`">
         <v-btn
           v-if="showShowMoreButton"
@@ -20,19 +20,17 @@
         :key="`timeline-${$store.state.lastSync}`"
         @updated="handleUpdate"
         @delete="handleDelete"></timeline>
-      <v-btn
-        fixed
-        dark
-        fab
-        bottom
-        right
-        :key="`button-${$store.state.lastSync}`"
-        :color="$theme.mainButton.color"
-        @click="showEntryModal = true"
-      >
-        <v-icon>{{ $icons.mdiPencil }}</v-icon>
-      </v-btn>
-    </template>
+      <v-container class="narrow">
+        <entry-form
+          textarea-label="Write a new entry"
+          :compact="true"
+          color="transparent"
+          :key="`timeline-${$store.state.lastSync}`"
+          @fullscreen="showEntryModal = true"
+          @submitted="handleCreated"
+        />
+      </v-container>
+    </div>
     <template v-else-if="tab === 'visualization'">
       <dataviz       
         :entries="queryableEntries"
@@ -50,7 +48,7 @@
         <v-icon>{{ $icons.mdiPlus }}</v-icon>
       </v-btn>
     </template>
-    <entry-modal :show.sync="showEntryModal" @created="handleCreated" />
+    <entry-modal :show.sync="showEntryModal" @submitted="handleCreated" />
     <visualization-modal
       :days="graphDays"
       :entries="queryableEntries"
@@ -63,6 +61,7 @@
 import Timeline from '@/components/Timeline.vue'
 import debounce from 'lodash/debounce'
 import EntryModal from '@/components/EntryModal.vue'
+import EntryForm from '@/components/EntryForm.vue'
 import VisualizationModal from '@/components/VisualizationModal.vue'
 import {parseFullQuery, matchOrTokens, getQueryableEntries, getQueryableTags} from '@/utils'
 
@@ -72,6 +71,7 @@ export default {
   },
   components: {
     Timeline,
+    EntryForm,
     EntryModal,
     VisualizationModal,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),

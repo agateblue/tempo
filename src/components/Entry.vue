@@ -78,14 +78,14 @@
         </v-menu>
         <entry-modal
           :show.sync="showEntryModal"
-          :entry="row.rawEntry"
-          @updated="update"
-          :name="`how-${row.rawEntry._id}`">
+          @submitted="update"
+          :entry-form-props="{entry: row.rawEntry, name: `how-${row.rawEntry._id}`}"
+        >
         </entry-modal>
         <entry-modal
           :show.sync="showDuplicateModal"
-          :initial-text="row.rawEntry.text"
-          :name="`how-${row.rawEntry._id}-dup`">
+          :entry-form-props="{initialText: row.rawEntry.text, name: `how-${row.rawEntry._id}-dup`}"
+        >
         </entry-modal>
 
         <v-dialog
