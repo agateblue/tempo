@@ -26,6 +26,13 @@
         <v-card-actions>
           <time class="font-weight-thin body-1 mb-2" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
           <v-spacer></v-spacer>
+          <v-btn
+            text
+            x-small
+            @click="showEntryModal = true"
+          >
+            <v-icon left>{{ $icons.mdiPencil}}</v-icon> Edit
+          </v-btn>
           <v-menu  bottom left>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -37,14 +44,6 @@
             </template>
 
             <v-list>
-              <v-list-item @click="showEntryModal = true">
-                <v-list-item-icon>
-                  <v-icon>{{ $icons.mdiPencil }}</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>Edit</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
               <v-list-item @click="showDuplicateModal = true">
                 <v-list-item-icon>
                   <v-icon>{{ $icons.mdiPlusCircleMultipleOutline }}</v-icon>

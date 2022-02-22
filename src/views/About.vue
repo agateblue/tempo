@@ -192,6 +192,14 @@
                   Find all negative entries also tagged with sleep
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <code>tag:sleep, tag:nap</code>
+                </td>
+                <td>
+                  Find all entries tagged with sleep or nap
+                </td>
+              </tr>
             </tbody>
           </template>
         </v-simple-table>
