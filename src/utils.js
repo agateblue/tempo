@@ -83,6 +83,19 @@ export function getNewEntryData(text) {
   return entryData
 }
 
+export function parseFullQuery(query) {
+  if (!query) {
+    return []
+  }
+  return query.split(",").map(p => {
+    return p.trim()
+  }).filter(p => {
+    return p.length > 0
+  }).map(p => {
+    return parseQuery(p)
+  })
+}
+
 export function parseQuery(query) {
   let tokens = []
   if (!query) {
@@ -160,6 +173,14 @@ export function matchTokens(entry, tokens) {
   return true
 }
 
+export function matchOrTokens(entry, orTokens) {
+  for (const tokens of orTokens) {
+    if (matchTokens(entry, tokens)) {
+      return true
+    }
+  }
+  return false
+}
 export function getCompleteEntry (e) {
   let fullDate = new Date(e.date)
   let weekNumber = getWeekNumber(fullDate)

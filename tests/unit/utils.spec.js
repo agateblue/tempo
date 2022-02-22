@@ -3,8 +3,10 @@ import {
   parseTags,
   getNewEntryData,
   insertTagMarkup,
+  parseFullQuery,
   parseQuery,
   matchTokens,
+  matchOrTokens,
   getCompleteEntry,
   getWeekNumber,
 } from '@/utils'
@@ -57,6 +59,15 @@ describe('utils', () => {
     const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
     const expected = `Today was quite [+happy](/?q=tag:happy){.internal-link data-query="tag:happy"}, but I feel [~tired](/?q=tag:tired){.internal-link data-query="tag:tired"} because of [#work](/?q=tag:work){.internal-link data-query="tag:work"}.`
     const result = insertTagMarkup(msg)
+    expect(result).to.deep.equal(expected)
+  })
+  it('parse full query', () => {
+    const query = 'hello, world'
+    const expected = [
+      [{text: 'hello'}],
+      [{text: 'world'}],
+    ]
+    const result = parseFullQuery(query)
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
@@ -129,6 +140,20 @@ describe('utils', () => {
       ]
     }
     const result = matchTokens(entry, tokens)
+    expect(result).equal(true)
+  })
+  it('match or tokens', () => {
+    const tokens = [
+      [{sign: '-'}],
+      [{text: 'noop'}],
+    ]
+    const entry = {
+      text: 'sad',
+      tags: [
+        {text: "-tired", id: "tired", type: "feeling", mood: 0, sign: '-'},
+      ]
+    }
+    const result = matchOrTokens(entry, tokens)
     expect(result).equal(true)
   })
   it('getCompleteEntry', () => {
