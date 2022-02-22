@@ -377,25 +377,6 @@ section.v-card {
   left: 0 !important;
   right: initial !important;
 }
-.v-timeline-item__divider {
-    min-width: 44px !important;
-}
-.v-timeline--dense .v-timeline-item__body {
-  max-width: calc(100% - 24px) !important;
-}
-.v-timeline-item__dot--small {
-  position: relative;
-  height: 16px !important;
-  left: -20px !important;
-  width: 16px !important;
-}
-.v-timeline-item__body .date-entry.v-card {
-  background: var(--application-background);
-  &::before, &::after {
-    border-right: none !important;
-    left: 0 !important;
-  }
-}
 .v-application pre > code {
   display: block;
   padding: 12px;

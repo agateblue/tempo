@@ -1,28 +1,23 @@
 <template>
   <div>
-    <v-timeline dense>
-      <template v-for="row in timelineRows">
-        <v-timeline-item
-          v-if="row.type === 'entry'"
-          :key="row.id"
-          left
-          fill-dot
-          :color="row.color"
-          small
-          class="pb-4"
-        >
-          <entry @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
-        </v-timeline-item>
-        <v-timeline-item
-          v-else
-          :key="row.repr"
-          hide-dot
-          class="py-4"
-        >
-          <date-entry :row="row"></date-entry>
-        </v-timeline-item>
-      </template>
-    </v-timeline>
+    <template v-for="row in timelineRows">
+      <v-card
+        v-if="row.type === 'entry'"
+        :key="row.id"
+        elevation="1"
+        class="my-2"
+        :color="row.color"
+      >
+        <entry @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
+      </v-card>
+      <h1
+        v-else
+        :key="row.repr"
+        class="py-4 mt-5"
+      >
+        <date-entry :row="row"></date-entry>
+      </h1>
+    </template>
   </div>
 </template>
 <script>
@@ -111,11 +106,11 @@ export default {
           rawEntry: e,
           time: getPrettyTimeFromDate(entry.fullDate)
         }
-        let baseColor = " accent-"
+        let baseColor = " lighten-"
         if (entry.mood > 0) {
-          row.color = "light-green" + baseColor + Math.min(entry.mood, 4)
+          row.color = "light-green" + baseColor + Math.min(entry.mood + 1, 4)
         } else if (entry.mood < 0) {
-          row.color = "deep-orange" + baseColor + Math.min(Math.abs(entry.mood), 4)
+          row.color = "deep-orange" + baseColor + Math.min(Math.abs(entry.mood) + 1, 4)
         }
         recordAggregate(aggregateConfigs, aggregates, entry, rows.length === 0)
         rows.push(row)
