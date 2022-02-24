@@ -1,6 +1,23 @@
 <template>
   <div class="pb-8">
     <div v-if="tab === 'timeline'">
+      <v-container class="narrow">
+        <entry-form
+          textarea-label="Write a new entry"
+          :compact="true"
+          color="transparent"
+          :key="`timeline-${$store.state.lastSync}`"
+          @fullscreen="showEntryModal = true"
+          @submitted="handleCreated"
+        />
+      </v-container>
+      <timeline
+        ref="timeline"
+        class="container narrow pt-12"
+        :entries="shownEntries"
+        :key="`timeline-${$store.state.lastSync}`"
+        @updated="handleUpdate"
+        @delete="handleDelete"></timeline>
       <v-container class="narrow" v-if="shownEntries.length < entries.length" :key="`container-${$store.state.lastSync}`">
         <v-btn
           v-if="showShowMoreButton"
@@ -12,23 +29,6 @@
               threshold: 0.5
             }
           }">Show more</v-btn>
-      </v-container>
-      <timeline
-        ref="timeline"
-        class="container narrow pt-12"
-        :entries="shownEntries"
-        :key="`timeline-${$store.state.lastSync}`"
-        @updated="handleUpdate"
-        @delete="handleDelete"></timeline>
-      <v-container class="narrow">
-        <entry-form
-          textarea-label="Write a new entry"
-          :compact="true"
-          color="transparent"
-          :key="`timeline-${$store.state.lastSync}`"
-          @fullscreen="showEntryModal = true"
-          @submitted="handleCreated"
-        />
       </v-container>
     </div>
     <template v-else-if="tab === 'visualization'">
@@ -92,11 +92,6 @@ export default {
   },
   async created () {
     this.search()
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.scrollToBottom();
-    })
   },
   computed: {
 
@@ -197,9 +192,6 @@ ${e.text}
         allEntries,
         parseFullQuery(this.query),
       )
-      this.$nextTick(() => {
-        this.scrollToBottom()
-      })
     },
     async handleCreated () {
       if (this.$router.currentRoute.query.q) {
@@ -210,15 +202,11 @@ ${e.text}
       }
       await this.search()
     },
-    scrollToBottom () {
-      window.scrollTo(0,document.body.scrollHeight)
-    },
     showMore: debounce(function (data) {
       if (data && !data[0].isIntersecting) {
         return
       }
       this.count += this.$store.state.pageSize
-      this.$refs.timeline.$el.scrollIntoView({block: 'start'})
     }, 1000, {leading: true, trailing: false, maxWait: 500})
   },
   watch: {
@@ -234,9 +222,6 @@ ${e.text}
       }
     },
     shownEntries () {
-      if (!this.showShowMoreButton) {
-        this.scrollToBottom()
-      } 
       setTimeout(() => {
         this.showShowMoreButton = true
       }, 1000)
@@ -246,11 +231,6 @@ ${e.text}
         path: this.$router.currentRoute.path,
         query: {...this.$router.currentRoute.query, tab: v},
       })
-      if (v === 'timeline') {
-        this.$nextTick(() => {
-          this.scrollToBottom()
-        })
-      }
     }
   },
 }
