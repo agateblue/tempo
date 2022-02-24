@@ -27,8 +27,8 @@
         v-model="text"
       ></v-textarea>
       <div v-if="compact" class="d-flex justify-space-between">
-        <v-btn text @click="submit">Save</v-btn>
         <v-btn text @click="$emit('fullscreen')">Edit in fullscreen</v-btn>
+        <v-btn text @click="submit">Save</v-btn>
       </div>
     </v-container>
     <v-divider v-if="!compact"></v-divider>
