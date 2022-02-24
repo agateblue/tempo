@@ -6,7 +6,9 @@
         :color="row.color"
         dot
       >
-        <div class="rendered-markdown text-body-1" v-html="expand ? row.text : truncatedText"></div>
+        <div
+          class="rendered-markdown grey--text text--lighten-2"
+          v-html="expand ? row.text : truncatedText"></div>
       </v-badge>
       <div v-if="isTruncated">
         <v-btn small class="mt-4"
@@ -30,61 +32,48 @@
       transition="fade-transition"
     >
       <v-card-actions>
-        <time class="font-weight-thin" :date="row.entry.fullDate.toISOString()" :title="row.entry.fullDate.toISOString()">{{ row.time }}</time>
+        <time
+          class="text-body-2 grey--text text--darken-1"
+          :date="row.entry.fullDate.toISOString()"
+          :title="row.entry.fullDate.toISOString()">
+            <v-icon small color="grey darken-2">{{ $icons.mdiClockOutline}}</v-icon>
+            {{ row.time }}
+          </time>
         <v-spacer></v-spacer>
         <v-btn
-          text
-          x-small
+          icon
+          small
+          class="px-1"
+          color="grey darken-2"
           @click="showEntryModal = true"
+          title="Edit"
         >
-          <v-icon left>{{ $icons.mdiPencil}}</v-icon> Edit
+          <v-icon left>{{ $icons.mdiPencil}}</v-icon>
         </v-btn>
-        <v-menu  bottom left>
-          <template v-slot:activator="{ on }">
-            <v-btn
-              icon
-              v-on="on"
-            >
-              <v-icon>{{ $icons.mdiDotsHorizontal}}</v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item @click="showDuplicateModal = true">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiPlusCircleMultipleOutline }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Copy</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="$store.dispatch('newShortcut', row.entry.text)">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiPlusCircleMultipleOutline }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Save as shortcut</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="deleteDialog = true">
-              <v-list-item-icon>
-                <v-icon>{{ $icons.mdiDelete }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>Delete</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+        <v-btn
+          icon
+          small
+          class="px-1"
+          color="grey darken-2"
+          @click="copyToClipboard(row.entry.text)"
+          title="Copy to clipboard"
+        >
+          <v-icon left>{{ $icons.mdiContentCopy}}</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          small
+          class="px-1"
+          color="grey darken-2"
+          @click="deleteDialog = true"
+          title="Delete"
+        >
+          <v-icon left>{{ $icons.mdiDelete}}</v-icon>
+        </v-btn>
         <entry-modal
           :show.sync="showEntryModal"
           @submitted="update"
           :entry-form-props="{entry: row.rawEntry, name: `how-${row.rawEntry._id}`}"
-        >
-        </entry-modal>
-        <entry-modal
-          :show.sync="showDuplicateModal"
-          :entry-form-props="{initialText: row.rawEntry.text, name: `how-${row.rawEntry._id}-dup`}"
         >
         </entry-modal>
 
@@ -128,7 +117,7 @@
 <script>
 import EntryModal from '@/components/EntryModal.vue'
 import truncate from 'truncate-html'
-truncate.setup({byWords: true, length: 30, keepWhitespaces: true })
+truncate.setup({byWords: true, length: 60, keepWhitespaces: true })
 
 export default {
   props: {
@@ -141,7 +130,6 @@ export default {
     return {
       deleteDialog: false,
       showEntryModal: false,
-      showDuplicateModal: false,
       currentEntry: this.row.rawEntry,
       expand: false,
     }
@@ -156,6 +144,9 @@ export default {
 
   },
   methods: {
+    async copyToClipboard (text) {
+      await navigator.clipboard.writeText(text)
+    },
     async update (e) {
       this.currentEntry = e
       this.$emit('updated', e)

@@ -6,10 +6,12 @@
         :compact="true"
         color="transparent"
         :key="`timeline-${$store.state.lastSync}`"
+        ref="entryForm"
         @fullscreen="showEntryModal = true"
         @submitted="handleCreated"
       />
     </v-container>
+    <v-divider></v-divider>
     <timeline
       ref="timeline"
       class="container narrow"
@@ -69,7 +71,6 @@ export default {
     },
   },
   methods: {
-    
     async handleCreated () {
       if (this.$router.currentRoute.query.q) {
         this.$router.push({
