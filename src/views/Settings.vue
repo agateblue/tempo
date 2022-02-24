@@ -5,7 +5,6 @@
 
       <v-card-text :class="$theme.card.textSize">
         <ul>
-          <li><a href="#theming">Theming</a></li>
           <li><a href="#import">Import entries</a></li>
           <li><a href="#import-tasks">Import tasks</a></li>
           <li><a href="#sync">Sync</a></li>
