@@ -8,15 +8,18 @@
         class="my-2"
         :color="row.color"
       >
-        <entry @updated="$emit('updated', $event)" @deleted="$emit('deleted', $event)" :row="row"></entry>
+        <entry
+          @updated="$emit('updated', $event)"
+          @deleted="$emit('deleted', $event)"
+          :row="row"></entry>
       </v-card>
-      <h2
+      <h3
         v-else
         :key="row.repr"
-        class="py-4 mt-5"
+        class="py-4 mt-4"
       >
         <date-entry :row="row"></date-entry>
-      </h2>
+      </h3>
     </template>
   </div>
 </template>
@@ -36,7 +39,7 @@ RENDERER.use(require('@toycode/markdown-it-class'), { blockquote: 'blockquote' }
 let aggregateConfigs = [
   {
     id: 'day',
-    repr: (e) => e.fullDate.toLocaleDateString(),
+    repr: (e) => e.fullDate.toDateString(),
   },
   // {
   //   id: 'week',

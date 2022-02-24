@@ -1,6 +1,6 @@
 <template>
   <v-card :color="color" outlined>
-    <v-toolbar v-if="!compact" :color="$theme.appBar.color">
+    <v-toolbar dense v-if="!compact" :color="$theme.appBar.color">
       <v-btn icon @click="$emit('update:show', false)">
         <v-icon>{{ $icons.mdiClose }}</v-icon>
       </v-btn>
@@ -19,7 +19,7 @@
         :name="name"
         ref="textarea"
         id="composer"
-        :auto-grow="!compact"
+        auto-grow
         autofocus
         @keydown.ctrl.enter.exact="submit"
         :label="textareaLabel"
@@ -210,7 +210,7 @@ export default {
     text: {
       handler: throttle(function (v) {
         if (!this.entry) {
-          localStorage.setItem('entry-draft', v)
+          localStorage.setItem('entry-draft', v || '')
         }
       }, 1000, {leading: true, trailing: true})
     },

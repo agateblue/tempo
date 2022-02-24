@@ -1,5 +1,5 @@
 <template>
-  <p class="font-weight-thin text--lighten">
+  <p class="font-weight-light text--lighten">
     {{ row.repr }}
   </p>
 </template>

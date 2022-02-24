@@ -3,7 +3,6 @@
     <v-app-bar
       app
       dense
-      hide-on-scroll
       :color="$theme.appBar.color">
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -29,9 +28,6 @@
         "
         @click:clear="$router.push({ path: $route.path, query: { q: '' } })"
       ></v-text-field>
-      <v-btn small icon class="ml-3" to="/settings">
-        <v-icon v-text="$icons.mdiCog"></v-icon>
-      </v-btn>
       <v-btn small icon class="ml-3" to="/about">
         <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
       </v-btn>
@@ -45,6 +41,7 @@
       </v-container>
     </v-main>
     <v-bottom-navigation fixed>
+      <v-spacer></v-spacer>
       <v-btn to="/diary">
         <span>Diary</span>
 
@@ -54,6 +51,11 @@
         <span>Tasks</span>
 
         <v-icon v-text="$icons.mdiCheck"></v-icon>
+      </v-btn>
+      <v-btn to="/settings">
+        <span>Settings</span>
+
+        <v-icon v-text="$icons.mdiCog"></v-icon>
       </v-btn>
       <template v-if="$store.state.couchDbUrl">
         <v-btn
@@ -75,6 +77,10 @@
           </template>
         </v-btn>
       </template>
+      <v-spacer></v-spacer>
+      <v-btn @click="scrollToTop()">
+        <v-icon v-text="$icons.mdiChevronUp"></v-icon>
+      </v-btn>
     </v-bottom-navigation>
   </v-app>
 </template>
@@ -147,6 +153,10 @@ export default {
         command: "skipWaiting",
       });
     },
+
+    scrollToTop() {
+      window.scrollTo(0,0);
+    },
   },
   watch: {
     "$route.path": {
@@ -197,13 +207,16 @@ $roboto-font-path: "~roboto-fontface/fonts";
   --border: 1px solid var(--border-color);
   --border-radius: 3px;
   --box-shadow: 0px 0px 4px rgba(66, 66, 66, 0.5);
-  --single-column-width: 650px;
+  --single-column-width: 600px;
   --top-bar-height: 60px;
   --application-background: var(--v-secondary-darken1);
   --main-text-color: rgba(255, 255, 255, 0.904);
   --content-bg: rgb(26, 23, 38);
   --secondary-bg-color: rgb(43, 30, 39);
   --accent-color: rgb(253, 186, 146);
+}
+html {
+  scroll-behavior: smooth;
 }
 .theme--dark.v-application {
   background: var(--application-background) !important;
@@ -255,6 +268,10 @@ section.v-card {
 .block {
   display: block;
 }
+.rendered-markdown {
+  font-size: 110%;
+  line-height: 1.5;
+}
 .rendered-markdown > * {
   margin-bottom: 21px;
 }
@@ -276,7 +293,7 @@ section.v-card {
   }
 }
 #composer {
-  max-height: 900px;
+  max-height: 600px;
   overflow-y: auto;
 }
 
