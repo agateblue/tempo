@@ -8,7 +8,7 @@
         class="my-2"
         :color="row.color"
       >
-        <entry @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
+        <entry @updated="$emit('updated', $event)" @deleted="$emit('deleted', $event)" :row="row"></entry>
       </v-card>
       <h2
         v-else
