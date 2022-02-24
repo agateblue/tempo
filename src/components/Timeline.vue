@@ -8,7 +8,7 @@
         class="my-2"
         :color="row.color"
       >
-        <entry @updated="$emit('updated', $event)" @delete="$emit('delete', $event)" :row="row"></entry>
+        <entry @updated="$emit('updated', $event)" @deleted="$emit('deleted', $event)" :row="row"></entry>
       </v-card>
       <h2
         v-else
@@ -93,9 +93,8 @@ export default {
     timelineRows () {
       let aggregates = {}
       let rows = []
-      let reversedEntries = [...this.entries]
-      reversedEntries.reverse()
-      reversedEntries.forEach((e) => {
+      let entries = [...this.entries]
+      entries.forEach((e) => {
         let entry = getCompleteEntry(e)
         let row = {
           text: RENDERER.render(insertTagMarkup(entry.text)),
