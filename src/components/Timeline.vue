@@ -24,18 +24,11 @@
   </div>
 </template>
 <script>
-import MarkdownIt from 'markdown-it'
+import RENDERER from '@/markdown'
 import {getCompleteEntry, insertTagMarkup, getPrettyTimeFromDate} from '@/utils'
 import Entry from './Entry'
 import DateEntry from './DateEntry'
 
-const RENDERER = new MarkdownIt({
-  html: true,
-  linkify: true,
-  breaks: true,
-});
-RENDERER.use(require('markdown-it-attrs'))
-RENDERER.use(require('@toycode/markdown-it-class'), { blockquote: 'blockquote' })
 let aggregateConfigs = [
   {
     id: 'day',
