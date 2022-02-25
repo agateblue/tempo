@@ -1,7 +1,10 @@
 <template>
   <div class="pb-8">
-    <v-container class="narrow">
-      <v-tabs grow centered background-color="transparent">
+    <v-container>
+      <v-tabs
+        show-arrows
+        centered
+        background-color="transparent">
         <v-tab :to="{path: '/diary', query: {q: query}}" exact>
           Entries · {{ entries.length }}
         </v-tab>
