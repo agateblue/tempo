@@ -4,6 +4,7 @@ import Timeline from '../views/Timeline.vue'
 import Visualization from '../views/Visualization.vue'
 import Diary from '../views/Diary.vue'
 import DiaryAdvanced from '../views/DiaryAdvanced.vue'
+import Calendar from '../views/Calendar.vue'
 import About from '../views/About.vue'
 import Settings from '../views/Settings.vue'
 import Tasks from '../views/Tasks.vue'
@@ -25,6 +26,11 @@ const routes = [
         path: 'visualization',
         name: 'Visualization',
         component: Visualization,
+      },
+      {
+        path: 'calendar',
+        name: 'Calendar',
+        component: Calendar,
       },
       {
         path: 'advanced',

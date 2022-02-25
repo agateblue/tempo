@@ -8,7 +8,7 @@
         <v-tab :to="{path: '/diary', query: {q: query}}" exact>
           Entries · {{ entries.length }}
         </v-tab>
-        <!-- <v-tab to="/calendar">Calendar</v-tab> -->
+        <v-tab :to="{path: '/diary/calendar', query: {q: query}}">Calendar</v-tab>
         <v-tab :to="{path: '/diary/visualization', query: {q: query}}">Visualization</v-tab>
         <v-tab :to="{path: '/diary/advanced', query: {q: query}}">Advanced</v-tab>
       </v-tabs>

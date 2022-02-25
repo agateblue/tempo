@@ -119,7 +119,7 @@ export default {
         e.preventDefault();
         self.searchQuery = e.target.getAttribute("data-query");
         self.$router.push({
-          path: "/diary",
+          path: self.$route.path,
           query: { q: e.target.getAttribute("data-query") },
         });
       }
