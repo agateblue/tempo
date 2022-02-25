@@ -42,23 +42,24 @@
     </v-main>
     <v-bottom-navigation fixed>
       <v-spacer></v-spacer>
-      <v-btn to="/diary">
+      <v-btn :style="bottomNavBarButtonStyle" to="/diary">
         <span>Diary</span>
 
         <v-icon v-text="$icons.mdiBook"></v-icon>
       </v-btn>
-      <v-btn to="/tasks">
+      <v-btn :style="bottomNavBarButtonStyle" to="/tasks">
         <span>Tasks</span>
 
         <v-icon v-text="$icons.mdiCheck"></v-icon>
       </v-btn>
-      <v-btn to="/settings">
+      <v-btn :style="bottomNavBarButtonStyle" to="/settings">
         <span>Settings</span>
 
         <v-icon v-text="$icons.mdiCog"></v-icon>
       </v-btn>
       <template v-if="$store.state.couchDbUrl">
         <v-btn
+          :style="bottomNavBarButtonStyle"
           :loading="isSyncing"
           :disabled="isSyncing"
           @click.stop.prevent="forceSync"
@@ -78,7 +79,7 @@
         </v-btn>
       </template>
       <v-spacer></v-spacer>
-      <v-btn @click="scrollToTop()">
+      <v-btn :style="bottomNavBarButtonStyle" @click="scrollToTop()">
         <v-icon v-text="$icons.mdiChevronUp"></v-icon>
       </v-btn>
     </v-bottom-navigation>
@@ -123,6 +124,12 @@ export default {
         });
       }
     };
+  },
+  computed: {
+    bottomNavBarButtonStyle () {
+      // until https://github.com/vuetifyjs/vuetify/issues/7933 is fixed
+      return 'height: 56px; background: transparent;'
+    }
   },
   methods: {
     async forceSync() {
