@@ -41,6 +41,27 @@
       </v-container>
     </v-main>
     <v-bottom-navigation fixed>
+      <v-btn
+        :style="bottomNavBarButtonStyle"
+        :loading="isSyncing"
+        :disabled="isSyncing"
+        @click.stop.prevent="forceSync"
+        v-if="$store.state.couchDbUrl"
+      >
+        <span v-if="!isSyncing && syncError">
+          Sync error:
+          <span v-if="syncError.name">{{ syncError.name }}</span>
+          <span v-else>Unknown</span>
+        </span>
+        <span v-else>
+          Sync
+        </span>
+        <v-icon v-text="$icons.mdiSync"></v-icon>
+        <template v-slot:loader>
+          <span>Loading...</span>
+        </template>
+      </v-btn>
+      <v-btn v-else />
       <v-spacer></v-spacer>
       <v-btn :style="bottomNavBarButtonStyle" to="/diary">
         <span>Diary</span>
@@ -57,27 +78,6 @@
 
         <v-icon v-text="$icons.mdiCog"></v-icon>
       </v-btn>
-      <template v-if="$store.state.couchDbUrl">
-        <v-btn
-          :style="bottomNavBarButtonStyle"
-          :loading="isSyncing"
-          :disabled="isSyncing"
-          @click.stop.prevent="forceSync"
-        >
-          <span v-if="!isSyncing && syncError">
-            Sync error:
-            <span v-if="syncError.name">{{ syncError.name }}</span>
-            <span v-else>Unknown</span>
-          </span>
-          <span v-else>
-            Sync
-          </span>
-          <v-icon v-text="$icons.mdiSync"></v-icon>
-          <template v-slot:loader>
-            <span>Loading...</span>
-          </template>
-        </v-btn>
-      </template>
       <v-spacer></v-spacer>
       <v-btn :style="bottomNavBarButtonStyle" @click="scrollToTop()">
         <v-icon v-text="$icons.mdiChevronUp"></v-icon>
