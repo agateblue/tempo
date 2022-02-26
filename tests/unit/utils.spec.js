@@ -71,7 +71,7 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'hello #world + - date:2020 t:mytag'
+    const query = 'hello #world + - date:2020 t:mytag $dreams'
     const expected = [
       {text: 'hello'},
       {tag: '#world'},
@@ -79,6 +79,7 @@ describe('utils', () => {
       {sign: '-'},
       {date: '2020'},
       {tagName: 'mytag'},
+      {alias: 'dreams'},
     ]
     const result = parseQuery(query)
     expect(result).to.deep.equal(expected)
@@ -112,7 +113,34 @@ describe('utils', () => {
     const result = matchTokens(entry, tokens)
     expect(result).equal(true)
   })
-
+  it('match tokens aliases true', () => {
+    let aliases = {
+      dreams: "nightmare, dream"
+    }
+    const tokens = [
+      {alias: 'dreams'},
+    ]
+    const entry = {
+      text: 'nightmare tonight',
+      tags: []
+    }
+    const result = matchTokens(entry, tokens, aliases)
+    expect(result).equal(true)
+  })
+  it('match tokens aliases false', () => {
+    let aliases = {
+      dreams: "foo"
+    }
+    const tokens = [
+      {alias: 'dreams'},
+    ]
+    const entry = {
+      text: 'nightmare tonight',
+      tags: []
+    }
+    const result = matchTokens(entry, tokens, aliases)
+    expect(result).equal(false)
+  })
   it('match tokens false', () => {
     const tokens = [
       {text: 'foo'},
