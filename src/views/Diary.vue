@@ -4,8 +4,9 @@
       <v-tabs
         show-arrows
         centered
+        height="36"
         background-color="transparent">
-        <v-tab :to="{path: '/diary', query: {q: query}}" exact>
+        <v-tab :to="{path: '/diary', query: {q: query}}" exact :key="entries.length">
           Entries · {{ entries.length }}
         </v-tab>
         <v-tab :to="{path: '/diary/calendar', query: {q: query}}">Calendar</v-tab>
