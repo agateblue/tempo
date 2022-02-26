@@ -5,11 +5,15 @@
         tile
       > 
         <v-toolbar dense flat>
-          <v-spacer></v-spacer>
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-switch
+            class="mt-5"
+            v-model="expanded"
+            label="Show all events"
+          ></v-switch>
         </v-toolbar>
         <v-toolbar dense flat>
           <v-menu
@@ -68,7 +72,7 @@
           
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="60vh" min-height="600">
+      <v-sheet :height="expanded ? '' : '60vh'" :min-height="expanded ? '' : 600">
         <v-calendar
           ref="calendar"
           v-model="value"
@@ -126,6 +130,7 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
+    expanded: false,
   }),
   mounted () {
     this.$refs.calendar.checkChange()
