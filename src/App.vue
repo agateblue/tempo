@@ -92,7 +92,7 @@ export default {
       drawer: null,
       isSyncing: false,
       syncError: null,
-      searchQuery: "",
+      searchQuery: this.$route.query.q || "",
       exportDialog: false,
     };
   },
