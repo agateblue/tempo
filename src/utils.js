@@ -113,12 +113,14 @@ export function parseQuery(query) {
       } else {
         tokens.push({tag: stripped})
       }
-    }  else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
+    } else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
       tokens.push({date: stripped.split(':')[1]})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(/:(.+)/)[1]})
     } else if (stripped.startsWith('c:') || stripped.startsWith('category:') ) {
       tokens.push({categoryName: stripped.split(/:(.+)/)[1]})
+    } else if (stripped.startsWith('$')) {
+      tokens.push({alias: stripped.slice(1)})
     } else {
       tokens.push({text: stripped})
     }
@@ -133,9 +135,15 @@ export function matchString(q, s) {
   let r = new RegExp(q, 'i')
   return s.match(r) || false
 }
-export function matchTokens(entry, tokens) {
+export function matchTokens(entry, tokens, aliasesById = {}) {
   for (let index = 0; index < tokens.length; index++) {
     const token = tokens[index];
+     if (token.alias && aliasesById[token.alias]) {
+      let match = matchOrTokens(entry, parseFullQuery(aliasesById[token.alias]))
+      if (!match) {
+        return false
+      }
+    }
     if (token.text && !entry.text.toLowerCase().includes(token.text.toLowerCase())) {
       return matchString(token.text, entry.text)
     }
@@ -173,9 +181,9 @@ export function matchTokens(entry, tokens) {
   return true
 }
 
-export function matchOrTokens(entry, orTokens) {
+export function matchOrTokens(entry, orTokens, aliasesById) {
   for (const tokens of orTokens) {
-    if (matchTokens(entry, tokens)) {
+    if (matchTokens(entry, tokens, aliasesById)) {
       return true
     }
   }
@@ -293,5 +301,40 @@ export function sortChained(list) {
   return sortedKeys.map(k => {
     return byKey[k]
   })
+}
+export async function getEntries (store, sortDesc) {
+  let options = {
+    include_docs: true,
+    descending: sortDesc,
+  }
+  let result = await store.state.db.allDocs(options)
+  let entries = result.rows.map(r => {
+    return r.doc
+  })
+  entries = entries.filter((e) => {
+    return e.type == 'entry'
+  })
+  return entries
+}
 
+export function filterEntries (entries, queryTokens, aliases) {
+  if (queryTokens.length === 0) {
+    return entries
+  }
+  let aliasesById = {}
+  aliases.forEach(e => {
+    aliasesById[e.name] = e.query
+  });
+  return entries.filter((e) => {
+    return matchOrTokens(e, queryTokens, aliasesById)
+  })
+}
+
+export async function search ({store, sortDesc, query}) {
+  let allEntries = await getEntries(store, sortDesc)
+  return filterEntries(
+    allEntries,
+    parseFullQuery(query),
+    store.state.aliases,
+  )
 }

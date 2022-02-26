@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {parseFullQuery, matchOrTokens} from '@/utils'
+import {search} from '@/utils'
 
 export default {
   props: {
@@ -32,27 +32,13 @@ export default {
   data () {
     return {
       entries: [],
-      entriesCount: 0,
     }
   },
   async created () {
     this.search()
   },
   methods: {    
-    async getEntries () {
-      let options = {
-        include_docs: true,
-        descending: this.sortDesc,
-      }
-      let result = await this.$store.state.db.allDocs(options)
-      let entries = result.rows.map(r => {
-        return r.doc
-      })
-      entries = entries.filter((e) => {
-        return e.type == 'entry'
-      })
-      return entries
-    },
+    
     async handleDelete (entry) {
       this.entries = this.entries.filter((e) => {
         return e._id != entry._id
@@ -65,24 +51,12 @@ export default {
         }
       })
     },
-    filterEntries (entries, queryTokens) {
-      if (queryTokens.length === 0) {
-        return entries
-      }
-      return entries.filter((e) => {
-        return matchOrTokens(e, queryTokens)
-      })
-    },
-
     async search () {
-
-      this.count = this.$store.state.pageSize
-      let allEntries = await this.getEntries()
-      this.entriesCount = allEntries.length
-      this.entries = this.filterEntries(
-        allEntries,
-        parseFullQuery(this.query),
-      )
+      this.entries = await search({
+        store: this.$store,
+        sortDesc: this.sortDesc,
+        query: this.query
+      })
     },
   },
   watch: {

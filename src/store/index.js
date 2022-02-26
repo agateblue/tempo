@@ -24,6 +24,7 @@ const store = new Vuex.Store({
     dark: true,
     shortcuts: [],
     charts: [],
+    aliases: [],
     serviceWorker: {
       refreshing: false,
       registration: null,
@@ -88,6 +89,9 @@ const store = new Vuex.Store({
     },
     charts (state, charts) {
       state.charts = charts
+    },
+    aliases (state, aliases) {
+      state.aliases = aliases
     },
     boardConfig (state, boardConfig) {
       state.boardConfig = boardConfig
@@ -352,6 +356,77 @@ const store = new Vuex.Store({
         return
       }
       commit('boardConfig', tl.boardConfig)
+    },
+    async addAlias ({state, commit}, config) {
+      let id = (new Date()).toISOString()
+      config._id = id
+      commit('aliases', [...state.aliases, config])
+      let existing
+      try {
+        existing = await state.db.get('aliases')
+      } catch {
+        console.debug('No existing aliases')
+      }
+      if (existing && isEqual(existing.aliases, state.aliases)) {
+        return
+      }
+      let data = {
+        _id: 'aliases',
+        aliases: state.aliases,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async removeAlias ({state, commit}, id) {
+      let remaining = state.aliases.filter(c => {
+        return c._id != id
+      })
+      commit('aliases', remaining)
+      let existing = await state.db.get('aliases')
+      let data = {
+        _id: 'aliases',
+        aliases: state.aliases,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async updateAlias ({state, commit}, chart) {
+      
+      let aliases = []
+      state.aliases.forEach((c) => {
+        if (c._id === chart._id) {
+          aliases.push(chart)
+        } else {
+          aliases.push(c)
+        }
+      })
+      commit('aliases', aliases)
+      let existing = await state.db.get('aliases')
+      let data = {
+        _id: 'aliases',
+        aliases: state.aliases,
+        type: 'settings',
+      }
+      if (existing) {
+        data._rev = existing._rev
+      }
+      await state.db.put(data)
+    },
+    async loadAliases ({state, commit}) {
+      let sc = []
+      try {
+        sc = await state.db.get("aliases")
+      } catch (e) {
+        console.debug('No existing aliases')
+        return
+      }
+      commit('aliases', sc.aliases)
     },
   },
   modules: {

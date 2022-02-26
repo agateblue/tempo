@@ -98,6 +98,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch('loadCharts')
+    await this.$store.dispatch('loadAliases')
     await this.$store.dispatch('loadBoardConfig')
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener("controllerchange", () => {
