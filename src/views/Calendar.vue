@@ -3,33 +3,15 @@
     <v-container>
       <v-sheet
         tile
-      >
-        <v-toolbar flat>
-          <v-btn
-            icon
-            @click="$refs.calendar.prev()"
-          >
-            <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
-          </v-btn>
-          <v-btn
-            icon
-            class="ma-2"
-            @click="$refs.calendar.next()"
-          >
-            <v-icon>{{ $icons.mdiChevronRight }}</v-icon>
-          </v-btn>
-          <v-btn
-            outlined
-            small
-            class="mr-4"
-            @click="setToday"
-          >
-            Today
-          </v-btn>
+      > 
+        <v-toolbar dense flat>
+          <v-spacer></v-spacer>
           <v-toolbar-title v-if="$refs.calendar">
             {{ $refs.calendar.title }}
           </v-toolbar-title>
           <v-spacer></v-spacer>
+        </v-toolbar>
+        <v-toolbar dense flat>
           <v-menu
             bottom
             right
@@ -39,6 +21,7 @@
                 outlined
                 v-bind="attrs"
                 v-on="on"
+                small
               >
                 <span>{{ type }}</span>
                 <v-icon right>
@@ -58,9 +41,34 @@
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            @click="$refs.calendar.prev()"
+          >
+            <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
+            Previous
+          </v-btn>
+          <v-btn
+            text
+            @click="$refs.calendar.next()"
+          >
+            Next
+            <v-icon>{{ $icons.mdiChevronRight }}</v-icon>
+          </v-btn>
+
+          <v-spacer></v-spacer>
+          <v-btn
+            outlined
+            small
+            @click="setToday"
+          >
+            Today
+          </v-btn>
+          
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="70vh" min-height="600">
+      <v-sheet height="60vh" min-height="600">
         <v-calendar
           ref="calendar"
           v-model="value"
@@ -141,7 +149,11 @@ export default {
     },
     viewDay ({ date }) {
       this.value = date
-      this.type = 'day'
+      if (this.type != "day") {
+        this.type = 'day'
+      } else {
+        this.type = 'month'
+      }
     },
     getEventColor (event) {
       let hasImportant = (event.tags || []).filter(t => {
