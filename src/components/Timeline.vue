@@ -101,7 +101,7 @@ export default {
           rawEntry: e,
           time: getPrettyTimeFromDate(entry.fullDate)
         }
-        let baseColor = " lighten-"
+        let baseColor = " accent-"
         if (entry.mood > 0) {
           row.color = "light-green" + baseColor + Math.min(entry.mood + 1, 4)
         } else if (entry.mood < 0) {
