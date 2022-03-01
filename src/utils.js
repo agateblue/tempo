@@ -305,7 +305,6 @@ export function sortChained(list) {
 export async function getEntries (store, sortDesc) {
   let options = {
     include_docs: true,
-    descending: sortDesc,
   }
   let result = await store.state.db.allDocs(options)
   let entries = result.rows.map(r => {
