@@ -314,6 +314,10 @@ export async function getEntries (store, sortDesc) {
   entries = entries.filter((e) => {
     return e.type == 'entry'
   })
+  entries = sortBy(entries, ["date"])
+  if (sortDesc) {
+    entries.reversed()
+  }
   return entries
 }
 
