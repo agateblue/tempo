@@ -243,6 +243,10 @@ If you're using Tempo or one of the community spaces such as the GitHub issues o
 
 This Code of Conduct is non-negotiable and I will gladly enforce it. You can also contact me at tempo@agate.blue if you think some moderation action needs to be taken.
 
+## Software license
+
+Tempo is licensed under GNU Affero General Public License v3.0.
+
 ## Reporting bugs
 
 If you encounter a bug while using Tempo, you're welcome to [open an issue](https://github.com/agateblue/tempo/issues). Please have a quick look at the issue tracker beforehand, as someone may already have reported it.
