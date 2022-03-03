@@ -1,0 +1,1 @@
+{"name":"Tempo","short_name":"Tempo","theme_color":"#422D62","icons":[{"src":"favicon.png","sizes":"192x192","type":"image/png"},{"src":"favicon.png","sizes":"512x512","type":"image/png"}],"start_url":".","display":"fullscreen","background_color":"#000000","description":"Find yoour own rythm","scope":"/","categories":["notes","note",null,"diary","log","health","mood tracker"]}
