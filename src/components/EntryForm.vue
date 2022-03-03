@@ -148,7 +148,7 @@ export default {
         return `${this.newDate}T${this.newTime}:${pad(d.getSeconds(), 2)}`
       },
       set (v) {
-        if (!v) {
+        if (!v || this.compact) {
           this.newDate = null
           this.newTime = null
           return
