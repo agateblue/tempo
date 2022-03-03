@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "660f2e51166d43df152b",
+    "revision": "c542f886591909805f87",
     "url": "/css/app~748942c6.20b0e9a3.css"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/chunk-vendors~fdc6512a.641c7f32.css"
   },
   {
-    "revision": "6c87755abdbae9e080cc",
+    "revision": "8bd1ecc4945d2ef68733",
     "url": "/css/tasks~31ecd969.726b3234.css"
   },
   {
@@ -180,7 +180,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "400eeb30936b7f4ee831005ab866b363",
+    "revision": "118267dcba9f2b032bbd3d4d1e3c600a",
     "url": "/index.html"
   },
   {
@@ -188,8 +188,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/alasql~2a42e354.7d46ea10.js"
   },
   {
-    "revision": "660f2e51166d43df152b",
-    "url": "/js/app~748942c6.a4421d49.js"
+    "revision": "c542f886591909805f87",
+    "url": "/js/app~748942c6.04133048.js"
   },
   {
     "revision": "122c05360f4a8f8c71a8",
@@ -200,8 +200,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors~2ebc07f6.ea82b2f0.js"
   },
   {
-    "revision": "b67320d304f964d43288",
-    "url": "/js/chunk-vendors~4a7e9e0b.b5d02dd7.js"
+    "revision": "aa71fcc89467186a06b9",
+    "url": "/js/chunk-vendors~4a7e9e0b.4da5484f.js"
   },
   {
     "revision": "e365043227c8a65339b2",
@@ -220,12 +220,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors~fdc6512a.4a4a6522.js"
   },
   {
-    "revision": "6c87755abdbae9e080cc",
-    "url": "/js/tasks~31ecd969.dbf66fe3.js"
+    "revision": "8bd1ecc4945d2ef68733",
+    "url": "/js/tasks~31ecd969.e60113f9.js"
   },
   {
-    "revision": "21491671ce1d254ed856",
-    "url": "/js/visualization~31ecd969.52059d90.js"
+    "revision": "b85e1358af3f97ec0398",
+    "url": "/js/visualization~31ecd969.a1164372.js"
   },
   {
     "revision": "d311f2c71ce2a14481a676bb9f7ae619",
