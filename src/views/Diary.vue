@@ -18,6 +18,7 @@
       :all-entries="entries"
       @deleted="handleDelete"
       @updated="handleUpdate"
+      @created="handleCreated"
     ></router-view>
   </div>
 </template>
@@ -39,6 +40,9 @@ export default {
   },
   methods: {    
     
+    async handleCreated (entry) {
+      this.entries.push(entry)
+    },
     async handleDelete (entry) {
       this.entries = this.entries.filter((e) => {
         return e._id != entry._id

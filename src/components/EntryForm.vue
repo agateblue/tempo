@@ -174,12 +174,13 @@ export default {
       if (!this.text) {
         return
       }
+      let e
       if (this.entry) {
-        await this.update()
+        e = await this.update()
       } else {
-        await this.addNew()
+        e = await this.addNew()
       }
-      this.$emit('submitted', this.entry)
+      this.$emit('submitted', e)
       await this.$store.dispatch('triggerWebhook')
     },
     async addNew () {
@@ -193,6 +194,7 @@ export default {
       this.$emit('created', e)
       this.text = ''
       this.date = null
+      return e
     },
     async update () {
       let date = new Date(this.date || this.entry.date)
@@ -204,6 +206,7 @@ export default {
       }
       let e = await this.$store.dispatch('updateEntry', data)
       this.$emit('updated', e)
+      return e
     }
   },
   watch: {
