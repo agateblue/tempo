@@ -278,6 +278,9 @@ export function getPrettyTimeFromDate (v) {
   let minutes = parseInt(time[1]) + (hours * 60)
   minutes = minutes - v.getTimezoneOffset()
   let realHours = Math.floor(minutes / 60);
+  if (realHours === 24) {
+    realHours = 0
+  }
   var realMinutes = minutes % 60;
   return `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
 }
