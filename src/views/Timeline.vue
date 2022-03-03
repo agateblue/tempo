@@ -71,13 +71,8 @@ export default {
     },
   },
   methods: {
-    async handleCreated () {
-      if (this.$router.currentRoute.query.q) {
-        this.$router.push({
-          path: "/",
-          query: {}
-        })
-      }
+    async handleCreated (e) {
+      this.$emit('created', e)
     },
     showMore: debounce(function (data) {
       if (data && !data[0].isIntersecting) {
