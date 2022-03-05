@@ -1,14 +1,14 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c542f886591909805f87",
+    "revision": "32e1649cc8a30f128774",
     "url": "/css/app~748942c6.20b0e9a3.css"
   },
   {
-    "revision": "d4649a22d18dbfe02d2c",
-    "url": "/css/chunk-vendors~fdc6512a.641c7f32.css"
+    "revision": "76a38502fe03e9762eb4",
+    "url": "/css/chunk-vendors~fdc6512a.3fc48042.css"
   },
   {
-    "revision": "8bd1ecc4945d2ef68733",
+    "revision": "8b73c7eb295d5a0522cd",
     "url": "/css/tasks~31ecd969.726b3234.css"
   },
   {
@@ -180,7 +180,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "118267dcba9f2b032bbd3d4d1e3c600a",
+    "revision": "2e600ad2366466ae1ad0d99272260cce",
     "url": "/index.html"
   },
   {
@@ -188,20 +188,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/alasql~2a42e354.7d46ea10.js"
   },
   {
-    "revision": "c542f886591909805f87",
-    "url": "/js/app~748942c6.04133048.js"
+    "revision": "32e1649cc8a30f128774",
+    "url": "/js/app~748942c6.77469887.js"
   },
   {
-    "revision": "122c05360f4a8f8c71a8",
-    "url": "/js/chunk-vendors~253ae210.97e3daea.js"
+    "revision": "4fe763c0abc08c5c0ce4",
+    "url": "/js/chunk-vendors~253ae210.5df7b60a.js"
   },
   {
     "revision": "ed9c8d842382c357d9a3",
     "url": "/js/chunk-vendors~2ebc07f6.ea82b2f0.js"
   },
   {
-    "revision": "aa71fcc89467186a06b9",
-    "url": "/js/chunk-vendors~4a7e9e0b.4da5484f.js"
+    "revision": "feff16216a4d96bcebdf",
+    "url": "/js/chunk-vendors~4a7e9e0b.4bfc13be.js"
   },
   {
     "revision": "e365043227c8a65339b2",
@@ -216,16 +216,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors~ec8c427e.06c03e95.js"
   },
   {
-    "revision": "d4649a22d18dbfe02d2c",
-    "url": "/js/chunk-vendors~fdc6512a.4a4a6522.js"
+    "revision": "76a38502fe03e9762eb4",
+    "url": "/js/chunk-vendors~fdc6512a.4232c8cc.js"
   },
   {
-    "revision": "8bd1ecc4945d2ef68733",
-    "url": "/js/tasks~31ecd969.e60113f9.js"
+    "revision": "8b73c7eb295d5a0522cd",
+    "url": "/js/tasks~31ecd969.f35ae0cb.js"
   },
   {
-    "revision": "b85e1358af3f97ec0398",
-    "url": "/js/visualization~31ecd969.a1164372.js"
+    "revision": "ddce379b0d6db8a3a5d9",
+    "url": "/js/visualization~31ecd969.f3269c51.js"
   },
   {
     "revision": "d311f2c71ce2a14481a676bb9f7ae619",
