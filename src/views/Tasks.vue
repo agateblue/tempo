@@ -9,8 +9,7 @@
       <v-card-title class="headline" v-else>Create your board</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
-        <board-form @updated="isEditing = false"></board-form>
-
+        <board-form @updated="tasksByList = getTasksByList(); isEditing = false"></board-form>
       </v-card-text>
     </v-card>
     <template v-else>
@@ -68,7 +67,7 @@
                   <v-icon v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
                   <v-icon v-else>{{ $icons.mdiChevronUp }}</v-icon>
                 </v-btn>
-                {{ list.label }} · {{ tasksByList[idx].length }}
+                {{ list.label }} · {{ (tasksByList[idx] || []).length }}
               </v-col>
               <v-col cols="2" v-if="lists[idx].expanded">
                 <v-btn
@@ -304,6 +303,14 @@ export default {
       },
       immediate: true,
       deep: true,
+    },
+    isConfigured: {
+      handler (v) {
+        if (v) {
+          this.tasksByList = this.getTasksByList()
+        }
+      },
+      immediate: true,
     }
   }
 }
