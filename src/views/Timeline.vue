@@ -3,11 +3,9 @@
     <v-container class="narrow">
       <entry-form
         textarea-label="Write a new entry"
-        :compact="true"
         color="transparent"
         :key="`timeline-${$store.state.lastSync}`"
         ref="entryForm"
-        @fullscreen="showEntryModal = true"
         @submitted="handleCreated"
       />
     </v-container>
@@ -31,14 +29,12 @@
           }
         }">Show more</v-btn>
     </v-container>
-    <entry-modal :show.sync="showEntryModal" @submitted="handleCreated" />
   </div>
 </template>
 
 <script>
 import Timeline from '@/components/Timeline.vue'
 import debounce from 'lodash/debounce'
-import EntryModal from '@/components/EntryModal.vue'
 import EntryForm from '@/components/EntryForm.vue'
 
 export default {
@@ -48,7 +44,6 @@ export default {
   components: {
     Timeline,
     EntryForm,
-    EntryModal,
   },
   data () {
     return {
