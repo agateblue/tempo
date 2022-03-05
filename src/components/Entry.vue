@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-text :class="$theme.card.textSize">
+    <v-card-text :class="$theme.card.textSize" v-if="!isEditing">
       <v-badge
         style="display: block !important"
         :color="row.color"
@@ -23,7 +23,18 @@
         </v-btn>
       </div>
     </v-card-text>
-
+    <v-card-text v-else>
+      <entry-form
+        textarea-label="Update entry"
+        :entry="row.entry"
+        :initial-text="row.entry.text"
+        color="transparent"
+        :key="`timeline-${$store.state.lastSync}`"
+        ref="entryForm"
+        @submitted="update"
+        @cancel="isEditing = false"
+      />
+    </v-card-text>
     <v-lazy
       :options="{
         threshold: .5
@@ -45,7 +56,7 @@
           small
           class="px-1"
           color="grey darken-2"
-          @click="showEntryModal = true"
+          @click="isEditing = !isEditing"
           title="Edit"
         >
           <v-icon left>{{ $icons.mdiPencil}}</v-icon>
@@ -70,12 +81,6 @@
         >
           <v-icon left>{{ $icons.mdiDelete}}</v-icon>
         </v-btn>
-        <entry-modal
-          :show.sync="showEntryModal"
-          @submitted="update"
-          :entry-form-props="{entry: row.rawEntry, name: `how-${row.rawEntry._id}`}"
-        >
-        </entry-modal>
 
         <v-dialog
 
@@ -115,7 +120,7 @@
   </v-card>
 </template>
 <script>
-import EntryModal from '@/components/EntryModal.vue'
+import EntryForm from '@/components/EntryForm.vue'
 import truncate from 'truncate-html'
 truncate.setup({byWords: true, length: 60, keepWhitespaces: true })
 
@@ -124,12 +129,12 @@ export default {
     row: Object
   },
   components: {
-    EntryModal
+    EntryForm
   },
   data () {
     return {
       deleteDialog: false,
-      showEntryModal: false,
+      isEditing: false,
       currentEntry: this.row.rawEntry,
       expand: false,
     }
