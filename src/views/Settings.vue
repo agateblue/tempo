@@ -5,6 +5,7 @@
 
       <v-card-text :class="$theme.card.textSize">
         <ul>
+          <li><a href="#export">Export data</a></li>
           <li><a href="#import">Import entries</a></li>
           <li><a href="#import-tasks">Import tasks</a></li>
           <li><a href="#sync">Sync</a></li>
@@ -28,42 +29,73 @@
       </v-card-text>
     </v-card> -->
 
-    <v-card tag="section" id="import" class="mb-8" :color="$theme.card.color">
-      <v-card-title class="headline">Import entries</v-card-title>
-
+    <v-card
+      tag="form"
+      id="export"
+      class="section mb-8"
+      :color="$theme.card.color"
+      @submit.prevent="exportData"
+    >
+      <v-card-title class="headline">Export data</v-card-title>
       <v-card-text :class="$theme.card.textSize">
-        <p>Import entries from a JSON file exported from another Tempo session.</p>
-        <v-form>
-          <v-file-input accept=".json,application/json" label="JSON export" v-model="toImportEntries"></v-file-input>
-          <v-btn
-            :disabled="!toImportEntries"
-            color="primary"
-            @click="importEntries">
-            Import
-          </v-btn>
-          <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
-          <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
-        </v-form>
+        <p>Export selected data into a JSON file for backup and restore purpose.</p>
+        <v-checkbox
+          hide-details
+          v-model="exportConfig.entries"
+          label="Export diary notes"
+        ></v-checkbox>
+        <v-checkbox
+          hide-details
+          v-model="exportConfig.board"
+          label="Export tasks and board configuration"
+        ></v-checkbox>
+        <v-checkbox
+          hide-details
+          v-model="exportConfig.settings"
+          label="Export Tempo settings"
+        ></v-checkbox>
       </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" type="submit">Export</v-btn>
+      </v-card-actions>
     </v-card>
-
-    <v-card tag="section" id="import-tasks" class="mb-8" :color="$theme.card.color">
-      <v-card-title class="headline">Import tasks</v-card-title>
-
+    <v-card
+      tag="form"
+      id="import"
+      class="section mb-8"
+      :color="$theme.card.color"
+      @submit.prevent="importData"
+    >
+      <v-card-title class="headline">Import data</v-card-title>
       <v-card-text :class="$theme.card.textSize">
-        <p>Import tasks and board configuration from a JSON file exported from another Tempo session.</p>
-        <v-form>
-          <v-file-input accept=".json,application/json" label="JSON export" v-model="toImportTasks"></v-file-input>
-          <v-btn
-            :disabled="!toImportTasks"
-            color="primary"
-            @click="importTasks">
-            Import
-          </v-btn>
-          <p v-if="importedEntries > 0">Imported {{ importedEntries }} entries!</p>
-          <p v-if="failedEntries > 0">Skipped {{ failedEntries }} existing entries.</p>
-        </v-form>
+        <p>Import data from a previously generated Tempo JSON File. Existing notes and tasks will be kept.</p>
+        <v-file-input accept=".json,application/json" label="JSON File" v-model="toImportFile"></v-file-input>
+        <v-checkbox
+          hide-details
+          v-model="importConfig.entries"
+          label="Import diary notes"
+        ></v-checkbox>
+        <v-checkbox
+          hide-details
+          v-model="importConfig.board"
+          label="Import tasks and board configuration"
+        ></v-checkbox>
+        <v-checkbox
+          hide-details
+          v-model="importConfig.settings"
+          label="Import Tempo settings"
+        ></v-checkbox>
+        <v-textarea
+          v-if="importLogs.length > 0"
+          readonly
+          :value="importLogs.join('\n')"
+          auto-grow
+        >
+        </v-textarea>
       </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" type="submit" :disabled="!toImportFile">Import</v-btn>
+      </v-card-actions>
     </v-card>
 
     <v-card tag="section" id="sync" class="mb-8" :color="$theme.card.color">
@@ -155,15 +187,103 @@
 
 <script>
 
+import {search, getTasks, downloadFile, getSettings} from '@/utils'
+
+async function bulkInsertAndUpdate(arr, db) {
+  let withRev = arr.filter(r => !!r._rev)
+  let withoutRev = arr.filter(r => !r._rev)
+  let results = []
+
+  if (withoutRev) {
+    results = [...results, ...await db.bulkDocs(withoutRev)]
+  }
+  if (withRev) {
+    results = [...results, ...await db.bulkDocs(withRev, {new_edits: false})]
+  }
+  return results
+}
+
+async function importEntries(entries, db, logs) {
+  entries = entries || []
+  logs.push(`[info] Importing ${entries.length} notes...`)
+  let result = await bulkInsertAndUpdate(entries, db)
+  let success = result.filter((e) => {
+    return e.ok
+  }).length
+  let failed = result.filter((e) => {
+    return !e.ok
+  }).length
+  if (failed > 0) {
+    logs.push(`[error] ${failed} notes failed to import`)
+  }
+  if (success > 0) {
+    logs.push(`[info] ${success} notes imported successfully...`)
+  }
+  return result
+}
+async function importBoard(board, db, dispatch, logs) {
+  if (!board || !board.settings) {
+    return logs.push("[error] Invalid board configuration, skipping")
+  }
+  logs.push(`[info] Importing board configuration...`)
+  await dispatch('boardConfig', board.settings)
+
+  let tasks = board.tasks || []
+  logs.push(`[info] Importing ${tasks.length} tasks...`)
+  let result = await bulkInsertAndUpdate(tasks, db)
+  let success = result.filter((e) => {
+    return e.ok
+  }).length
+  let failed = result.filter((e) => {
+    return !e.ok
+  }).length
+
+  if (failed > 0) {
+    logs.push(`[error] ${failed} tasks failed to import`)
+  }
+  if (success > 0) {
+    logs.push(`[info] ${success} tasks imported successfully...`)
+  }
+  return result
+}
+
+
+async function importSettings(settings, db, logs) {
+  settings = settings || []
+  logs.push(`[info] Importing ${settings.length} settings...`)
+  let result = await bulkInsertAndUpdate(settings, db)
+  let success = result.filter((e) => {
+    return e.ok
+  }).length
+  let failed = result.filter((e) => {
+    return !e.ok
+  }).length
+  if (failed > 0) {
+    logs.push(`[error] ${failed} settings failed to import`)
+  }
+  if (success > 0) {
+    logs.push(`[info] ${success} settings imported successfully...`)
+  }
+  return result
+}
+
+
 export default {
   data () {
-
     return {
+      exportConfig: {
+        entries: true,
+        board: true,
+        settings: true,
+      },
+      importConfig: {
+        entries: true,
+        board: true,
+        settings: true,
+      },
+      importLogs: [],
       syncStatus: null,
-      toImportEntries: null,
-      toImportTasks: null,
-      importedEntries: 0,
-      failedEntries: 0,
+      toImportFile: null,
       showdbPassword: false,
       couchDbUrl: this.$store.state.couchDbUrl,
       couchDbUsername: this.$store.state.couchDbUsername,
@@ -173,53 +293,61 @@ export default {
     }
   },
   methods: {
+    async exportData () {
+      let data = {}
+      if (this.exportConfig.entries) {
+        data.entries = await search({
+          store: this.$store,
+          sortDesc: false,
+          query: ''
+        })
+      }
+      if (this.exportConfig.board) {
+        data.board = {
+          settings: this.$store.state.boardConfig,
+          tasks: await getTasks(this.$store, '')
+        }
+      }
+      if (this.exportConfig.settings) {
+        let settings = await getSettings(this.$store)
+        data.settings = settings.filter(s => {
+          return s._id != "boardConfig"
+        })
+      }
+
+      let d = (new Date()).toISOString().slice(0, 16)
+      downloadFile(
+        window,
+        document,
+        JSON.stringify(data),
+        'application/json',
+        `tempo_export_${d}.json`
+      )
+    },
     async triggerWebhook (url) {
       await this.$store.dispatch("forceSync")
       await this.$store.dispatch('triggerWebhook', url)
     },
-    async importEntries () {
-      if (!this.toImportEntries) {
+    async importData () {
+      this.importLogs = []
+      if (!this.toImportFile) {
         console.log('No file to import')
         return
       }
-      this.importedEntries = 0
-      this.failedEntries = 0
-      console.log('Importing entries…')
-      let text = await this.toImportEntries.text()
-      let entries = JSON.parse(text)
-      entries.forEach((e) => {
-        delete e._rev
-      })
-      let result = await this.$store.state.db.bulkDocs(entries)
-      this.importedEntries = result.filter((e) => {
-        return e.ok
-      }).length
-      this.failedEntries = result.filter((e) => {
-        return !e.ok
-      }).length
-    },
-    async importTasks () {
-      if (!this.toImportTasks) {
-        console.log('No file to import')
-        return
+      this.importLogs.push("[info] Loading file...")
+      let text = await this.toImportFile.text()
+      this.importLogs.push("[info] Parsing file...")
+      let data = JSON.parse(text)
+      if (this.importConfig.entries ){
+        await importEntries(data.entries, this.$store.state.db, this.importLogs)
       }
-      this.importedEntries = 0
-      this.failedEntries = 0
-      console.log('Importing tasks')
-      let text = await this.toImportTasks.text()
-      let parsed = JSON.parse(text)
-      let tasks = parsed.tasks
-      tasks.forEach((e) => {
-        delete e._rev
-      })
-      await this.$store.dispatch('boardConfig', parsed.boardConfig)
-      let result = await this.$store.state.db.bulkDocs(tasks)
-      this.importedEntries = result.filter((e) => {
-        return e.ok
-      }).length
-      this.failedEntries = result.filter((e) => {
-        return !e.ok
-      }).length
+      if (this.importConfig.board ){
+        await importBoard(data.board, this.$store.state.db, this.$store.dispatch, this.importLogs)
+      }
+      if (this.importConfig.settings ){
+        await importSettings(data.settings, this.$store.state.db, this.importLogs)
+      }
+      this.importLogs.push(`[info] Import complete!`)
     },
     deleteConfirm () {
       if (confirm("This will remove all your notes. This action is irreversible.")) {
