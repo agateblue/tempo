@@ -346,3 +346,72 @@ export async function search ({store, sortDesc, query}) {
     store.state.aliases,
   )
 }
+
+export function filterTasks (tasks, queryTokens) {
+  if (queryTokens.length === 0) {
+    return tasks
+  }
+  return tasks.filter((e) => {
+    return matchOrTokens(e, queryTokens)
+  })
+}
+
+export async function getTasks (store, query) {
+  let result = await store.state.db.find({
+    selector: {
+      type: 'task',
+      date: { $gt: 0 }
+    }
+  })
+  let tasks = result.docs
+  return filterTasks(
+    tasks,
+    parseFullQuery(query),
+  )
+}
+
+export function getSettingValue(s) {
+  const excludedAttrs = ["_rev", "_id", "_"]
+  for (const key in s) {
+    if (Object.hasOwnProperty.call(s, key) && !excludedAttrs.indexOf(key) > -1) {
+      return s[key]
+    }
+  }
+}
+
+export async function getSettings (store) {
+  let result = await store.state.db.find({
+    selector: {
+      type: 'settings',
+    }
+  })
+  let settings = result.docs.map(r => {
+    return {
+      _id: r._id,
+      _rev: r._rev,
+      value: r.value || getSettingValue(r),
+    }
+  })
+
+  return settings
+}
+
+export function downloadFile (window, document, text, mimetype, name) {
+  let f = makeFile(window, text, mimetype)
+  var link = document.createElement('a')
+  link.setAttribute('download', name)
+  link.href = f
+  document.body.appendChild(link)
+
+  window.requestAnimationFrame(function () {
+    var event = new MouseEvent('click')
+    link.dispatchEvent(event)
+    document.body.removeChild(link)
+  })
+}
+
+export function makeFile (window, text, mimetype) {
+  let data = new Blob([text], {type: mimetype})
+  let textFile = window.URL.createObjectURL(data)
+  return textFile
+}

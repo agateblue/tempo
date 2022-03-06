@@ -232,7 +232,7 @@ html {
 .container.narrow {
   max-width: var(--single-column-width);
 }
-section.v-card {
+section.v-card, .section.v-card {
   max-width: var(--single-column-width) !important;
   margin-left: auto !important;
   margin-right: auto !important;
