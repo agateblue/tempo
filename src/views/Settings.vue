@@ -143,28 +143,22 @@
       <v-card-text :class="$theme.card.textSize">
         <p>Notify an URL via a POST request when an entry is created, updated or deleted.</p>
           <v-text-field
-            v-model="webhookUrl"
+            v-model="webhook.url"
             label="Webhook URL"
             name="webhookurl"
             type="url"
             required
           ></v-text-field>
-          <v-text-field
-            v-model="webhookQuery"
-            label="Restrict to specific entries"
-            placeholder="tag:publish"
-            name="webhookquery"
-          ></v-text-field>
         <v-btn
           class="mr-4"
-          :disabled="!webhookUrl"
-          @click="triggerWebhook(webhookUrl)">
+          :disabled="!webhook.url"
+          @click="triggerWebhook(webhook.url)">
           Send webhook now
         </v-btn>
         <v-btn
           color="primary"
-          :disabled="!webhookUrl"
-          @click="$store.dispatch('setWebhook', {url: webhookUrl, query: webhookQuery})">
+          :disabled="!webhook.url"
+          @click="$store.dispatch('setWebhook', {url: webhook.url})">
           Save
         </v-btn>
       </v-card-text>
@@ -187,21 +181,7 @@
 
 <script>
 
-import {search, getTasks, downloadFile, getSettings} from '@/utils'
-
-async function bulkInsertAndUpdate(arr, db) {
-  let withRev = arr.filter(r => !!r._rev)
-  let withoutRev = arr.filter(r => !r._rev)
-  let results = []
-
-  if (withoutRev) {
-    results = [...results, ...await db.bulkDocs(withoutRev)]
-  }
-  if (withRev) {
-    results = [...results, ...await db.bulkDocs(withRev, {new_edits: false})]
-  }
-  return results
-}
+import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate} from '@/utils'
 
 async function importEntries(entries, db, logs) {
   entries = entries || []
@@ -288,8 +268,9 @@ export default {
       couchDbUrl: this.$store.state.couchDbUrl,
       couchDbUsername: this.$store.state.couchDbUsername,
       couchDbPassword: this.$store.state.couchDbPassword,
-      webhookUrl: this.$store.state.webhook.url,
-      webhookQuery: this.$store.state.webhook.query,
+      webhook: this.$store.state.settings.webhook || {
+        url: '',
+      }
     }
   },
   methods: {
@@ -346,6 +327,7 @@ export default {
       }
       if (this.importConfig.settings ){
         await importSettings(data.settings, this.$store.state.db, this.importLogs)
+        await this.$store.dispatch("loadSettings")
       }
       this.importLogs.push(`[info] Import complete!`)
     },

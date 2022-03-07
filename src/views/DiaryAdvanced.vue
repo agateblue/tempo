@@ -11,7 +11,7 @@
         </p>
         <v-form>
           <alias-form
-            v-for="alias in $store.state.aliases"
+            v-for="alias in $store.state.settings.aliases"
             :key="alias._id"
             :alias="alias"
           />
