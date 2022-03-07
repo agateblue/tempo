@@ -371,9 +371,9 @@ export async function getTasks (store, query) {
 }
 
 export function getSettingValue(s) {
-  const excludedAttrs = ["_rev", "_id", "_"]
+  const excludedAttrs = ["_rev", "_id", "_", "type"]
   for (const key in s) {
-    if (Object.hasOwnProperty.call(s, key) && !excludedAttrs.indexOf(key) > -1) {
+    if (Object.hasOwnProperty.call(s, key) && excludedAttrs.indexOf(key) === -1) {
       return s[key]
     }
   }
@@ -414,4 +414,40 @@ export function makeFile (window, text, mimetype) {
   let data = new Blob([text], {type: mimetype})
   let textFile = window.URL.createObjectURL(data)
   return textFile
+}
+
+export const SETTINGS = [
+  {name: "webhook", default: () => {return {}}},
+  {name: "charts", default: () => {return []}},
+  {name: "aliases", default: () => {return []}},
+  {name: "boardConfig", default: () => {return {
+    lists: [
+      {label: "To-do"},
+      {label: "Doing"},
+    ],
+    categories: [
+      {label: "Personal"},
+      {label: "Work"},
+      {label: "House-keeping"},
+    ]
+  }}},
+]
+
+export async function bulkInsertAndUpdate(arr, db) {
+  let newEdits = []
+  let notNewEdits = []
+  await db.compact()
+  for (const o of arr) {
+    try {
+      let e = await db.get(o._id)
+      newEdits.push({...o, _rev: e._rev})
+    } catch (e) {
+      notNewEdits.push({...o})
+    }
+  }
+  let results = [
+    ...await db.bulkDocs(notNewEdits, {new_edits: false}),
+    ...await db.bulkDocs(newEdits),
+  ]
+  return results
 }

@@ -85,7 +85,7 @@ export default {
       }
       let index = 0
       let colorIndex = null
-      this.$store.state.boardConfig.categories.forEach((c) => {
+      this.$store.state.settings.boardConfig.categories.forEach((c) => {
         if (c.label.toLowerCase() == this.task.category.toLowerCase()) {
           colorIndex = index
         }

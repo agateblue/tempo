@@ -2,11 +2,10 @@
   <div :key="`tasks-${$store.state.lastSync}`">
     <v-card
       tag="section"
-      v-if="!isConfigured || isEditing"
+      v-if="isEditing"
       class="mb-8"
       :color="$theme.card.color">
-      <v-card-title class="headline" v-if="isEditing">Update your board</v-card-title>
-      <v-card-title class="headline" v-else>Create your board</v-card-title>
+      <v-card-title class="headline">Update your board</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
         <board-form @updated="tasksByList = getTasksByList(); isEditing = false"></board-form>
@@ -158,11 +157,6 @@ export default {
   async created () {
     this.tasks = await getTasks(this.$store, this.query)
   },
-  computed: {
-    isConfigured () {
-      return this.$store.state.boardConfig && this.$store.state.boardConfig.lists.length > 0  
-    },
-  },
   methods: {
     getTasksByList () {
       let d = {}
@@ -219,15 +213,12 @@ export default {
 
     tasks: {
       handler () {
-        if (!this.isConfigured) {
-          return
-        }
         this.tasksByList = this.getTasksByList()
       },
       immediate: true,
       deep: true,
     },
-    isConfigured: {
+    "$store.settings.boardConfig": {
       handler (v) {
         if (v) {
           this.tasksByList = this.getTasksByList()
