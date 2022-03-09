@@ -109,19 +109,20 @@
           <v-text-field
             v-model="couchDbUrl"
             label="CouchDB URL"
+            name="couchdb-url"
             placeholder="http://localhost:5984/tempo"
             required
           ></v-text-field>
           <v-text-field
             v-model="couchDbUsername"
             label="CouchDB Username"
-            name="alice"
+            name="couchdb-username"
             required
           ></v-text-field>
           <v-text-field
             :append-icon="showdbPassword ? $icons.mdiEye : $icons.mdiEyeOff"
             :type="showdbPassword ? 'text' : 'password'"
-            name="input-10-2"
+            name="couchdb-password"
             required
             label="CouchDB Password"
             v-model="couchDbPassword"
