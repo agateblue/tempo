@@ -292,7 +292,7 @@ export default {
       }
       if (this.exportConfig.board) {
         data.board = {
-          settings: this.$store.state.boardConfig,
+          settings: this.$store.state.settings.boardConfig,
           tasks: await getTasks(this.$store, '')
         }
       }
