@@ -23,6 +23,10 @@ const store = new Vuex.Store({
     lastSync: new Date(),
     version,
     dark: true,
+    sync: {
+      loading: false,
+      error: null,
+    },
     charts: [],
     aliases: [],
     serviceWorker: {
@@ -81,6 +85,9 @@ const store = new Vuex.Store({
     },
     settings (state, value) {
       state.settings = value
+    },
+    sync (state, value) {
+      state.sync = value
     },
   },
   getters: {
@@ -163,13 +170,23 @@ const store = new Vuex.Store({
       }
     },
     async forceSync({state, commit}) {
-      if (!state.couchDbUrl) {
+      if (!state.couchDbUrl || state.sync.loading) {
         return
       }
+      commit("sync", {loading: true, error: null})
       console.log('Forcing sync…')
       let remoteDb = new PouchDB(state.couchDbUrl)
-      await remoteDb.logIn(state.couchDbUsername, state.couchDbPassword)
-      await state.db.sync(remoteDb)
+      try {
+        await remoteDb.logIn(state.couchDbUsername, state.couchDbPassword)
+        await state.db.sync(remoteDb)
+      } catch (e) {
+        console.log("Error while syncing", e)
+        setTimeout(() => {
+          commit("sync", {loading: false, error: null})
+        }, 3000);
+        return commit("sync", {loading: false, error: e})
+      }
+      commit("sync", {loading: false, error: null})
       commit('handleSync', null)
     },
     async setWebhook ({dispatch}, {url}) {

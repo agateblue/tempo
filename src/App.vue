@@ -44,14 +44,13 @@
       <v-spacer></v-spacer>
       <v-btn
         :style="bottomNavBarButtonStyle"
-        :loading="isSyncing"
-        :disabled="isSyncing"
-        @click.stop.prevent="forceSync"
+        :loading="$store.state.sync.loading"
+        @click.stop.prevent="$store.dispatch('forceSync')"
         v-if="$store.state.couchDbUrl"
       >
-        <span v-if="!isSyncing && syncError">
+        <span v-if="!$store.state.sync.loading && $store.state.sync.error">
           Sync error:
-          <span v-if="syncError.name">{{ syncError.name }}</span>
+          <span v-if="$store.state.sync.error.name">{{ $store.state.sync.error.name }}</span>
           <span v-else>Unknown</span>
         </span>
         <span v-else>
@@ -59,7 +58,7 @@
         </span>
         <v-icon v-text="$icons.mdiSync"></v-icon>
         <template v-slot:loader>
-          <span>Loading...</span>
+          <span>Syncing…</span>
         </template>
       </v-btn>
       <v-btn :style="bottomNavBarButtonStyle" to="/diary">
@@ -86,8 +85,6 @@ export default {
   data() {
     return {
       drawer: null,
-      isSyncing: false,
-      syncError: null,
       searchQuery: this.$route.query.q || "",
       exportDialog: false,
     };
@@ -127,22 +124,6 @@ export default {
     }
   },
   methods: {
-    async forceSync() {
-      this.isSyncing = true;
-      this.syncError = null;
-      try {
-        await this.$store.dispatch("forceSync");
-      } catch (e) {
-        this.syncError = e;
-      }
-      if (!this.syncError) {
-        this.syncError = false;
-      }
-      this.isSyncing = false;
-      setTimeout(() => {
-        this.syncError = null;
-      }, 3000);
-    },
     updateApp() {
       this.$store.commit("serviceWorker", { updateAvailable: false });
       if (
