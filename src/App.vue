@@ -41,6 +41,7 @@
       </v-container>
     </v-main>
     <v-bottom-navigation fixed>
+      <v-spacer></v-spacer>
       <v-btn
         :style="bottomNavBarButtonStyle"
         :loading="isSyncing"
@@ -61,8 +62,6 @@
           <span>Loading...</span>
         </template>
       </v-btn>
-      <v-btn v-else />
-      <v-spacer></v-spacer>
       <v-btn :style="bottomNavBarButtonStyle" to="/diary">
         <span>Diary</span>
 
@@ -79,9 +78,6 @@
         <v-icon v-text="$icons.mdiCog"></v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn :style="bottomNavBarButtonStyle" @click="scrollToTop()">
-        <v-icon v-text="$icons.mdiChevronUp"></v-icon>
-      </v-btn>
     </v-bottom-navigation>
   </v-app>
 </template>
