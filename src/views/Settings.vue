@@ -2,33 +2,35 @@
   <div>
     <v-card tag="section" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Settings</v-card-title>
+    </v-card>
+
+    <v-card
+      tag="form"
+      id="aliases"
+      class="section mb-8"
+      :color="$theme.card.color"
+    >
+      <v-card-title class="headline">Aliases</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
-        <ul>
-          <li><a href="#export">Export data</a></li>
-          <li><a href="#import">Import entries</a></li>
-          <li><a href="#import-tasks">Import tasks</a></li>
-          <li><a href="#sync">Sync</a></li>
-          <li><a href="#delete">Delete data</a></li>
-        </ul>
+        <p>
+          Aliases let you save and reuse search queries.
+          For instance, you could set a <code>$dreams</code> alias in place of a
+          <code>dream, dreamed, dreams, nightmare, nightmares</code> query.
+        </p>
+        <v-form>
+          <alias-form
+            v-for="alias in $store.state.settings.aliases"
+            :key="alias._id"
+            :alias="alias"
+          />
+          <alias-form
+            :key="String(lastAliasesUpdate)"
+            @created="lastAliasesUpdate = new Date()" />
+        </v-form>
       </v-card-text>
     </v-card>
-    <!-- <v-card tag="section" id="theming" class="mb-8" :color="$theme.card.color">
-      <v-card-title class="headline">Theming</v-card-title>
-      <v-card-text :class="$theme.card.textSize">
-        <p>Customize Tempo's look and feel</p>
-        <v-list dense>
-          <v-list-item>
-            <v-list-item-action>
-              <v-switch :color="$theme.switch.color" v-model="darkTheme"></v-switch>
-            </v-list-item-action>
-            <v-list-item-title>Dark theme</v-list-item-title>
-          </v-list-item>
-        </v-list>
-        <theme-form></theme-form>
-      </v-card-text>
-    </v-card> -->
-
+  
     <v-card
       tag="form"
       id="export"
@@ -180,6 +182,7 @@
 </template>
 
 <script>
+import AliasForm from '@/components/AliasForm'
 
 import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate} from '@/utils'
 
@@ -249,8 +252,12 @@ async function importSettings(settings, db, logs) {
 
 
 export default {
+  components: {
+    AliasForm
+  },
   data () {
     return {
+      lastAliasesUpdate: new Date(),
       exportConfig: {
         entries: true,
         board: true,
