@@ -324,4 +324,7 @@ section.v-card, .section.v-card {
 .v-input.search {
   max-width: 200px;
 }
+.v-slide-group__next, .v-slide-group__prev {
+  min-width: auto !important;
+}
 </style>
