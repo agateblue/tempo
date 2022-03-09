@@ -97,9 +97,7 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch('loadCharts')
-    await this.$store.dispatch('loadAliases')
-    await this.$store.dispatch('loadBoardConfig')
+    await this.$store.dispatch('loadSettings')
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (this.$store.state.serviceWorker.refreshing) return;
@@ -174,22 +172,7 @@ export default {
         }
       },
       immediate: true,
-    },
-    "$store.state.lastSync": {
-      async handler(v) {
-        console.log("lastSync updated", v)
-        let w;
-        try {
-          w = await this.$store.state.db.get("webhook");
-        } catch (e) {
-          console.log("No webhhook found");
-        }
-        if (w && w.webhook) {
-          await this.$store.dispatch("setWebhook", w.webhook);
-        }
-      },
-      immediate: true,
-    },
+    }
   },
 };
 </script>
@@ -232,7 +215,7 @@ html {
 .container.narrow {
   max-width: var(--single-column-width);
 }
-section.v-card {
+section.v-card, .section.v-card {
   max-width: var(--single-column-width) !important;
   margin-left: auto !important;
   margin-right: auto !important;

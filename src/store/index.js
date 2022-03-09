@@ -7,7 +7,8 @@ PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
 
 Vue.use(Vuex)
-import isEqual from 'lodash/isEqual'
+
+import {SETTINGS, getSettingValue} from '@/utils'
 
 const version = 1
 
@@ -29,11 +30,7 @@ const store = new Vuex.Store({
       registration: null,
       updateAvailable: false,
     },
-    webhook: {
-      query: null,
-      url: null,
-    },
-    boardConfig: null,
+    settings: {}
   },
   mutations: {
     handleSync (state, info) {
@@ -46,10 +43,6 @@ const store = new Vuex.Store({
         state.syncHandler.cancel()
       }
       state.syncHandler = newValue
-    },
-    webhook (state, {url, query}) {
-      state.webhook.url = url || null
-      state.webhook.query = query || null
     },
     couchDbConfig (state, {url, username, password}) {
       state.couchDbUrl = url
@@ -83,29 +76,37 @@ const store = new Vuex.Store({
     serviceWorker: (state, value) => {
       state.serviceWorker = {...state.serviceWorker, ...value}
     },
-    charts (state, charts) {
-      state.charts = charts
+    setting (state, {name, value}) {
+      state.settings[name] = value
     },
-    aliases (state, aliases) {
-      state.aliases = aliases
+    settings (state, value) {
+      state.settings = value
     },
-    boardConfig (state, boardConfig) {
-      state.boardConfig = boardConfig
-    }
   },
   getters: {
-    boardLists: (state) => {
-      return [...state.boardConfig.lists, {label: "Done"}]
+    settings: (state) => {
+      let s = {}
+      SETTINGS.forEach(r => {
+        let v = state.settings[r.name]
+        if (v === undefined) {
+          v = r.default()
+        }
+        s[r.name] = v
+      })
+      return s
+    },
+    boardLists: (state, getters) => {
+      return [...getters.settings.boardConfig.lists, {label: "Done"}]
     },
     taskCategoryChoices: (state) => {
-      return state.boardConfig.categories.map((c) => {
+      return state.settings.boardConfig.categories.map((c) => {
         return {value: c.label, text: c.label}
       })
     },
     taskListChoices: (state) => {
       let index = 0
       let choices = []
-      state.boardConfig.lists.forEach(l => {
+      state.settings.boardConfig.lists.forEach(l => {
         choices.push({value: index, text: l.label})
         index += 1
       })
@@ -126,13 +127,15 @@ const store = new Vuex.Store({
     },
     async reset ({commit, state, dispatch}) {
       await state.db.destroy()
-      commit("boardConfig", null)
+      localStorage.removeItem('state')
+      commit("settings", {})
       commit('initDb')
       await dispatch('setupSync', {
         url: state.couchDbUrl,
         username: state.couchDbUsername,
         password: state.couchDbPassword,
       })
+      await dispatch("loadSettings")
     },
     async setupSync ({state, commit}, {url, username, password}) {
       commit('syncHandler', null)
@@ -169,31 +172,13 @@ const store = new Vuex.Store({
       await state.db.sync(remoteDb)
       commit('handleSync', null)
     },
-    async setWebhook ({state, commit}, {url, query}) {
-      commit('webhook', {url, query})
-      let existing
-      try {
-        existing = await state.db.get('webhook')
-      } catch {
-        console.debug('No existing wehook')
-      }
-      if (existing && isEqual(existing.webhook, state.webhook)) {
-        return
-      }
-      let data = {
-        _id: 'webhook',
-        webook: {url, query},
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+    async setWebhook ({dispatch}, {url}) {
+      await dispatch("setSetting", {name: "webhook", value: {url}})
     },
     async triggerWebhook ({state}, url) {
-      url = url || state.webhook.url
+      url = url || state.settings.webhook.url
       if (!url) {
-        console.log("No webhook configured, skipping", state.webhook.url)
+        console.log("No webhook configured, skipping", state.settings.webhook.url)
         return
       }
       console.log("Sending webhook to", url)
@@ -202,179 +187,92 @@ const store = new Vuex.Store({
         body: ""
       })
     },
-    async addChart ({state, commit}, config) {
+    async addChart ({state, dispatch}, config) {
       let id = (new Date()).toISOString()
       config._id = id
-      commit('charts', [...state.charts, config])
-      let existing
-      try {
-        existing = await state.db.get('charts')
-      } catch {
-        console.debug('No existing charts')
-      }
-      if (existing && isEqual(existing.charts, state.charts)) {
-        return
-      }
-      let data = {
-        _id: 'charts',
-        charts: state.charts,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+      let charts = [...state.settings.charts, config]
+      await dispatch("setSetting", {name: "charts", value: charts})
     },
-    async removeChart ({state, commit}, id) {
-      let remaining = state.charts.filter(c => {
+    async removeChart ({state, dispatch}, id) {
+      let remaining = state.settings.charts.filter(c => {
         return c._id != id
       })
-      commit('charts', remaining)
-      let existing = await state.db.get('charts')
-      let data = {
-        _id: 'charts',
-        charts: state.charts,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+      await dispatch("setSetting", {name: "charts", value: remaining})
     },
-    async updateChart ({state, commit}, chart) {
+    async updateChart ({state, dispatch}, chart) {
       
       let charts = []
-      state.charts.forEach((c) => {
+      state.settings.charts.forEach((c) => {
         if (c._id === chart._id) {
           charts.push(chart)
         } else {
           charts.push(c)
         }
       })
-      commit('charts', charts)
-      let existing = await state.db.get('charts')
-      let data = {
-        _id: 'charts',
-        charts: state.charts,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+      await dispatch("setSetting", {name: "charts", value: charts})
     },
-    async loadCharts ({state, commit}) {
-      let sc = []
-      try {
-        sc = await state.db.get("charts")
-      } catch (e) {
-        console.debug('No existing charts')
-        return
-      }
-      commit('charts', sc.charts)
-    },
-    async boardConfig ({state, commit}, boardConfig) {
-      commit('boardConfig', boardConfig)
-      let existing
-      try {
-        existing = await state.db.get('boardConfig')
-      } catch {
-        console.debug('No existing lists')
-      }
-      if (existing && isEqual(existing.boardConfig, state.boardConfig)) {
-        return
-      }
-      let data = {
-        _id: 'boardConfig',
-        boardConfig: state.boardConfig,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+    async boardConfig ({dispatch}, boardConfig) {
+      await dispatch("setSetting", {name: "boardConfig", value: boardConfig})
     },
 
-    async loadBoardConfig ({state, commit}) {
-      let tl = []
-      try {
-        tl = await state.db.get("boardConfig")
-      } catch (e) {
-        console.debug('No existing boardConfig')
-        return
-      }
-      commit('boardConfig', tl.boardConfig)
-    },
-    async addAlias ({state, commit}, config) {
+    async addAlias ({state, dispatch}, config) {
       let id = (new Date()).toISOString()
       config._id = id
-      commit('aliases', [...state.aliases, config])
-      let existing
-      try {
-        existing = await state.db.get('aliases')
-      } catch {
-        console.debug('No existing aliases')
-      }
-      if (existing && isEqual(existing.aliases, state.aliases)) {
-        return
-      }
-      let data = {
-        _id: 'aliases',
-        aliases: state.aliases,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+      let aliases = [...state.settings.aliases, config]
+      await dispatch("setSetting", {name: "aliases", value: aliases})
     },
-    async removeAlias ({state, commit}, id) {
-      let remaining = state.aliases.filter(c => {
+    async removeAlias ({state, dispatch}, id) {
+      let remaining = state.settings.aliases.filter(c => {
         return c._id != id
       })
-      commit('aliases', remaining)
-      let existing = await state.db.get('aliases')
-      let data = {
-        _id: 'aliases',
-        aliases: state.aliases,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+      await dispatch("setSetting", {name: "aliases", value: remaining})
     },
-    async updateAlias ({state, commit}, chart) {
+    async updateAlias ({state, dispatch}, alias) {
       
       let aliases = []
-      state.aliases.forEach((c) => {
-        if (c._id === chart._id) {
-          aliases.push(chart)
+      state.settings.aliases.forEach((c) => {
+        if (c._id === alias._id) {
+          aliases.push(alias)
         } else {
           aliases.push(c)
         }
       })
-      commit('aliases', aliases)
-      let existing = await state.db.get('aliases')
-      let data = {
-        _id: 'aliases',
-        aliases: state.aliases,
-        type: 'settings',
-      }
-      if (existing) {
-        data._rev = existing._rev
-      }
-      await state.db.put(data)
+      await dispatch("setSetting", {name: "aliases", value: aliases})
     },
-    async loadAliases ({state, commit}) {
-      let sc = []
+    async setSetting ({state, commit}, {name, value}) {
+      let data
       try {
-        sc = await state.db.get("aliases")
+        data = await state.db.get(name)
+        data = {
+          _id: name,
+          type: 'settings',
+          _rev: data._rev,
+          value,
+        }
       } catch (e) {
-        console.debug('No existing aliases')
-        return
+        data = {
+          _id: name,
+          type: 'settings',
+          value
+        }
       }
-      commit('aliases', sc.aliases)
+      data = JSON.parse(JSON.stringify(data))
+      await state.db.put(data)
+      commit("setting", {name, value})
+    },
+    async loadSettings ({state, commit}) {
+      let s = {}
+      for (const r of SETTINGS) {
+        let v
+        try {
+          let existing = await state.db.get(r.name)
+          v = getSettingValue(existing)
+        } catch {
+          v = r.default()
+        }
+        s[r.name] = v
+      }
+      commit("settings", s)
     },
   },
   modules: {
@@ -386,8 +284,8 @@ store.subscribe((mutation, state) => {
 		couchDbUrl: state.couchDbUrl,
 		couchDbUsername: state.couchDbUsername,
 		couchDbPassword: state.couchDbPassword,
-		webhook: state.webhook,
 		version: state.version,
+    settings: state.settings,
 	};
 
   console.log('Updating localstorage cache…')

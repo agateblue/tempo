@@ -1,13 +1,5 @@
 <template>
   <v-form @submit.prevent="submit">
-    <v-btn
-      color="secondary"
-      class="mb-4"
-      v-if="$store.state.boardConfig"
-      @click.prevent="$emit('updated')"
-    >
-      Cancel
-    </v-btn>
     <h2 class="mb-4">Lists</h2>
     <p>Add one or more lists to your board, or use the defaults.</p>
     <v-row v-for="(list, idx) in lists" :key="`l${idx}`">
@@ -69,12 +61,7 @@
           color="primary"
           type="submit"
         >
-          <template v-if="$store.state.boardConfig && $store.state.boardConfig.lists">
-            Update board
-          </template>
-          <template v-else>
-            Create board
-          </template>
+          Update board
         </v-btn>
       </v-col>
     </v-row>
@@ -85,7 +72,7 @@
 
 export default {
   data () {
-    let boardConfig = this.$store.state.boardConfig || {}
+    let boardConfig = this.$store.state.settings.boardConfig || {}
     return {
       lists: boardConfig.lists || [
         {label: "To-do"},

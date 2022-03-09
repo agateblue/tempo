@@ -2,11 +2,10 @@
   <div :key="`tasks-${$store.state.lastSync}`">
     <v-card
       tag="section"
-      v-if="!isConfigured || isEditing"
+      v-if="isEditing"
       class="mb-8"
       :color="$theme.card.color">
-      <v-card-title class="headline" v-if="isEditing">Update your board</v-card-title>
-      <v-card-title class="headline" v-else>Create your board</v-card-title>
+      <v-card-title class="headline">Update your board</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
         <board-form @updated="tasksByList = getTasksByList(); isEditing = false"></board-form>
@@ -23,38 +22,8 @@
             @click="isEditing = true" 
             small
             color="secondary">Edit...</v-btn>
-          <v-btn 
-            class="float-right mx-2"
-            @click.stop="exportDialog = true" 
-            small
-            color="secondary">Export...</v-btn>
         </v-col>
       </v-row>
-      <v-dialog
-        v-model="exportDialog"
-        max-width="700"
-      >
-        <v-card :color="$theme.card.color">
-          <v-card-title class="headline">Export your tasks</v-card-title>
-
-          <v-card-text>
-            <p>Export the selected {{ tasks.length }} tasks and your board configuration.</p>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn
-              color="secondary"
-              text
-              @click="exportDialog = false"
-            >
-              Cancel
-            </v-btn>
-            <v-btn color="primary" @click="downloadJSON">Export as JSON</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
       <div class="board">
         <v-card
           :class="['task-list mr-4', {collapsed: !lists[idx].expanded}, {expanded: lists[idx].expanded}]"
@@ -153,7 +122,7 @@
 <script>
 
 import sortBy from 'lodash/sortBy'
-import {parseFullQuery, matchOrTokens} from '@/utils'
+import {getTasks} from '@/utils'
 
 export default {
   props: {
@@ -183,16 +152,10 @@ export default {
       tasksByList: {},
       newTaskText: '',
       newTaskCategory: null,
-      exportDialog: false,
     }
   },
   async created () {
-    this.tasks = await this.getTasks()
-  },
-  computed: {
-    isConfigured () {
-      return this.$store.state.boardConfig && this.$store.state.boardConfig.lists.length > 0  
-    },
+    this.tasks = await getTasks(this.$store, this.query)
   },
   methods: {
     getTasksByList () {
@@ -206,27 +169,6 @@ export default {
         d[i].reverse()
       })
       return d
-    },
-    filterTasks (tasks, queryTokens) {
-      if (queryTokens.length === 0) {
-        return tasks
-      }
-      return tasks.filter((e) => {
-        return matchOrTokens(e, queryTokens)
-      })
-    },
-    async getTasks () {
-      let result = await this.$store.state.db.find({
-        selector: {
-          type: 'task',
-          date: { $gt: 0 }
-        }
-      })
-      let tasks = result.docs
-      return this.filterTasks(
-        tasks,
-        parseFullQuery(this.query),
-      )
     },
     async submitTask(idx) {
       if (!this.newTaskText || this.newTaskText.length === 0) {
@@ -250,7 +192,7 @@ export default {
       this.newTaskCategory = null
     },
     async updateTasks () {
-      this.tasks = await this.getTasks()
+      this.tasks = await getTasks(this.$store, this.query)
     },
     async moveCard (id, list) {
       let task = await this.$store.state.db.get(id)
@@ -260,51 +202,23 @@ export default {
         await this.updateTasks()
       }
     },
-    downloadJSON () {
-      let payload = JSON.stringify({
-        tasks: this.tasks,
-        boardConfig: this.$store.state.boardConfig
-      })
-      this.downloadFile(payload, 'application/json', 'tempo.json')
-    },
-    downloadFile (text, mimetype, name) {
-      let f = this.makeFile(text, mimetype)
-      var link = document.createElement('a')
-      link.setAttribute('download', name)
-      link.href = f
-      document.body.appendChild(link)
-
-      window.requestAnimationFrame(function () {
-        var event = new MouseEvent('click')
-        link.dispatchEvent(event)
-        document.body.removeChild(link)
-      })
-    },
-    makeFile (text, mimetype) {
-      let data = new Blob([text], {type: mimetype})
-      let textFile = window.URL.createObjectURL(data)
-      return textFile
-    },
   },
   watch: {
     query: {
       handler: async function () {
-        this.tasks = await this.getTasks()
+        this.tasks = await getTasks(this.$store, this.query)
       },
       immediate: true,
     },
 
     tasks: {
       handler () {
-        if (!this.isConfigured) {
-          return
-        }
         this.tasksByList = this.getTasksByList()
       },
       immediate: true,
       deep: true,
     },
-    isConfigured: {
+    "$store.settings.boardConfig": {
       handler (v) {
         if (v) {
           this.tasksByList = this.getTasksByList()

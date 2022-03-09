@@ -185,21 +185,14 @@ The "Sync" button in the menu let you force the data synchronization. This can b
 
 ## Backing up data
 
-The "Advanced" tab in your diary lets you export your notes, in two format:
-
-- Markdown: notes are bundled in a single text file, that can be opened in the text editor of your choice.
-- JSON: notes are bunlded in a single JSON file that can be reimported later in Tempo (or on other devices), or used in other softwares and applications.
-
-Using the search bar, you can also export a subset of your notes.
-
-Exporting your tasks and board is done in a similar way, from the "Tasks" page. Only JSON format is available in this case.
+The settings page lets you export your notes, board and other settings for backup and restore purpose. 
 
 ## Importing data
 
-From the "Settings" page, you can import notes and tasks from backups made in JSON format. A couple important things:
+From the "Settings" page, you can import your notes, board and settings from a previously generated backup file. A couple important things:
 
 - When you import notes, your existing diary will be preserved, unless some notes have the same timestamp. In that case, existing notes will be replaced by the ones from the backup.
-- Importing your board will work in the same way. Existing tasks will be preserved. However, your existing board configuration will be replaced by the new one, which could lead to some inconsistencies if you have different columns and/or categories in the current and exported board.
+- Importing your board will work in the same way. Existing tasks will be preserved. However, your existing board configuration will be replaced by the new one, which could lead to some inconsistencies if you have different columns and/or categories in the current and backed-up board.
 
 ## Deleting data
 
