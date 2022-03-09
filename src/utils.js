@@ -343,7 +343,7 @@ export async function search ({store, sortDesc, query}) {
   return filterEntries(
     allEntries,
     parseFullQuery(query),
-    store.state.aliases,
+    store.state.settings.aliases,
   )
 }
 
