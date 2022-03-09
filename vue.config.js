@@ -40,9 +40,9 @@ module.exports = {
       exclude: []
     },
     manifestOptions: {
-      display: "fullscreen",
+      display: "standalone",
       start_url: '.',
-      description: 'Find yoour own rythm',
+      description: 'Find your own rythm',
       scope: "/",
       categories: ["notes", "note",, "diary", "log", "health", "mood tracker"],
       icons: [
