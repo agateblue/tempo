@@ -1,14 +1,12 @@
 <template>
   <div class="pb-8">
-    <v-container class="narrow">
-      <entry-form
-        textarea-label="Write a new entry"
-        color="transparent"
-        :key="`timeline-${$store.state.lastSync}`"
-        ref="entryForm"
-        @submitted="handleCreated"
-      />
-    </v-container>
+    <entry-form
+      textarea-label="Write a new entry"
+      color="transparent"
+      :key="`timeline-${$store.state.lastSync}`"
+      ref="entryForm"
+      @submitted="handleCreated"
+    />
     <v-divider></v-divider>
     <timeline
       ref="timeline"
