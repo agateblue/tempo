@@ -46,7 +46,7 @@ export default {
           chartType: 'table',
           source: 'tags'
         },
-        ...this.$store.state.charts
+        ...this.$store.state.settings.charts
       ] 
     }
   },

@@ -343,6 +343,111 @@ export async function search ({store, sortDesc, query}) {
   return filterEntries(
     allEntries,
     parseFullQuery(query),
-    store.state.aliases,
+    store.state.settings.aliases,
   )
+}
+
+export function filterTasks (tasks, queryTokens) {
+  if (queryTokens.length === 0) {
+    return tasks
+  }
+  return tasks.filter((e) => {
+    return matchOrTokens(e, queryTokens)
+  })
+}
+
+export async function getTasks (store, query) {
+  let result = await store.state.db.find({
+    selector: {
+      type: 'task',
+      date: { $gt: 0 }
+    }
+  })
+  let tasks = result.docs
+  return filterTasks(
+    tasks,
+    parseFullQuery(query),
+  )
+}
+
+export function getSettingValue(s) {
+  const excludedAttrs = ["_rev", "_id", "_", "type"]
+  for (const key in s) {
+    if (Object.hasOwnProperty.call(s, key) && excludedAttrs.indexOf(key) === -1) {
+      return s[key]
+    }
+  }
+}
+
+export async function getSettings (store) {
+  let result = await store.state.db.find({
+    selector: {
+      type: 'settings',
+    }
+  })
+  let settings = result.docs.map(r => {
+    return {
+      _id: r._id,
+      _rev: r._rev,
+      value: r.value || getSettingValue(r),
+    }
+  })
+
+  return settings
+}
+
+export function downloadFile (window, document, text, mimetype, name) {
+  let f = makeFile(window, text, mimetype)
+  var link = document.createElement('a')
+  link.setAttribute('download', name)
+  link.href = f
+  document.body.appendChild(link)
+
+  window.requestAnimationFrame(function () {
+    var event = new MouseEvent('click')
+    link.dispatchEvent(event)
+    document.body.removeChild(link)
+  })
+}
+
+export function makeFile (window, text, mimetype) {
+  let data = new Blob([text], {type: mimetype})
+  let textFile = window.URL.createObjectURL(data)
+  return textFile
+}
+
+export const SETTINGS = [
+  {name: "webhook", default: () => {return {}}},
+  {name: "charts", default: () => {return []}},
+  {name: "aliases", default: () => {return []}},
+  {name: "boardConfig", default: () => {return {
+    lists: [
+      {label: "To-do"},
+      {label: "Doing"},
+    ],
+    categories: [
+      {label: "Personal"},
+      {label: "Work"},
+      {label: "House-keeping"},
+    ]
+  }}},
+]
+
+export async function bulkInsertAndUpdate(arr, db) {
+  let newEdits = []
+  let notNewEdits = []
+  await db.compact()
+  for (const o of arr) {
+    try {
+      let e = await db.get(o._id)
+      newEdits.push({...o, _rev: e._rev})
+    } catch (e) {
+      notNewEdits.push({...o})
+    }
+  }
+  let results = [
+    ...await db.bulkDocs(notNewEdits, {new_edits: false}),
+    ...await db.bulkDocs(newEdits),
+  ]
+  return results
 }

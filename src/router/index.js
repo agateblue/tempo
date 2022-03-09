@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import Timeline from '../views/Timeline.vue'
 import Visualization from '../views/Visualization.vue'
 import Diary from '../views/Diary.vue'
-import DiaryAdvanced from '../views/DiaryAdvanced.vue'
 import Calendar from '../views/Calendar.vue'
 import About from '../views/About.vue'
 import Settings from '../views/Settings.vue'
@@ -31,11 +30,6 @@ const routes = [
         path: 'calendar',
         name: 'Calendar',
         component: Calendar,
-      },
-      {
-        path: 'advanced',
-        name: 'Advanced',
-        component: DiaryAdvanced,
       }
     ]
   },
