@@ -6,6 +6,8 @@ Tempo is a diary, mood tracker and Kanban board. Its main goals are to help you:
 - Record and understand how your mood changes and evolves over time
 - Remember what needs to be done and organize accordingly
 
+![Tempo's Diary view](https://user-images.githubusercontent.com/1970915/158240795-f53c3566-507e-4508-92ac-e0b4af3499ae.png)
+
 Tempo is also free to use, open source and web based. You can use it at no cost, from any compatible web browser, both on mobile and desktop, without even creating an account. The data entered in Tempo never leaves your device and isn't shared with any third-party. Finally, because Tempo is a Progressive Web App, it will continue to work on your device even without any internet connection. 
 
 On a more personal note, Tempo is by far the most personal software project I've ever worked on. Since its birth in Apris 2020, I have put a lot of myself in it. Among other things, it helped me overcome serious mental health issues and still supports me on a daily basis. It was built to address very specific needs (i.e, mine) and also as an experiment.
@@ -23,6 +25,8 @@ If you're using Tempo often on mobile, you will probably want to use the "Instal
 The [About Page](https://tempo.agate.blue/#/about) in Tempo itself should answer most the questions you have while using the app. You can also read more about Tempo's features below.
 
 ## Diary
+
+![Tempo's Diary view](https://user-images.githubusercontent.com/1970915/158240795-f53c3566-507e-4508-92ac-e0b4af3499ae.png)
 
 Tempo's diary should be relatively straightforward to use. Simply type your text in the text area, hit save and tada! You've recorded a new note in your diary. There is no hard limit to the size of a single note.
 
@@ -149,6 +153,10 @@ Tempo will keep a track that this note include both positive and negative moods,
 
 ### Visualization
 
+![Tempo's mood chart](https://user-images.githubusercontent.com/1970915/158241473-3a9ee96d-e082-4d70-86ae-f16e50ed657f.png)
+
+![Tempo's calendar](https://user-images.githubusercontent.com/1970915/158240793-af4a3d8a-a12e-4283-8d08-d9bbf19df4c7.png)
+
 At some point, you will probably want to use this information to actually understand what's going on with your mood. Tempo use moodtags in various places:
 
 - In the Diary view, at the top corner of each note, a color badge showsyou the predominent mood of a note
@@ -159,6 +167,9 @@ At some point, you will probably want to use this information to actually unders
 - In search queries, via the `-` and `+` operators, to filter negative or positive entries respectively
 
 ## Kanban board
+
+![Tempo's Kanban board](https://user-images.githubusercontent.com/1970915/158240788-5699604f-5071-4b7d-bc2f-fb97d3574685.png)
+
 
 The "Tasks" menu gives you access to a relatively simple Kanban Board.
 
@@ -186,6 +197,9 @@ The "Sync" button in the menu let you force the data synchronization. This can b
 ## Backing up data
 
 The settings page lets you export your notes, board and other settings for backup and restore purpose. 
+
+![Tempo's backup/restore form](https://user-images.githubusercontent.com/1970915/158240993-d2525d74-e9a1-4aac-8410-dab5c226eee1.png)
+
 
 ## Importing data
 
