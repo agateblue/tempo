@@ -2,7 +2,7 @@
 
 Tempo is a diary, mood tracker and Kanban board. Its main goals are to help you:
 
-- Keep, organize and find your writings, logs or wathever piece of text you want
+- Keep, organize and find your writings, logs or whatever piece of text you want
 - Record and understand how your mood changes and evolves over time
 - Remember what needs to be done and organize accordingly
 
