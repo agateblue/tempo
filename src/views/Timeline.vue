@@ -10,7 +10,7 @@
     <v-divider></v-divider>
     <timeline
       ref="timeline"
-      class="container narrow"
+      class="container narrow px-0"
       :entries="shownEntries"
       :key="`timeline-${$store.state.lastSync}`"
       @updated="$emit('updated', $event)"

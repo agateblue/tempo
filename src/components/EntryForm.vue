@@ -1,10 +1,11 @@
 <template>
   <v-card :color="color" outlined>
-    <v-container :class="['narrow mt-4']">
+    <v-container class="narrow px-0">
       <v-textarea
         clearable
         outlined
         :name="name"
+        class="mt-0"
         ref="textarea"
         id="composer"
         auto-grow
