@@ -26,7 +26,7 @@
           />
           <alias-form
             :key="String(lastAliasesUpdate)"
-            @created="lastAliasesUpdate = new Date()" />
+            @created="lastAliasesUpdate = new Date(); trackEvent($store, 'alias.created')" />
         </v-form>
       </v-card-text>
     </v-card>
@@ -161,9 +161,34 @@
         <v-btn
           color="primary"
           :disabled="!webhook.url"
-          @click="$store.dispatch('setWebhook', {url: webhook.url})">
+          @click="$store.dispatch('setWebhook', {url: webhook.url}); trackEvent($store, 'webhook.setup')">
           Save
         </v-btn>
+      </v-card-text>
+    </v-card>
+
+    <v-card v-if="telemetryServer" tag="section" id="telemetry" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Telemetry</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>
+          Tempo collects some anonymous telemetry data.
+          This data is very valuable for us as it helps us understand how people are using the application.
+        </p>
+        <p>
+          We do not collect any personal information such as IP adresses, cookies, mood, notes, tasks or search queries.
+          Telemetry data is hosted by Agate, in France, and 
+          <a href="https://stats.agate.blue/tempo.agate.blue" _blank="true">
+            available publicly for transparency.
+          </a>
+        </p>
+        <p>You can opt-out from data collection using the switch below.</p>
+
+        <v-switch
+          v-model="telemetryEnabled"
+          label="Send telemetry data"
+          @change="updateTelemetry($event)"
+        ></v-switch>
       </v-card-text>
     </v-card>
 
@@ -185,7 +210,7 @@
 <script>
 import AliasForm from '@/components/AliasForm'
 
-import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate} from '@/utils'
+import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate, trackEvent} from '@/utils'
 
 async function importEntries(entries, db, logs) {
   entries = entries || []
@@ -278,7 +303,10 @@ export default {
       couchDbPassword: this.$store.state.couchDbPassword,
       webhook: this.$store.state.settings.webhook || {
         url: '',
-      }
+      },
+      telemetryEnabled: this.$store.getters['settings'].telemetry,
+      telemetryServer: process.env.VUE_APP_PLAUSIBLE_HOST,
+      trackEvent,
     }
   },
   methods: {
@@ -312,6 +340,7 @@ export default {
         'application/json',
         `tempo_export_${d}.json`
       )
+      trackEvent(this.$store, "data.exported")
     },
     async triggerWebhook (url) {
       await this.$store.dispatch("forceSync")
@@ -338,12 +367,14 @@ export default {
         await this.$store.dispatch("loadSettings")
       }
       this.importLogs.push(`[info] Import complete!`)
+      trackEvent(this.$store, "data.imported")
     },
     deleteConfirm () {
       if (confirm("This will remove all your notes. This action is irreversible.")) {
         this.$store.dispatch('reset')
         this.importedEntries = 0
         this.failedEntries = 0
+        trackEvent(this.$store, "data.deleted")
       }
     },
     async setupSync () {
@@ -357,9 +388,16 @@ export default {
           }
         )
         this.syncStatus = `Sync OK!`
+        trackEvent(this.$store, "sync.setup")
       } catch (e) {
         this.syncStatus = `Error: ${e.name || e}`
       }
+    },
+    async updateTelemetry (v) {
+      if (!v) {
+        trackEvent(this.$store, "telemetry.disabled")
+      }
+      await this.$store.dispatch("setSetting", {name: "telemetry", value: v})
     }
   }
 }

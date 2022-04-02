@@ -4,8 +4,10 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
+import { VuePlausible } from 'vue-plausible'
 
 Vue.config.productionTip = false
+
 
 // three shaking icons to reduce bundle size
 import {
@@ -95,6 +97,18 @@ Vue.prototype.$theme = {
   mainButton: {
     color: "pink darken-4",
   },
+}
+if (process.env.VUE_APP_PLAUSIBLE_HOST) {
+  let options = {
+    apiHost: process.env.VUE_APP_PLAUSIBLE_HOST,
+    hashMode: true,
+    enableAutoPageviews: false,
+    trackLocalhost: process.env.VUE_APP_PLAUSIBLE_TRACK_LOCALHOST == "true" ? true : false,
+  }
+  if (process.env.VUE_APP_DOMAIN) {
+    options.domain = process.env.VUE_APP_DOMAIN
+  }
+  Vue.use(VuePlausible, options)
 }
 new Vue({
   router,

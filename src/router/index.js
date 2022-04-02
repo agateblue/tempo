@@ -8,6 +8,9 @@ import About from '../views/About.vue'
 import Settings from '../views/Settings.vue'
 import Tasks from '../views/Tasks.vue'
 
+import store from '@/store'
+import {trackEvent, getCleanUrlForTracking} from '@/utils'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -32,7 +35,7 @@ const routes = [
         component: Calendar,
       },
       {
-        path: ':entryId',
+        path: 'e/:entryId',
         name: 'Entry',
         component: Timeline,
         props: true
@@ -58,6 +61,38 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+export function shouldTrackPageView(to, from) {
+  if (from && to.name === from.name) {
+    // navigating to the same route, no need to track this
+    return false
+  }
+  if (to.fullPath.startsWith('/diary/e/')) {
+    return false
+  }
+  return true
+}
+
+export function trackPageView(to, from) {
+  trackEvent(
+    store,
+    "pageview",
+    {},
+    {
+      referrer: from ? getCleanUrlForTracking(window.location, from.fullPath) : null,
+      url: getCleanUrlForTracking(window.location, to.fullPath),
+    }
+  )
+}
+
+router.beforeEach((to, from, next) => {
+  // we track page view manually here to honor our telemetry setting
+  // and avoid tracking querystring and excluded urls
+  if (shouldTrackPageView(to, from)) {
+    trackPageView(to, from)
+  }
+  next()
 })
 
 export default router

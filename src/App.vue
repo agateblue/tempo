@@ -103,7 +103,7 @@ export default {
   },
   mounted() {
     let self = this;
-    // we have some internal links in rendered markdown but cannot use rotueur link there, so when a
+    // we have some internal links in rendered markdown but cannot use router link there, so when a
     // click is made on a link ith the appropriate class, we push via the router
     window.onclick = function(e) {
       var className = "internal-link"; // any css selector for children
