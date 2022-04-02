@@ -467,19 +467,19 @@ export function getCleanUrlForTracking (location, path) {
 }
 
 export function trackEvent(store, event, props = {}, eventData = {}) {
-  console.debug("[event] tracking", event)
+  console.debug("[telemetry] tracking", event)
 
   if (!process.env.VUE_APP_PLAUSIBLE_HOST) {
-    console.debug("[event] skipping, telemetry disabled at build time")
+    console.debug("[telemetry] skipping, disabled at build time")
     return
   }
   if (!store.getters["settings"].telemetry) {
-    console.debug("[event] skipping, telemetry disabled by user")
+    console.debug("[telemetry] skipping, disabled by user")
     return
   }
   try {
     Vue.$plausible.trackEvent(event, {props, callback () {
-      console.debug("[event] sent")
+      console.debug("[telemetry] sent")
     }}, {
       url: getCleanUrlForTracking(window.location, window.location.href.split("#")[1]),
       referrer: null,
