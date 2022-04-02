@@ -13,7 +13,22 @@
         :label="textareaLabel"
         placeholder="How do you feel?"
         v-model="text"
+        hide-details
       ></v-textarea>
+      <v-row class="mt-1 mb-3 px-3">
+        <v-btn
+          v-for="shortcut in shortcuts" :key="shortcut.value"
+          :title="shortcut.name"
+          text
+          color="grey"
+          class="px-1"
+          style="min-width: 2.5em"
+          @click.prevent="insertAtCursor($refs.textarea.$el.querySelector('textarea'), shortcut.value)"
+        >
+          
+          {{ shortcut.value }}
+        </v-btn>
+      </v-row>
       <div class="d-flex align-top justify-space-between">
         <div>
           <v-switch
@@ -84,6 +99,19 @@ export default {
       this.text = localStorage.getItem('entry-draft')
     }
   },
+  computed: {
+    shortcuts () {
+      return [
+        {value: "#", label: "Hashtag"},
+        {value: "+", label: "Positive mood tag"},
+        {value: "-", label: "Negative mood tag"},
+        {value: "!", label: "Important mood tag"},
+        {value: "~", label: "Mixed mood tag"},
+        {value: "?", label: "Unknown mood tag"},
+        {value: "@", label: "Annotation tag"},
+      ]
+    }
+  },
   methods: {
     async submit () {
       if (!this.text) {
@@ -122,6 +150,26 @@ export default {
       let e = await this.$store.dispatch('updateEntry', data)
       this.$emit('updated', e)
       return e
+    },
+    insertAtCursor (field, value) {
+      //IE support
+      if (document.selection) {
+          field.focus();
+          // let sel = document.selection.createRange();
+          this.text = value || "";
+      }
+      //MOZILLA and others
+      else if (field.selectionStart || field.selectionStart == '0') {
+          field.focus()
+          let startPos = field.selectionStart;
+          let endPos = field.selectionEnd;
+          let currentValue = (field.value || "").substring(0, startPos)
+          this.text = currentValue
+              + value
+              + field.value.substring(endPos, field.value.length);
+      } else {
+          this.text = (field.value || "") || value;
+      }
     }
   },
   watch: {
