@@ -167,7 +167,7 @@
       </v-card-text>
     </v-card>
 
-    <v-card tag="section" id="telemetry" class="mb-8" :color="$theme.card.color">
+    <v-card v-if="telemetryServer" tag="section" id="telemetry" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Telemetry</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
@@ -302,6 +302,7 @@ export default {
         url: '',
       },
       telemetryEnabled: this.$store.getters['settings'].telemetry,
+      telemetryServer: process.env.VUE_APP_PLAUSIBLE_HOST,
       trackEvent,
     }
   },

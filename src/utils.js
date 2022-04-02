@@ -468,8 +468,13 @@ export function getCleanUrlForTracking (location, path) {
 
 export function trackEvent(store, event, props = {}, eventData = {}) {
   console.debug("[event] tracking", event)
+
+  if (!process.env.VUE_APP_PLAUSIBLE_HOST) {
+    console.debug("[event] skipping, telemetry disabled at build time")
+    return
+  }
   if (!store.getters["settings"].telemetry) {
-    console.debug("[event] skipping, telemetry disabled")
+    console.debug("[event] skipping, telemetry disabled by user")
     return
   }
   try {
