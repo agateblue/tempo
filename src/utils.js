@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import sortBy from 'lodash/sortBy'
 
 const signToMood = {
@@ -417,6 +418,7 @@ export function makeFile (window, text, mimetype) {
 }
 
 export const SETTINGS = [
+  {name: "telemetry", default: () => {return true}},
   {name: "webhook", default: () => {return {}}},
   {name: "charts", default: () => {return []}},
   {name: "aliases", default: () => {return []}},
@@ -455,4 +457,30 @@ export async function bulkInsertAndUpdate(arr, db) {
 
 export function getShortEntryId (id) {
   return id.toISOString()
+}
+
+
+export function getCleanUrlForTracking (location, path) {
+  // remove querystring since it may contain sensitive data
+  path = path.split('?')[0]
+  return `${location.protocol}//${location.hostname}${path}`
+}
+
+export function trackEvent(store, event, props = {}, eventData = {}) {
+  console.debug("[event] tracking", event, props)
+  if (!store.getters["settings"].telemetry) {
+    console.debug("[event] skipping, telemetry disabled")
+    return
+  }
+  try {
+    Vue.$plausible.trackEvent(event, {props, callback () {
+      console.debug("[event] sent")
+    }}, {
+      url: getCleanUrlForTracking(window.location, window.location.href.split("#")[1]),
+      referrer: null,
+      ...eventData,
+    })
+  } catch (e) {
+    console.warn("Could not track event", e)
+  }
 }
