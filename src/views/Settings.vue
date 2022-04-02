@@ -167,6 +167,28 @@
       </v-card-text>
     </v-card>
 
+    <v-card tag="section" id="telemetry" class="mb-8" :color="$theme.card.color">
+      <v-card-title class="headline">Telemetry</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>
+          Tempo collects some anonymous telemetry data.
+          This data is very valuable for us as it helps us understand how people are using the application.
+        </p>
+        <p>
+          We do not collect any personal information such as IP adresses, cookies, mood, notes, tasks or search queries.
+          Telemetry data is hosted by Agate, in France, and not shared with any third party. 
+        </p>
+        <p>You can opt-out from data collection using the switch below.</p>
+
+        <v-switch
+          v-model="telemetryEnabled"
+          label="Send telemetry data"
+          @change="updateTelemetry($event)"
+        ></v-switch>
+      </v-card-text>
+    </v-card>
+
     <v-card tag="section" id="delete" class="mb-8" :color="$theme.card.color">
       <v-card-title class="headline">Delete your data</v-card-title>
 
@@ -279,7 +301,8 @@ export default {
       webhook: this.$store.state.settings.webhook || {
         url: '',
       },
-      trackEvent
+      telemetryEnabled: this.$store.getters['settings'].telemetry,
+      trackEvent,
     }
   },
   methods: {
@@ -365,6 +388,12 @@ export default {
       } catch (e) {
         this.syncStatus = `Error: ${e.name || e}`
       }
+    },
+    async updateTelemetry (v) {
+      if (!v) {
+        trackEvent(this.$store, "telemetry.disabled")
+      }
+      await this.$store.dispatch("setSetting", {name: "telemetry", value: v})
     }
   }
 }

@@ -467,7 +467,7 @@ export function getCleanUrlForTracking (location, path) {
 }
 
 export function trackEvent(store, event, props = {}, eventData = {}) {
-  console.debug("[event] tracking", event, props)
+  console.debug("[event] tracking", event)
   if (!store.getters["settings"].telemetry) {
     console.debug("[event] skipping, telemetry disabled")
     return
