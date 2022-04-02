@@ -451,3 +451,8 @@ export async function bulkInsertAndUpdate(arr, db) {
   ]
   return results
 }
+
+
+export function getShortEntryId (id) {
+  return id.toISOString()
+}
