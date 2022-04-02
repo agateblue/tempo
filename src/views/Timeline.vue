@@ -1,25 +1,33 @@
 <template>
   <div class="pb-8">
-    <entry-form
-      textarea-label="Write a new entry"
-      color="transparent"
-      :key="`timeline-${$store.state.lastSync}`"
-      ref="entryForm"
-      @submitted="handleCreated"
-    />
-    <v-divider></v-divider>
+    <template v-if="!entryId">
+      <entry-form
+        
+        textarea-label="Write a new entry"
+        color="transparent"
+        :key="`timeline-${$store.state.lastSync}`"
+        ref="entryForm"
+        @submitted="handleCreated"
+      />
+      <v-divider></v-divider>
+    </template>
     <timeline
       ref="timeline"
       class="container narrow px-0"
       :entries="shownEntries"
+      :entry-id="entryId"
       :key="`timeline-${$store.state.lastSync}`"
       @updated="$emit('updated', $event)"
       @deleted="$emit('deleted', $event)"></timeline>
-    <v-container class="narrow" v-if="shownEntries.length < entries.length" :key="`container-${$store.state.lastSync}`">
+    <v-container
+      v-if="!entryId && shownEntries.length < entries.length"
+      class="narrow"
+      :key="`container-${$store.state.lastSync}`"
+    >
       <v-btn
         v-if="showShowMoreButton"
         color="secondary"
-        @click.prevent="showMore"
+        @click.prevent="showMore([{isIntersecting: true}])"
         v-intersect="{
           handler: showMore,
           options: {
@@ -37,7 +45,8 @@ import EntryForm from '@/components/EntryForm.vue'
 
 export default {
   props: {
-    allEntries: Array
+    allEntries: Array,
+    entryId: {required: false}
   },
   components: {
     Timeline,

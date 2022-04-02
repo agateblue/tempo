@@ -30,7 +30,13 @@ const routes = [
         path: 'calendar',
         name: 'Calendar',
         component: Calendar,
-      }
+      },
+      {
+        path: ':entryId',
+        name: 'Entry',
+        component: Timeline,
+        props: true
+      },
     ]
   },
   {

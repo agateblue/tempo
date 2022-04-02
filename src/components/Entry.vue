@@ -35,6 +35,7 @@
         @cancel="isEditing = false"
       />
     </v-card-text>
+  
     <v-lazy
       :options="{
         threshold: .5
@@ -51,6 +52,17 @@
             {{ row.time }}
           </time>
         <v-spacer></v-spacer>
+        <v-btn
+          icon
+          small
+          class="px-1"
+          color="grey"
+          title="Detail page"
+          plain
+          :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry.fullDate)}}"
+        >
+          <v-icon>{{ $icons.mdiEye}}</v-icon>
+        </v-btn>
         <v-btn
           icon
           small
@@ -121,6 +133,7 @@
 </template>
 <script>
 import EntryForm from '@/components/EntryForm.vue'
+import {getShortEntryId} from '@/utils'
 import truncate from 'truncate-html'
 truncate.setup({byWords: true, length: 60, keepWhitespaces: true })
 
@@ -137,6 +150,7 @@ export default {
       isEditing: false,
       currentEntry: this.row.rawEntry,
       expand: false,
+      getShortEntryId,
     }
   },
   computed: {

@@ -83,13 +83,21 @@ function insertAggregates(config, rows, aggregates) {
   return final
 }
 export default {
-  props: ['entries'],
+  props: {
+    entries: {},
+    entryId: {required: false}
+  },
   components: {Entry, DateEntry},
   computed: {
     timelineRows () {
       let aggregates = {}
       let rows = []
       let entries = [...this.entries]
+      if (this.entryId) {
+        entries = entries.filter(entry => {
+          return entry._id == this.entryId
+        })
+      }
       entries.forEach((e) => {
         let entry = getCompleteEntry(e)
         let row = {
