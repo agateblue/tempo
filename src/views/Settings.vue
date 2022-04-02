@@ -26,7 +26,7 @@
           />
           <alias-form
             :key="String(lastAliasesUpdate)"
-            @created="lastAliasesUpdate = new Date()" />
+            @created="lastAliasesUpdate = new Date(); trackEvent($store, 'alias.created')" />
         </v-form>
       </v-card-text>
     </v-card>
@@ -161,7 +161,7 @@
         <v-btn
           color="primary"
           :disabled="!webhook.url"
-          @click="$store.dispatch('setWebhook', {url: webhook.url})">
+          @click="$store.dispatch('setWebhook', {url: webhook.url}); trackEvent($store, 'webhook.setup')">
           Save
         </v-btn>
       </v-card-text>
@@ -185,7 +185,7 @@
 <script>
 import AliasForm from '@/components/AliasForm'
 
-import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate} from '@/utils'
+import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate, trackEvent} from '@/utils'
 
 async function importEntries(entries, db, logs) {
   entries = entries || []
@@ -278,7 +278,8 @@ export default {
       couchDbPassword: this.$store.state.couchDbPassword,
       webhook: this.$store.state.settings.webhook || {
         url: '',
-      }
+      },
+      trackEvent
     }
   },
   methods: {
@@ -312,6 +313,7 @@ export default {
         'application/json',
         `tempo_export_${d}.json`
       )
+      trackEvent(this.$store, "data.exported")
     },
     async triggerWebhook (url) {
       await this.$store.dispatch("forceSync")
@@ -338,12 +340,14 @@ export default {
         await this.$store.dispatch("loadSettings")
       }
       this.importLogs.push(`[info] Import complete!`)
+      trackEvent(this.$store, "data.imported")
     },
     deleteConfirm () {
       if (confirm("This will remove all your notes. This action is irreversible.")) {
         this.$store.dispatch('reset')
         this.importedEntries = 0
         this.failedEntries = 0
+        trackEvent(this.$store, "data.deleted")
       }
     },
     async setupSync () {
@@ -357,6 +361,7 @@ export default {
           }
         )
         this.syncStatus = `Sync OK!`
+        trackEvent(this.$store, "sync.setup")
       } catch (e) {
         this.syncStatus = `Error: ${e.name || e}`
       }

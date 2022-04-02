@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {search} from '@/utils'
+import {search, trackEvent} from '@/utils'
 
 export default {
   props: {
@@ -45,11 +45,13 @@ export default {
     
     async handleCreated (entry) {
       this.entries.push(entry)
+      trackEvent(this.$store, "entry.created")
     },
     async handleDelete (entry) {
       this.entries = this.entries.filter((e) => {
         return e._id != entry._id
       })
+      trackEvent(this.$store, "entry.deleted")
     },
     async handleUpdate (entry) {
       this.entries.forEach((e) => {
@@ -57,6 +59,7 @@ export default {
           Object.assign(e, entry)
         }
       })
+      trackEvent(this.$store, "entry.updated")
     },
     async search () {
       this.entries = await search({

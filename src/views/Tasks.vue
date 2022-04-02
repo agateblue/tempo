@@ -8,7 +8,7 @@
       <v-card-title class="headline">Update your board</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
-        <board-form @updated="tasksByList = getTasksByList(); isEditing = false"></board-form>
+        <board-form @updated="tasksByList = getTasksByList(); isEditing = false; trackEvent($store, 'board.updated')"></board-form>
       </v-card-text>
     </v-card>
     <template v-else>
@@ -106,9 +106,9 @@
                   
                   :is-done="idx === $store.getters['boardLists'].length - 1"
                   
-                  @done="moveCard($event._id, $store.getters['boardLists'].length - 1)"
-                  @deleted="updateTasks"
-                  @updated="updateTasks"
+                  @done="moveCard($event._id, $store.getters['boardLists'].length - 1); trackEvent($store, 'task.completed')"
+                  @deleted="updateTasks; trackEvent($store, 'task.deleted')"
+                  @updated="updateTasks; trackEvent($store, 'task.updated')"
                   ></task-card>
               </v-lazy>
             </draggable>
@@ -122,7 +122,7 @@
 <script>
 
 import sortBy from 'lodash/sortBy'
-import {getTasks} from '@/utils'
+import {getTasks, trackEvent} from '@/utils'
 
 export default {
   props: {
@@ -152,6 +152,7 @@ export default {
       tasksByList: {},
       newTaskText: '',
       newTaskCategory: null,
+      trackEvent,
     }
   },
   async created () {
@@ -190,6 +191,7 @@ export default {
       this.tasks.push(task)
       this.newTaskText = null
       this.newTaskCategory = null
+      trackEvent(this.$store, "task.created")
     },
     async updateTasks () {
       this.tasks = await getTasks(this.$store, this.query)
