@@ -177,7 +177,11 @@
         </p>
         <p>
           We do not collect any personal information such as IP adresses, cookies, mood, notes, tasks or search queries.
-          Telemetry data is hosted by Agate, in France, and not shared with any third party. 
+          Telemetry data is hosted by Agate, in France, and not shared with any third party.
+          If you are interested, you can
+          <a href="https://stats.agate.blue/tempo.agate.blue" _blank="true">
+            access this telemetry data yourself.
+          </a>
         </p>
         <p>You can opt-out from data collection using the switch below.</p>
 
