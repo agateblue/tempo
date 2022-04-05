@@ -110,6 +110,7 @@ export default {
         {value: "~", label: "Mixed mood tag"},
         {value: "?", label: "Unknown mood tag"},
         {value: "@", label: "Annotation tag"},
+        {value: "=", label: "Equal sign for annotation value"},
       ]
     }
   },
