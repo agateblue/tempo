@@ -149,6 +149,8 @@
 </template>
 <script>
 import debounce from 'lodash/debounce'
+import merge from 'lodash/merge'
+
 import alasql from '@/alasql'
 
 import {CHARTTYPES} from '@/utils'
@@ -185,7 +187,7 @@ export default {
       return []
     },
     chartOptions () {
-      return {
+      let options = {
         data: {
           datasets: this.getDatasets(this.queriedData),
           labels: this.getLabels(this.queriedData),
@@ -210,9 +212,12 @@ export default {
           'violet',
           'light-grey',
           'dark-grey',
-        ]
-
+        ],
+        barOptions: {
+          spaceRatio: 0.1
+        }
       }
+      return merge(options, this.config.chartOptions || {})
     },
 
     dataSource () {

@@ -6,14 +6,20 @@
     {
       "label": "Mood by day",
       "help": "Higher is better",
-      "query": "SELECT date, sum(mood) as mood FROM ? GROUP BY date ORDER BY date DESC",
-      "chartType": "line"
+      "query": "SELECT date, sum(CASE WHEN mood > 0 THEN mood ELSE 0 END) as Positive, sum(CASE WHEN mood < 0 THEN mood ELSE 0 END) as Negative FROM ? GROUP BY date ORDER BY date DESC",
+      "chartType": "bar",
+      "chartOptions": {
+        "colors": ["green", "orange"]
+      }
     },
     {
       "label": "Mood instability",
       "help": "Lower is stabler",
       "query": "Select date, posmood * negmood / 10 as instability From (SELECT date, sum(CASE when mood>0 then mood else 0 END) as posmood,  sum(CASE when mood<0 then abs(mood) else 0 END) AS negmood FROM ? GROUP BY date ORDER BY date DESC)",
-      "chartType": "line"
+      "chartType": "bar",
+      "chartOptions": {
+        "colors": ["purple"]
+      }
     }
   ]
 }
