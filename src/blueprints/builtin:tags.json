@@ -5,7 +5,19 @@
   "vizualisations": [
     {
       "label": "Predominent tags",
-      "query": "SELECT id, entries, mood from ? ORDER BY entries DESC limit 15",
+      "query": "SELECT id, entries, mood from ? ORDER BY entries DESC limit 10",
+      "chartType": "table",
+      "source": "tags"
+    },
+    {
+      "label": "Positive tags",
+      "query": "SELECT id, entries, mood from ? where mood > 0 ORDER BY mood DESC limit 10",
+      "chartType": "table",
+      "source": "tags"
+    },
+    {
+      "label": "Negative tags",
+      "query": "SELECT id, entries, mood from ? where mood < 0 ORDER BY mood ASC limit 10",
       "chartType": "table",
       "source": "tags"
     }
