@@ -61,7 +61,8 @@ import {getQueryableEntries, getQueryableTags} from '@/utils'
 
 export default {
   props: {
-    allEntries: Array
+    allEntries: Array,
+    blueprint: {type: Number, default: 0}
   },
   components: {
     VizualisationModal,
@@ -71,7 +72,7 @@ export default {
     return {
       showvizualisationModal: false,
       graphDays: 60,
-      selectedBlueprintIdx: 0,
+      selectedBlueprintIdx: parseInt(this.blueprint) || 0,
     }
   },
   async created () {
@@ -101,5 +102,13 @@ export default {
       })
     }
   },
+  watch: {
+    selectedBlueprintIdx (v) {
+      this.$router.push({ path: this.$route.path, query: { q: '', blueprint: v} })
+    },
+    "$route.query.blueprint" (v) {
+      this.selectedBlueprintIdx = parseInt(v || 0)
+    },
+  }
 }
 </script>
