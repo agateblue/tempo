@@ -14,7 +14,7 @@
           Entries · {{ entries.length }}
         </v-tab>
         <v-tab :to="{path: '/diary/calendar', query: {q: query}}">Calendar</v-tab>
-        <v-tab :to="{path: '/diary/visualization', query: {q: query}}">Visualization</v-tab>
+        <v-tab :to="{path: '/diary/vizualisation', query: {q: query}}">Vizualisation</v-tab>
       </v-tabs>
     </v-container>
     <router-view

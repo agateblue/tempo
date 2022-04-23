@@ -57,7 +57,7 @@ Got my blood test results:
 @testosterone="22.3" (ng/dL)
 ```
 
-This data can then be used to build graphical visualizations such as charts, tables, or even be exported for use in other tools. You can read more on annotations in the dedicated section below.
+This data can then be used to build graphical vizualisations such as charts, tables, or even be exported for use in other tools. You can read more on annotations in the dedicated section below.
 
 
 ### Querying and search
@@ -151,7 +151,7 @@ Tempo will keep a track that this note include both positive and negative moods,
 - `--anxious` gets a score of -2
 - `-tired but ++happy` gets a score of +1 (`-1 + 2`)
 
-### Visualization
+### Vizualisation
 
 ![Tempo's mood chart](https://user-images.githubusercontent.com/1970915/158241473-3a9ee96d-e082-4d70-86ae-f16e50ed657f.png)
 
@@ -161,7 +161,7 @@ At some point, you will probably want to use this information to actually unders
 
 - In the Diary view, at the top corner of each note, a color badge showsyou the predominent mood of a note
 - Similarly, in the Calendar view, entries have a color matching their predominent mood
-- In the Visualization view, Tempo display several charts:
+- In the Vizualisation view, Tempo display several charts:
     - A day to day chart, showing your mood variations, using the total mood scores of each day's entries
     - A "Common tags" table, showing you the most used tags and their associated mood score
 - In search queries, via the `-` and `+` operators, to filter negative or positive entries respectively

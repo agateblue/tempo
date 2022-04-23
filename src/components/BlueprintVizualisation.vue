@@ -3,6 +3,9 @@
     <v-card-title>
       {{ config.label }}
     </v-card-title>
+    <v-card-text v-if="config.help">
+      {{ config.help }}
+    </v-card-text>
     <v-card-text v-if="queriedData && queriedData[0]">
       <v-simple-table v-if="chartType === 'table'">
         <template v-slot:default>
@@ -65,7 +68,7 @@
         </template>
 
         <v-list>
-          <v-list-item @click="showVisualizationModal = true">
+          <v-list-item @click="showVizualisationModal = true">
             <v-list-item-icon>
               <v-icon>{{ $icons.mdiPencil }}</v-icon>
             </v-list-item-icon>
@@ -83,13 +86,13 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <visualization-modal
-        :show.sync="showVisualizationModal"
+      <vizualisation-modal
+        :show.sync="showVizualisationModal"
         :config="config"
         :entries="entries"
         :tags="tags"
         @updated="update">
-      </visualization-modal>
+      </vizualisation-modal>
 
       <v-dialog
 
@@ -152,14 +155,14 @@ import {CHARTTYPES} from '@/utils'
 export default {
   props: ['entries', 'tags', 'config', 'builtin'],
   components: {
-    Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
-    VisualizationModal:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationModal"),
+    Chart:  () => import(/* webpackChunkName: "vizualisation" */ "@/components/Chart"),
+    VizualisationModal:  () => import(/* webpackChunkName: "vizualisation" */ "@/components/VizualisationModal"),
   },
   data () {
     return {
       currentConfig: this.config,
       deleteDialog: false,
-      showVisualizationModal: false,
+      showVizualisationModal: false,
       expandQuery: false,
       dataQuery: this.config.query,
       queriedData: null,

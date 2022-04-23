@@ -10,6 +10,14 @@ Vue.use(Vuex)
 
 import {SETTINGS, getSettingValue} from '@/utils'
 
+async function getBuiltinBlueprints () {
+  return {
+    "builtin:mood": (await import("@/blueprints/builtin:mood.json")).default,
+    "builtin:tags": (await import("@/blueprints/builtin:tags.json")).default,
+  }
+}
+
+
 const version = 1
 
 const store = new Vuex.Store({
@@ -34,7 +42,8 @@ const store = new Vuex.Store({
       registration: null,
       updateAvailable: false,
     },
-    settings: {}
+    settings: {},
+    loadedBlueprints: [],
   },
   mutations: {
     handleSync (state, info) {
@@ -88,6 +97,9 @@ const store = new Vuex.Store({
     },
     sync (state, value) {
       state.sync = value
+    },
+    loadedBlueprints (state, value) {
+      state.loadedBlueprints = value
     },
   },
   getters: {
@@ -290,6 +302,18 @@ const store = new Vuex.Store({
         s[r.name] = v
       }
       commit("settings", s)
+    },
+    async loadBlueprints ({commit}, configs) {
+      let builtins = await getBuiltinBlueprints()
+      let b = []
+      for (const config of configs) {
+        if (builtins[config.id]) {
+          b.push(builtins[config.id])
+        } else { 
+          console.warn("Unknown blueprint", config)
+        }
+      }
+      commit("loadedBlueprints", b)
     },
   },
   modules: {
