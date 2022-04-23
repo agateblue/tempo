@@ -433,6 +433,12 @@ export const SETTINGS = [
       {label: "House-keeping"},
     ]
   }}},
+  {name: "blueprints", default: () => {
+    return [
+      {id: "builtin:mood"},
+      {id: "builtin:tags"},
+      ]
+  }},
 ]
 
 export async function bulkInsertAndUpdate(arr, db) {

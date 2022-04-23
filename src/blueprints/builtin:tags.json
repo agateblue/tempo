@@ -1,0 +1,13 @@
+{
+  "id": "builtin:tags",
+  "label": "Tags",
+  "version": "1",
+  "vizualisations": [
+    {
+      "label": "Predominent tags",
+      "query": "SELECT id, entries, mood from ? ORDER BY entries DESC limit 15",
+      "chartType": "table",
+      "source": "tags"
+    }
+  ]
+}

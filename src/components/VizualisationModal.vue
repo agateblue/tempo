@@ -58,7 +58,7 @@
               <v-select
                 :items="chartTypes"
                 v-model="chartType"
-                label="Visualization"
+                label="Vizualisation"
                 required
               ></v-select>
             </v-col>
@@ -68,13 +68,13 @@
       <v-divider></v-divider>
       <v-container class="mt-4">
         <h1>Preview</h1>
-        <chart-component
+        <blueprint-vizualisation
           :key="previewKey"
           :config="chartConfig"
           :tags="tags"
           :entries="entries"
           :builtin="false"
-          @query:updated="query = $event;field = null"></chart-component>
+          @query:updated="query = $event;field = null"></blueprint-vizualisation>
       </v-container>
     </v-card>
   </v-dialog>
@@ -92,7 +92,7 @@ export default {
     days: {type: Number, default: null},
   },
   components: {
-    ChartComponent:  () => import(/* webpackChunkName: "visualization" */ "@/components/ChartComponent"),
+    BlueprintVizualisation:  () => import(/* webpackChunkName: "vizualisation" */ "@/components/BlueprintVizualisation"),
   },
   data () {
     return {
