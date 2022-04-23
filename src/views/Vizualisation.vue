@@ -30,14 +30,14 @@
         </v-card-text>
       </v-card>
       
-      <v-btn
+      <!-- <v-btn
         class="mb-4"
         :color="$theme.mainButton.color"
         @click="showvizualisationModal = true"
       >
         <v-icon>{{ $icons.mdiPlus }}</v-icon>
         Add a new vizualisation
-      </v-btn>
+      </v-btn> -->
     </v-container>
     <v-divider></v-divider>
     <v-container class="mt-4" v-if="selectedBlueprint">
