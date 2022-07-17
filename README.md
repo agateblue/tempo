@@ -10,7 +10,7 @@ Tempo is a diary, mood tracker and Kanban board. Its main goals are to help you:
 
 Tempo is also free to use, open source and web based. You can use it at no cost, from any compatible web browser, both on mobile and desktop, without even creating an account. The data entered in Tempo never leaves your device and isn't shared with any third-party. Finally, because Tempo is a Progressive Web App, it will continue to work on your device even without any internet connection. 
 
-On a more personal note, Tempo is by far the most personal software project I've ever worked on. Since its birth in Apris 2020, I have put a lot of myself in it. Among other things, it helped me overcome serious mental health issues and still supports me on a daily basis. It was built to address very specific needs (i.e, mine) and also as an experiment.
+On a more personal note, Tempo is by far the most personal software project I've ever worked on. Since its birth in April 2020, I have put a lot of myself in it. Among other things, it helped me overcome serious mental health issues and still supports me on a daily basis. It was built to address very specific needs (i.e, mine) and also as an experiment.
 
 As a result, Tempo isn't meant for everyone. I don't expect it to be used by many people and this is completely fine. There are a lot of other tools available out there that will probably be a better fit for you. But if that's not the case, well, you might want to give Tempo a try. 
 
