@@ -11,7 +11,7 @@
       />
       <v-divider></v-divider>
     </template>
-    <v-container class="narrow d-flex justify-end">
+    <v-container class="py-0 px-0 narrow d-flex justify-end">
       <v-switch
         v-model="showFavorites"
         label="Show favorites"
@@ -19,7 +19,7 @@
     </v-container>
     <timeline
       ref="timeline"
-      class="container narrow px-0"
+      class="mt-0 container narrow px-0"
       :entries="shownEntries"
       :entry-id="entryId"
       :key="`timeline-${$store.state.lastSync}`"
