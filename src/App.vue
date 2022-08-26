@@ -20,13 +20,9 @@
         placeholder="Search"
         class="search"
         :append-icon="$icons.mdiMagnify"
-        @click:append="
-          expandSearch = true; $router.push({ path: $route.path, query: { q: searchQuery } })
-        "
-        @keydown.enter="
-          $router.push({ path: $route.path, query: { q: searchQuery } })
-        "
-        @click:clear="$router.push({ path: $route.path, query: { q: '' } })"
+        @click:append="expandSearch = true; $store.commit('searchQuery', searchQuery)"
+        @keydown.enter="$store.commit('searchQuery', searchQuery)"
+        @click:clear="$store.commit('searchQuery', '')"
       ></v-text-field>
       <v-btn small icon class="ml-3" to="/about">
         <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
@@ -109,11 +105,7 @@ export default {
       var className = "internal-link"; // any css selector for children
       if (e.target.localName == "a" && e.target.classList.contains(className)) {
         e.preventDefault();
-        self.searchQuery = e.target.getAttribute("data-query");
-        self.$router.push({
-          path: self.$route.path,
-          query: { q: e.target.getAttribute("data-query") },
-        });
+        self.$store.commit('searchQuery', e.target.getAttribute("data-query"))
       }
     };
   },
@@ -149,6 +141,12 @@ export default {
         }
       },
       immediate: true,
+    },
+    "$store.state.searchQuery": {
+      handler (v) {
+        this.searchQuery = v
+        this.$router.push({ path: this.$route.path, query: { q: v } })
+      }
     }
   },
 };
