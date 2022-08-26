@@ -11,6 +11,12 @@
       />
       <v-divider></v-divider>
     </template>
+    <v-container class="narrow d-flex justify-end">
+      <v-switch
+        v-model="showFavorites"
+        label="Show favorites"
+      ></v-switch>
+    </v-container>
     <timeline
       ref="timeline"
       class="container narrow px-0"
@@ -54,6 +60,7 @@ export default {
   },
   data () {
     return {
+      showFavorites: false,
       showEntryModal: false,
       showShowMoreButton: false,
       count: this.$store.state.pageSize,
@@ -90,6 +97,10 @@ export default {
         this.showShowMoreButton = true
       }, 1000)
     },
+    showFavorites (v) {
+      let query = v ? 'is:fav' : ''
+      this.$store.commit('searchQuery', query)
+    }
   },
 }
 </script>

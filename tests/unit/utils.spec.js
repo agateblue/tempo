@@ -35,7 +35,8 @@ describe('utils', () => {
         {text: "#work", id: "work", type: "tag", mood: null, sign: '#'},
       ],
       text: msg,
-      mood: 1
+      mood: 1,
+      favorite: false,
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -51,7 +52,8 @@ describe('utils', () => {
         {text: "@work:perf=-12", id: "work:perf", type: "annotation", mood: null, sign: '@', value: "-12"},
       ],
       text: msg,
-      mood: 0
+      mood: 0,
+      favorite: false,
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -71,8 +73,9 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'hello #world + - date:2020 t:mytag $dreams'
+    const query = 'is:fav hello #world + - date:2020 t:mytag $dreams'
     const expected = [
+      {favorite: true},
       {text: 'hello'},
       {tag: '#world'},
       {sign: '+'},
@@ -112,6 +115,23 @@ describe('utils', () => {
     }
     const result = matchTokens(entry, tokens)
     expect(result).equal(true)
+  })
+  it('match favorite', () => {
+    const tokens = [
+      {favorite: true},
+    ]
+    const entryFav = {
+      text: 'this is hello world',
+      favorite: true,
+    }
+    const entryNotFav = {
+      text: 'this is hello world',
+      favorite: false,
+    }
+    let result = matchTokens(entryFav, tokens)
+    expect(result).equal(true)
+    result = matchTokens(entryNotFav, tokens)
+    expect(result).equal(false)
   })
   it('match tokens aliases true', () => {
     let aliases = {
@@ -190,6 +210,7 @@ describe('utils', () => {
       _id: 'id',
       _rev: 'rev',
       text: "hello",
+      favorite: false,
       mood: 3,
       date: date.toISOString(),
       tags: [
@@ -238,8 +259,9 @@ describe('utils', () => {
           text: "@work:duration=8.5",
           type: "annotation",
           value: "8.5",
-        }
-      }
+        },
+      },
+      favorite: false,
     }
     expected.week = `${expected.year}-${expected.weeknumber}`
     const result = getCompleteEntry(entry)

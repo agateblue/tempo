@@ -66,6 +66,7 @@ export function getNewEntryData(text) {
     mood: 0,
     type: 'entry',
     data: null,
+    favorite: false,
   }
   let annotations = []
   entryData.tags.forEach(t => {
@@ -118,6 +119,8 @@ export function parseQuery(query) {
       }
     } else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
       tokens.push({date: stripped.split(':')[1]})
+    } else if (stripped.startsWith('is:fav')) {
+      tokens.push({favorite: true})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(/:(.+)/)[1]})
     } else if (stripped.startsWith('c:') || stripped.startsWith('category:') ) {
@@ -157,6 +160,9 @@ export function matchTokens(entry, tokens, aliasesById = {}) {
       if (matching.length === 0) {
         return false
       }
+    }
+    if (token.favorite && !entry.favorite) {
+      return false
     }
     if (token.tagName) {
       let matching = entry.tags.filter((t) => {
@@ -211,6 +217,7 @@ export function getCompleteEntry (e) {
     week: `${year}-${weekNumber}`,
     tags: {},
     data: e.data || null,
+    favorite: e.favorite || false,
   }
   e.tags.forEach((t) => {
     entry.tags[t.id] = {
@@ -437,6 +444,7 @@ export const SETTINGS = [
     return [
       {id: "builtin:mood"},
       {id: "builtin:tags"},
+      {id: "builtin:travel"},
       ]
   }},
 ]

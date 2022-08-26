@@ -166,6 +166,14 @@
                   Find all entries with a positive moodtag (also works with <code>-</code>, <code>?</code>, <code>!</code> and <code>~</code>)
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <code>is:fav</code>
+                </td>
+                <td>
+                  Find favorited entries
+                </td>
+              </tr>
             </tbody>
           </template>
         </v-simple-table>

@@ -8,7 +8,7 @@ PouchDB.plugin(PouchDBAuthentication)
 
 Vue.use(Vuex)
 
-import {SETTINGS, getSettingValue} from '@/utils'
+import {SETTINGS, getSettingValue, getNewEntryData} from '@/utils'
 
 async function getBuiltinBlueprints () {
   return {
@@ -142,6 +142,17 @@ const store = new Vuex.Store({
       await state.db.put(entryData)
       dispatch('forceSync')
       return await state.db.get(entryData._id)
+    },
+    async partialUpdateEntry ({dispatch}, {entry, values}) {
+      let data = {
+        ...getNewEntryData(entry.text),
+        ...values,
+        _rev: entry._rev,
+        _id: entry._id,
+        date: (new Date(entry.date)).toISOString()
+      }
+      let e = await dispatch('updateEntry', data)
+      return e
     },
     async updateEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)

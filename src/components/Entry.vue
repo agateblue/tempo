@@ -67,11 +67,12 @@
           icon
           small
           class="px-1"
-          color="grey darken-2"
-          @click="isEditing = !isEditing"
+          :color="row.entry.favorite ? 'pink darken-2' : 'grey darken-2'"
+          @click="setFavorite(!row.entry.favorite)"
           title="Edit"
         >
-          <v-icon left>{{ $icons.mdiPencil}}</v-icon>
+          <v-icon left v-if="row.entry.favorite">{{ $icons.mdiHeart }}</v-icon>
+          <v-icon left v-else>{{ $icons.mdiHeartOutline }}</v-icon>
         </v-btn>
         <v-btn
           icon
@@ -82,6 +83,16 @@
           title="Copy to clipboard"
         >
           <v-icon left>{{ $icons.mdiContentCopy}}</v-icon>
+        </v-btn>
+        <v-btn
+          icon
+          small
+          class="px-1"
+          color="grey darken-2"
+          @click="isEditing = !isEditing"
+          title="Edit"
+        >
+          <v-icon left>{{ $icons.mdiPencil}}</v-icon>
         </v-btn>
         <v-btn
           icon
@@ -168,6 +179,10 @@ export default {
     },
     async update (e) {
       this.currentEntry = e
+      this.$emit('updated', e)
+    },
+    async setFavorite (value) {
+      let e = await this.$store.dispatch('partialUpdateEntry', {entry: this.row.entry, values: {favorite: value}})
       this.$emit('updated', e)
     },
     async handleDelete () {
