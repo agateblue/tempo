@@ -44,6 +44,7 @@ const store = new Vuex.Store({
     },
     settings: {},
     loadedBlueprints: [],
+    searchQuery: '',
   },
   mutations: {
     handleSync (state, info) {
@@ -100,6 +101,9 @@ const store = new Vuex.Store({
     },
     loadedBlueprints (state, value) {
       state.loadedBlueprints = value
+    },
+    searchQuery (state, value) {
+      state.searchQuery = value
     },
   },
   getters: {
