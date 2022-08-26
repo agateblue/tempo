@@ -11,6 +11,7 @@ Vue.config.productionTip = false
 
 // three shaking icons to reduce bundle size
 import {
+  mdiArrowLeft,
   mdiBook,
   mdiCalendar,
   mdiChartTimelineVariant,
@@ -43,6 +44,7 @@ import {
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
+  mdiArrowLeft,
   mdiBook,
   mdiCalendar,
   mdiChartTimelineVariant,

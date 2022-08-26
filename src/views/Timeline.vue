@@ -11,11 +11,22 @@
       />
       <v-divider></v-divider>
     </template>
-    <v-container class="py-0 px-0 narrow d-flex justify-end">
+    <v-container v-if="!entryId" class="py-0 px-0 narrow d-flex justify-end">
       <v-switch
         v-model="showFavorites"
         label="Show favorites"
       ></v-switch>
+    </v-container>
+    <v-container v-if="entryId" class="py-0 px-0 narrow d-flex justify-start">
+      <v-btn
+        class="mt-5 px-0"
+        to="/diary"
+        plain
+        small
+      >
+        <v-icon left v-text="$icons.mdiArrowLeft"></v-icon>
+        Go back to diary
+      </v-btn>
     </v-container>
     <timeline
       ref="timeline"
