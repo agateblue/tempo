@@ -41,7 +41,7 @@
       <v-btn
         :style="bottomNavBarButtonStyle"
         :loading="$store.state.sync.loading"
-        @click.stop.prevent="$store.dispatch('forceSync')"
+        @click.stop.prevent="$store.dispatch('forceSync', {updateLastSync: true})"
         v-if="$store.state.couchDbUrl"
       >
         <span v-if="!$store.state.sync.loading && $store.state.sync.error">

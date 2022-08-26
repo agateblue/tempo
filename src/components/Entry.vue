@@ -35,111 +35,103 @@
         @cancel="isEditing = false"
       />
     </v-card-text>
-  
-    <v-lazy
-      :options="{
-        threshold: .5
-      }"
-      min-height="50"
-      transition="fade-transition"
-    >
-      <v-card-actions>
-        <time
-          class="text-body-2 grey--text text--darken-1"
-          :date="row.entry.fullDate.toISOString()"
-          :title="row.entry.fullDate.toISOString()">
-            <v-icon small color="grey darken-2">{{ $icons.mdiClockOutline}}</v-icon>
-            {{ row.time }}
-          </time>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          small
-          class="px-1"
-          color="grey"
-          title="Detail page"
-          plain
-          :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry.fullDate)}}"
-        >
-          <v-icon>{{ $icons.mdiEye}}</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          small
-          class="px-1"
-          :color="row.entry.favorite ? 'pink darken-2' : 'grey darken-2'"
-          @click="setFavorite(!row.entry.favorite)"
-          title="Edit"
-        >
-          <v-icon left v-if="row.entry.favorite">{{ $icons.mdiHeart }}</v-icon>
-          <v-icon left v-else>{{ $icons.mdiHeartOutline }}</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          small
-          class="px-1"
-          color="grey darken-2"
-          @click="copyToClipboard(row.entry.text)"
-          title="Copy to clipboard"
-        >
-          <v-icon left>{{ $icons.mdiContentCopy}}</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          small
-          class="px-1"
-          color="grey darken-2"
-          @click="isEditing = !isEditing"
-          title="Edit"
-        >
-          <v-icon left>{{ $icons.mdiPencil}}</v-icon>
-        </v-btn>
-        <v-btn
-          icon
-          small
-          class="px-1"
-          color="grey darken-2"
-          @click="deleteDialog = true"
-          title="Delete"
-        >
-          <v-icon left>{{ $icons.mdiDelete}}</v-icon>
-        </v-btn>
 
-        <v-dialog
+    <v-card-actions>
+      <time
+        class="text-body-2 grey--text text--darken-1"
+        :date="row.entry.fullDate.toISOString()"
+        :title="row.entry.fullDate.toISOString()">
+          <v-icon small color="grey darken-2">{{ $icons.mdiClockOutline}}</v-icon>
+          {{ row.time }}
+        </time>
+      <v-spacer></v-spacer>
+      <v-btn
+        icon
+        small
+        class="px-1"
+        color="grey"
+        title="Detail page"
+        plain
+        :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry.fullDate)}}"
+      >
+        <v-icon>{{ $icons.mdiEye}}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        small
+        class="px-1"
+        :color="row.entry.favorite ? 'pink darken-2' : 'grey darken-2'"
+        @click="setFavorite(!row.entry.favorite)"
+        title="Edit"
+      >
+        <v-icon left v-if="row.entry.favorite">{{ $icons.mdiHeart }}</v-icon>
+        <v-icon left v-else>{{ $icons.mdiHeartOutline }}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        small
+        class="px-1"
+        color="grey darken-2"
+        @click="copyToClipboard(row.entry.text)"
+        title="Copy to clipboard"
+      >
+        <v-icon left>{{ $icons.mdiContentCopy}}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        small
+        class="px-1"
+        color="grey darken-2"
+        @click="isEditing = !isEditing"
+        title="Edit"
+      >
+        <v-icon left>{{ $icons.mdiPencil}}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        small
+        class="px-1"
+        color="grey darken-2"
+        @click="deleteDialog = true"
+        title="Delete"
+      >
+        <v-icon left>{{ $icons.mdiDelete}}</v-icon>
+      </v-btn>
 
-          v-model="deleteDialog"
-          max-width="400"
-        >
-          <v-card :color="$theme.card.color">
-            <v-card-title class="headline">Delete this entry?</v-card-title>
+      <v-dialog
 
-            <v-card-text>
-              This action is irreversible.
-            </v-card-text>
+        v-model="deleteDialog"
+        max-width="400"
+      >
+        <v-card :color="$theme.card.color">
+          <v-card-title class="headline">Delete this entry?</v-card-title>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
+          <v-card-text>
+            This action is irreversible.
+          </v-card-text>
 
-              <v-btn
-                color="secondary"
-                text
-                @click="deleteDialog = false"
-              >
-                Cancel
-              </v-btn>
+          <v-card-actions>
+            <v-spacer></v-spacer>
 
-              <v-btn
-                color="primary"
-                text
-                @click="deleteDialog = false;handleDelete()"
-              >
-                Delete
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-card-actions>
-    </v-lazy>
+            <v-btn
+              color="secondary"
+              text
+              @click="deleteDialog = false"
+            >
+              Cancel
+            </v-btn>
+
+            <v-btn
+              color="primary"
+              text
+              @click="deleteDialog = false;handleDelete()"
+            >
+              Delete
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-card-actions>
   </v-card>
 </template>
 <script>
@@ -178,16 +170,16 @@ export default {
       await navigator.clipboard.writeText(text)
     },
     async update (e) {
-      this.currentEntry = e
       this.$emit('updated', e)
+      this.currentEntry = e
     },
     async setFavorite (value) {
       let e = await this.$store.dispatch('partialUpdateEntry', {entry: this.row.entry, values: {favorite: value}})
       this.$emit('updated', e)
     },
     async handleDelete () {
-      await this.$store.state.db.remove(this.row.rawEntry)
       this.$emit('deleted', this.row.rawEntry)
+      await this.$store.state.db.remove(this.row.rawEntry)
       await this.$store.dispatch('forceSync')
       await this.$store.dispatch('triggerWebhook')
     },

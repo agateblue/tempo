@@ -343,7 +343,7 @@ export default {
       trackEvent(this.$store, "data.exported")
     },
     async triggerWebhook (url) {
-      await this.$store.dispatch("forceSync")
+      await this.$store.dispatch("forceSync", {updateLastSync: true})
       await this.$store.dispatch('triggerWebhook', url)
     },
     async importData () {

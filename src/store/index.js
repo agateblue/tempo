@@ -47,9 +47,11 @@ const store = new Vuex.Store({
     searchQuery: '',
   },
   mutations: {
-    handleSync (state, info) {
-      console.log('Received sync event', info)
-      state.lastSync = new Date()
+    handleSync (state, {updateLastSync}) {
+      console.log('Received sync event')
+      if (updateLastSync) {
+        state.lastSync = new Date()
+      }
     },
     syncHandler (state, newValue) {
       if (state.syncHandler) {
@@ -140,7 +142,7 @@ const store = new Vuex.Store({
   actions: {
     async addEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
-      dispatch('forceSync')
+      dispatch('forceSync', {updateLastSync: false})
       return await state.db.get(entryData._id)
     },
     async partialUpdateEntry ({dispatch}, {entry, values}) {
@@ -156,7 +158,7 @@ const store = new Vuex.Store({
     },
     async updateEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
-      dispatch('forceSync')
+      dispatch('forceSync', {updateLastSync: false})
       return await state.db.get(entryData._id)
     },
     async reset ({commit, state, dispatch}) {
@@ -185,18 +187,15 @@ const store = new Vuex.Store({
           retry: true
         }).on('change', () => {
           console.log("Sync change…")
-          // commit('handleSync', info)
         }).on('active', () => {
           console.log("Sync active…")
-          // commit('handleSync', info)
         }).on('complete', () => {
           console.log("Sync complete…")
-          // commit('handleSync', info)
         })
         commit('syncHandler', syncHandler)
       }
     },
-    async forceSync({state, commit}) {
+    async forceSync({state, commit}, {updateLastSync}) {
       if (!state.couchDbUrl || state.sync.loading) {
         return
       }
@@ -214,7 +213,7 @@ const store = new Vuex.Store({
         return commit("sync", {loading: false, error: e})
       }
       commit("sync", {loading: false, error: null})
-      commit('handleSync', null)
+      commit('handleSync', {updateLastSync})
     },
     async setWebhook ({dispatch}, {url}) {
       await dispatch("setSetting", {name: "webhook", value: {url}})
