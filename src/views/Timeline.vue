@@ -5,7 +5,7 @@
         
         textarea-label="Write a new entry"
         color="transparent"
-        :key="`timeline-${$store.state.lastSync}`"
+        :key="`timeline-form-${$store.state.lastSync}`"
         ref="entryForm"
         @submitted="handleCreated"
       />
