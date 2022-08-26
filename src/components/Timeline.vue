@@ -25,7 +25,12 @@
 </template>
 <script>
 import RENDERER from '@/markdown'
-import {getCompleteEntry, insertTagMarkup, getPrettyTimeFromDate} from '@/utils'
+import {
+  getShortEntryId,
+  getCompleteEntry,
+  insertTagMarkup,
+  getPrettyTimeFromDate
+} from '@/utils'
 import Entry from './Entry'
 import DateEntry from './DateEntry'
 
@@ -95,7 +100,7 @@ export default {
       let entries = [...this.entries]
       if (this.entryId) {
         entries = entries.filter(entry => {
-          return entry._id == this.entryId
+          return getShortEntryId(entry._id) == this.entryId
         })
       }
       entries.forEach((e) => {

@@ -52,7 +52,7 @@
         color="grey"
         title="Detail page"
         plain
-        :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry.fullDate)}}"
+        :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry._id)}}"
       >
         <v-icon>{{ $icons.mdiEye}}</v-icon>
       </v-btn>

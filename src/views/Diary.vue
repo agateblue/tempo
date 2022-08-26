@@ -1,6 +1,6 @@
 <template>
   <div class="pb-8">
-    <v-container>
+    <v-container v-if="$route.name != 'Entry'">
       <v-tabs
         show-arrows
         centered
