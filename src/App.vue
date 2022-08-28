@@ -87,7 +87,7 @@ export default {
   },
   async created() {
     await this.$store.dispatch('loadSettings')
-    await this.$store.dispatch("loadBlueprints", this.$store.state.settings.blueprints)
+    await this.$store.dispatch("loadBlueprints")
     if (navigator.serviceWorker) {
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (this.$store.state.serviceWorker.refreshing) return;

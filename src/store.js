@@ -139,9 +139,14 @@ const store = new Vuex.Store({
       choices.push({value: index, text: 'Done'})
       return choices
     },
-    forms: (state) => {
+    enabledBlueprints: (state) => {
+      return state.loadedBlueprints.filter(b => {
+        return state.settings.blueprints.indexOf(b.id) > -1
+      })
+    },
+    forms: (state, getters) => {
       let allForms = []
-      state.loadedBlueprints.forEach(l => {
+      getters.enabledBlueprints.forEach(l => {
         allForms = [...allForms, ...(l.forms || [])]
       })
       return allForms
@@ -153,9 +158,9 @@ const store = new Vuex.Store({
       })
       return forms
     },
-    fields: (state) => {
+    fields: (state, getters) => {
       let allFields = []
-      state.loadedBlueprints.forEach(l => {
+      getters.enabledBlueprints.forEach(l => {
         allFields = [...allFields, ...(l.fields || [])]
       })
       return allFields
@@ -400,17 +405,11 @@ const store = new Vuex.Store({
       }
       commit("settings", s)
     },
-    async loadBlueprints ({commit}, configs) {
+    async loadBlueprints ({commit}) {
       let builtins = await getBuiltinBlueprints()
-      let b = []
-      for (const config of configs) {
-        if (builtins[config.id]) {
-          b.push(builtins[config.id])
-        } else { 
-          console.warn("Unknown blueprint", config)
-        }
-      }
-      commit("loadedBlueprints", b)
+      let allBlueprints = {...builtins}
+
+      commit("loadedBlueprints", Object.keys(allBlueprints).map(b => {return allBlueprints[b]}))
     },
   },
   modules: {

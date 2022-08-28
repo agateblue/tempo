@@ -143,7 +143,7 @@ export default {
     }
   },
   async created () {
-    await this.$store.dispatch("loadBlueprints", this.$store.state.settings.blueprints)
+    await this.$store.dispatch("loadBlueprints")
   },
   computed: {
     entries () {
@@ -156,11 +156,11 @@ export default {
       return getQueryableTags(this.queryableEntries)
     },
     selectedBlueprint () {
-      return this.$store.state.loadedBlueprints[this.params.selectedBlueprintIdx]
+      return this.$store.getters.enabledBlueprints[this.params.selectedBlueprintIdx]
     },
     blueprintChoices () {
       let i = -1
-      return this.$store.state.loadedBlueprints.map(b => {
+      return this.$store.getters.enabledBlueprints.map(b => {
         i += 1
         return {
           text: b.label,
