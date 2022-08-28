@@ -37,9 +37,25 @@ describe('utils', () => {
       text: msg,
       mood: 1,
       favorite: false,
+      replies: [],
+      thread: null,
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
+  it("can get entry data with additional values", () => {
+    const msg = "Today was quite good";
+    const expected = {
+      type: "entry",
+      data: null,
+      tags: [],
+      text: msg,
+      mood: 0,
+      favorite: false,
+      replies: ['bar'],
+      thread: 'foo',
+    };
+    expect(getNewEntryData(msg, {thread: 'foo', replies: ['bar']})).to.deep.equal(expected);
+  });
   it('can get entry data with annotations', () => {
     const msg = '@work:duration=8.5, @work:project="tempo stuff" @work:lunch=true @work:perf=-12'
     const expected = {
@@ -54,6 +70,8 @@ describe('utils', () => {
       text: msg,
       mood: 0,
       favorite: false,
+      replies: [],
+      thread: null,
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -73,9 +91,11 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'is:fav hello #world + - date:2020 t:mytag $dreams'
+    const query = 'is:fav is:thread is:reply hello #world + - date:2020 t:mytag $dreams'
     const expected = [
       {favorite: true},
+      {thread: true},
+      {reply: true},
       {text: 'hello'},
       {tag: '#world'},
       {sign: '+'},
@@ -131,6 +151,40 @@ describe('utils', () => {
     let result = matchTokens(entryFav, tokens)
     expect(result).equal(true)
     result = matchTokens(entryNotFav, tokens)
+    expect(result).equal(false)
+  })
+  it('match thread', () => {
+    const tokens = [
+      {thread: true},
+    ]
+    const entryMatching = {
+      text: 'noop',
+      replies: ['foo'],
+    }
+    const entryNotMatching = {
+      text: 'bar',
+      replies: [],
+    }
+    let result = matchTokens(entryMatching, tokens)
+    expect(result).equal(true)
+    result = matchTokens(entryNotMatching, tokens)
+    expect(result).equal(false)
+  })
+  it('match reply', () => {
+    const tokens = [
+      {reply: true},
+    ]
+    const entryMatching = {
+      text: 'noop',
+      thread: 'foo',
+    }
+    const entryNotMatching = {
+      text: 'bar',
+      replies: null,
+    }
+    let result = matchTokens(entryMatching, tokens)
+    expect(result).equal(true)
+    result = matchTokens(entryNotMatching, tokens)
     expect(result).equal(false)
   })
   it('match tokens aliases true', () => {
@@ -220,7 +274,9 @@ describe('utils', () => {
       ],
       data: {
         'work:duration': "8.5"
-      }
+      },
+      thread: 'foo',
+      replies: ['bar']
     }
     const expected = {
       ...entry,
@@ -262,6 +318,8 @@ describe('utils', () => {
         },
       },
       favorite: false,
+      thread: 'foo',
+      replies: ['bar']
     }
     expected.week = `${expected.year}-${expected.weeknumber}`
     const result = getCompleteEntry(entry)

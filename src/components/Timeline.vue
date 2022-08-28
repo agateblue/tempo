@@ -10,6 +10,7 @@
       >
         <entry
           @updated="$emit('updated', $event)"
+          @replied="$emit('replied', $event)"
           @deleted="$emit('deleted', $event)"
           :row="row"></entry>
       </v-card>
@@ -100,7 +101,12 @@ export default {
       let entries = [...this.entries]
       if (this.entryId) {
         entries = entries.filter(entry => {
-          return getShortEntryId(entry._id) == this.entryId
+          if (getShortEntryId(entry._id) === this.entryId) {
+            return true
+          } else if (entry.thread && getShortEntryId(entry.thread) === this.entryId) {
+            return true
+          }
+          return false
         })
       }
       entries.forEach((e) => {

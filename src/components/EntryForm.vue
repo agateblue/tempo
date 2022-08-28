@@ -54,7 +54,7 @@
         </div>
         <div>
           <v-btn
-            v-if="entry" 
+            v-if="entry || thread" 
             text
             small
             @click="$emit('cancel')"
@@ -77,6 +77,7 @@ import {getNewEntryData} from '@/utils'
 export default {
   props: {
     entry: {type: Object, default: null},
+    thread: {type: String, default: null},
     name: {type: String, default: 'how'},
     initialText: {type: String, default: ''},
     textareaLabel: {type: String, default: 'Entry content'},
@@ -131,7 +132,7 @@ export default {
     async addNew () {
       let date = this.date ? new Date(this.date) : new Date()
       let data = {
-        ...getNewEntryData(this.text),
+        ...getNewEntryData(this.text, {thread: this.thread}),
         date: date.toISOString(),
       }
       data._id = data.date
@@ -144,12 +145,13 @@ export default {
     async update () {
       let date = new Date(this.date || this.entry.date)
       let data = {
-        ...getNewEntryData(this.text),
+        ...getNewEntryData(this.text, {thread: this.entry.thread, replies: this.entry.replies}),
         _rev: this.entry._rev,
         _id: this.entry._id,
         date: date.toISOString(),
       }
       let e = await this.$store.dispatch('updateEntry', data)
+      this.$store.dispatch('forceSync', {updateLastSync: false})
       this.$emit('updated', e)
       return e
     },

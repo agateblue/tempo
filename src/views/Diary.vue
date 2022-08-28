@@ -21,6 +21,7 @@
       :all-entries="entries"
       @deleted="handleDelete"
       @updated="handleUpdate"
+      @replied="handleCreated"
       @created="handleCreated"
     ></router-view>
   </div>
@@ -48,9 +49,22 @@ export default {
       trackEvent(this.$store, "entry.created")
     },
     async handleDelete (entry) {
+      // small optimisation to avoid string comparison
+      // when entry is already deleted
+      let alreadyDeleted = false
+      let id = entry._id
       this.entries = this.entries.filter((e) => {
-        return e._id != entry._id
+        if (alreadyDeleted || e._id != id) {
+          return true
+        }
+        alreadyDeleted = true
+        return false
       })
+      // redirect to diary view if we were
+      // on detail view
+      if (this.$route.name === 'Entry') {
+        this.$router.push('/')
+      }
       trackEvent(this.$store, "entry.deleted")
     },
     async handleUpdate (entry) {
@@ -76,6 +90,13 @@ export default {
     "$store.state.lastSync": {
       async handler () {
         await this.search()
+      }
+    },
+    "$route.params.entryId": {
+      async handler (v) {
+        if (v) {
+          await this.search()
+        }
       }
     },
   },
