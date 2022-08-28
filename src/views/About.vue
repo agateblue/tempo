@@ -174,6 +174,21 @@
                   Find favorited entries
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <code>is:thread</code>
+                </td>
+                <td>
+                  Find first entry of a thread
+                </td>
+              </tr><tr>
+                <td>
+                  <code>is:reply</code>
+                </td>
+                <td>
+                  Find replies to an entry
+                </td>
+              </tr>
             </tbody>
           </template>
         </v-simple-table>

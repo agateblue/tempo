@@ -13,7 +13,12 @@
     </template>
     <v-container v-if="!entryId" class="py-0 px-0 narrow d-flex justify-end">
       <v-switch
-        v-model="showFavorites"
+        class="mr-2"
+        v-model="filters.threads"
+        label="Show threads"
+      ></v-switch>
+      <v-switch
+        v-model="filters.favorites"
         label="Show favorites"
       ></v-switch>
     </v-container>
@@ -35,6 +40,7 @@
       :entry-id="entryId"
       :key="`timeline-${$store.state.lastSync}`"
       @updated="$emit('updated', $event)"
+      @replied="$emit('replied', $event)"
       @deleted="$emit('deleted', $event)"></timeline>
     <v-container
       v-if="!entryId && shownEntries.length < entries.length"
@@ -71,7 +77,10 @@ export default {
   },
   data () {
     return {
-      showFavorites: false,
+      filters: {
+        favorites: false,
+        threads: false,
+      },
       showEntryModal: false,
       showShowMoreButton: false,
       count: this.$store.state.pageSize,
@@ -108,9 +117,18 @@ export default {
         this.showShowMoreButton = true
       }, 1000)
     },
-    showFavorites (v) {
-      let query = v ? 'is:fav' : ''
-      this.$store.commit('searchQuery', query)
+    filters: {
+      handler (v) {
+        let query = []
+        if (v.favorites) {
+          query.push('is:fav')
+        }
+        if (v.threads) {
+          query.push('is:threads')
+        }
+        this.$store.commit('searchQuery', query.join(' '))
+      },
+      deep: true
     }
   },
 }

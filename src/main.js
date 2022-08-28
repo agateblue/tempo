@@ -39,6 +39,8 @@ import {
   mdiMenuDown,
   mdiPencil,
   mdiPlus,
+  mdiReply,
+  mdiReplyOutline,
   mdiSend,
   mdiSync,
 } from '@mdi/js'
@@ -72,6 +74,8 @@ Vue.prototype.$icons = {
   mdiMenuDown,
   mdiPencil,
   mdiPlus,
+  mdiReply,
+  mdiReplyOutline,
   mdiSend,
   mdiSync,
 }

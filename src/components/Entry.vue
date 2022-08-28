@@ -46,6 +46,34 @@
         </time>
       <v-spacer></v-spacer>
       <v-btn
+        v-if="row.entry.thread && $route.params.entryId != getShortEntryId(row.entry.thread)"
+        small
+        class="px-1"
+        color="grey"
+        title="View thread"
+        plain
+        :to="{name: 'Entry', params: {entryId: getShortEntryId(threadId)}}"
+      >
+        View thread
+      </v-btn>
+      <v-btn
+        v-if="(row.entry.replies || []).length > 0 && $route.params.entryId != getShortEntryId(row.entry._id)"
+        small
+        class="px-1"
+        color="grey"
+        title="View thread"
+        plain
+        :to="{name: 'Entry', params: {entryId: getShortEntryId(threadId)}}"
+      >
+        <template v-if="row.entry.replies === 1">
+          View {{ row.entry.replies.length }} reply
+        </template>
+        <template v-else>
+          View {{ row.entry.replies.length }} replies
+        </template>
+      </v-btn>
+      <v-btn
+        v-if="$route.params.entryId != getShortEntryId(row.entry._id)"
         icon
         small
         class="px-1"
@@ -55,6 +83,16 @@
         :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry._id)}}"
       >
         <v-icon>{{ $icons.mdiEye}}</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        small
+        class="px-1"
+        :color="isReplying ? 'light-blue darken-2' : 'grey darken-2'"
+        @click="isReplying = !isReplying"
+        title="Reply"
+      >
+        <v-icon left>{{ $icons.mdiReply}}</v-icon>
       </v-btn>
       <v-btn
         icon
@@ -105,7 +143,20 @@
       >
         <v-card :color="$theme.card.color">
           <v-card-title class="headline">Delete this entry?</v-card-title>
-
+          <v-card-text v-if="row.entry.thread || (row.entry.replies && row.entry.replies.length > 0)">
+            <v-checkbox
+              hide-details
+              v-if="row.entry.thread"
+              v-model="deleteAllThread"
+              :label="`Delete other entries from this thread`"
+            ></v-checkbox>
+            <v-checkbox
+              hide-details
+              v-else
+              v-model="deleteAllThread"
+              :label="`Delete ${row.entry.replies.length} other entries from this thread`"
+            ></v-checkbox>
+          </v-card-text>
           <v-card-text>
             This action is irreversible.
           </v-card-text>
@@ -120,7 +171,6 @@
             >
               Cancel
             </v-btn>
-
             <v-btn
               color="primary"
               text
@@ -132,6 +182,17 @@
         </v-card>
       </v-dialog>
     </v-card-actions>
+    <v-card-text v-if="isReplying">
+      <entry-form
+        textarea-label="Reply"
+        :thread="threadId"
+        color="transparent"
+        :key="`timeline-entry-form-thread-${threadId}`"
+        ref="entryFormReply"
+        @submitted="replied"
+        @cancel="isReplying = false"
+      />
+    </v-card-text>
   </v-card>
 </template>
 <script>
@@ -150,7 +211,9 @@ export default {
   data () {
     return {
       deleteDialog: false,
+      deleteAllThread: false,
       isEditing: false,
+      isReplying: false,
       currentEntry: this.row.rawEntry,
       expand: false,
       getShortEntryId,
@@ -163,6 +226,9 @@ export default {
     isTruncated () {
       return this.truncatedText.length < this.row.text.length
     },
+    threadId () {
+      return this.row.rawEntry.thread || this.row.rawEntry._id
+    }
 
   },
   methods: {
@@ -172,15 +238,29 @@ export default {
     async update (e) {
       this.$emit('updated', e)
       this.currentEntry = e
+      this.isReplying = false
+    },
+    async replied (e) {
+      this.$emit('replied', e)
+      this.isReplying = false
     },
     async setFavorite (value) {
       let e = await this.$store.dispatch('partialUpdateEntry', {entry: this.row.entry, values: {favorite: value}})
       this.$emit('updated', e)
     },
     async handleDelete () {
+      let entryId = this.row.rawEntry._id
+      let threadId = this.row.rawEntry.thread
+      if (this.deleteAllThread) {
+        let deleted = await this.$store.dispatch('deleteThread', threadId || entryId)
+        for (const d of deleted) {
+          this.$emit('deleted', d)
+        }
+      }
       this.$emit('deleted', this.row.rawEntry)
       await this.$store.state.db.remove(this.row.rawEntry)
-      await this.$store.dispatch('forceSync')
+      await this.$store.dispatch('rebuildThread', threadId)
+      await this.$store.dispatch('forceSync', {updateLastSync: false})
       await this.$store.dispatch('triggerWebhook')
     },
   }

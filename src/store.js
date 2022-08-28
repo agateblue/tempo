@@ -86,7 +86,7 @@ const store = new Vuex.Store({
       }
       state.db = new PouchDB('db')
       state.db.createIndex({
-        index: {fields: ['date', 'type']}
+        index: {fields: ['date', 'type', 'thread']}
       })
     },
     serviceWorker: (state, value) => {
@@ -142,25 +142,79 @@ const store = new Vuex.Store({
   actions: {
     async addEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
+      let entry = await state.db.get(entryData._id)
+      await dispatch('rebuildThread', entryData.thread)
       dispatch('forceSync', {updateLastSync: false})
-      return await state.db.get(entryData._id)
+      return entry
     },
     async partialUpdateEntry ({dispatch}, {entry, values}) {
       let data = {
-        ...getNewEntryData(entry.text),
+        ...getNewEntryData(entry.text, { thread: entry.thread, replies: entry.replies }),
         ...values,
         _rev: entry._rev,
         _id: entry._id,
         date: (new Date(entry.date)).toISOString()
       }
       let e = await dispatch('updateEntry', data)
+      dispatch('forceSync', {updateLastSync: false})
       return e
     },
     async updateEntry ({state, dispatch}, entryData) {
       await state.db.put(entryData)
-      dispatch('forceSync', {updateLastSync: false})
+      await dispatch('rebuildThread', entryData.thread)
       return await state.db.get(entryData._id)
     },
+    async rebuildThread ({state, dispatch}, id) {
+      // when an entry is added, updated or deleted,
+      // we need to ensure the corresponding thread is consistent
+      // this functions takes a thread ID and ensures
+      // the thread has the proper replies
+      if (!id) {
+        return
+      }
+      let thread
+      try {
+        thread = await state.db.get(id)
+      } catch (e) {
+        console.error(`Thread ${id} does not exist and cannot be rebuilt`, e)
+        return
+      }
+      let replies = await state.db.find({
+        selector: {
+          thread: thread._id,
+        },
+        fields: ['_id'],
+        limit: 9999999,
+      })
+      replies = replies.docs.map(r => {
+        return r._id
+      })
+      replies.sort()
+      thread.replies = replies
+      return await dispatch('updateEntry', thread)
+    },
+    async deleteThread ({state}, id) {
+      if (!id) {
+        return
+      }
+      let replies = await state.db.find({
+        selector: {
+          thread: id,
+        },
+        fields: ['_id', '_rev'],
+        limit: 9999999,
+      })
+      replies = replies.docs.map(r => {
+        return {
+          ...r,
+          _deleted: true,
+        }
+      })
+      console.log(`Deleting ${replies.length} from thread ${id}...`)
+      await state.db.bulkDocs(replies)
+      return replies
+    },
+    
     async reset ({commit, state, dispatch}) {
       await state.db.destroy()
       localStorage.removeItem('state')

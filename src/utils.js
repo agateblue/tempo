@@ -59,7 +59,7 @@ export function insertTagMarkup (text) {
   }
 }
 
-export function getNewEntryData(text) {
+export function getNewEntryData(text, additionalValues = {}) {
   let entryData = {
     text,
     tags: parseTags(text),
@@ -67,6 +67,8 @@ export function getNewEntryData(text) {
     type: 'entry',
     data: null,
     favorite: false,
+    thread: additionalValues.thread || null,
+    replies: additionalValues.replies || [],
   }
   let annotations = []
   entryData.tags.forEach(t => {
@@ -121,6 +123,10 @@ export function parseQuery(query) {
       tokens.push({date: stripped.split(':')[1]})
     } else if (stripped.startsWith('is:fav')) {
       tokens.push({favorite: true})
+    } else if (stripped.startsWith('is:thread')) {
+      tokens.push({thread: true})
+    } else if (stripped.startsWith('is:reply')) {
+      tokens.push({reply: true})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(/:(.+)/)[1]})
     } else if (stripped.startsWith('c:') || stripped.startsWith('category:') ) {
@@ -162,6 +168,12 @@ export function matchTokens(entry, tokens, aliasesById = {}) {
       }
     }
     if (token.favorite && !entry.favorite) {
+      return false
+    }
+    if (token.thread && (entry.replies || []).length === 0) {
+      return false
+    }
+    if (token.reply && !entry.thread) {
       return false
     }
     if (token.tagName) {
@@ -218,6 +230,8 @@ export function getCompleteEntry (e) {
     tags: {},
     data: e.data || null,
     favorite: e.favorite || false,
+    thread: e.thread || null,
+    replies: e.replies || [],
   }
   e.tags.forEach((t) => {
     entry.tags[t.id] = {

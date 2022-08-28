@@ -36,6 +36,10 @@ In addition, the diary support advanced use cases and features. All these featur
 
 You can use titles, bullet list, links, emphasis and other Markdown syntax inside your entries, and have them rendered properly once the note is saved. If you are not familiar with Markdown syntax, you can [learn how to use it in a couple minutes](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 
+### Favorites
+
+Entries can be favorited to be quickly found when you most need them.
+
 ### Tags
 
 Prefixing any word with a `#` will render it as a hashtag, like this: `Played some #guitar tonight.`. As hashtags can easily be clicked and searched for, this helps you organize your diary without spending too much time thinking about it
@@ -43,6 +47,12 @@ Prefixing any word with a `#` will render it as a hashtag, like this: `Played so
 Similarly, prefixing a word with an exclamation mark, like this: `Got my first !tattoo today`, will tag entries as important and give you a way to quickly retrieve and browse them afterwards.
 
 Tempo supports several other type of tags, related to its mood tracking capabilities and thus described below. 
+
+### Threads
+
+Entries in the diary can have replies, which is especially useful if you want to group them. For instance, you can use a single thread to gather everything related to an event (planning, notes, feedback, etc.)
+
+Thread replies are regular diary entries and, as such, can be queried, favorited, contain tags, annotations, etc.
 
 ### Annotations
 
@@ -59,7 +69,6 @@ Got my blood test results:
 
 This data can then be used to build graphical vizualisations such as charts, tables, or even be exported for use in other tools. You can read more on annotations in the dedicated section below.
 
-
 ### Querying and search
 
 Tempo includes a search bar and a powerful query language you can use to quickly find entries:
@@ -73,6 +82,10 @@ Tempo includes a search bar and a powerful query language you can use to quickly
 - Tag type search:
     - `#` gives you entries with any hashtag
     - `!` gives you all important entries
+- Other operators:
+    - `is:favorite` gives you all favorited entries
+    - `is:thread` gives you all first entries of a thread
+    - `is:reply` gives you all replies thread
 
 All these operators can be combined to further refine your search:
 
