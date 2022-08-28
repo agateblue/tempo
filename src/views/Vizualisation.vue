@@ -8,23 +8,72 @@
           <v-row>
             <v-col
               cols="12"
-              sm="6"
+              sm="4"
             >
               <v-select
-                v-model="selectedBlueprintIdx"
+                v-model="params.selectedBlueprintIdx"
                 :items="blueprintChoices"
-                label="Blueprint"
+                label="Name"
               ></v-select>
             </v-col>
             <v-col
               cols="12"
-              sm="6"
+              sm="4"
             >
-              <v-text-field
-                v-model="graphDays"
-                type="number"
-                step="1"
-                label="Days to show"></v-text-field>
+              <v-menu
+                v-model="showStartMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="params.start"
+                    label="Start"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  no-title
+                  :max="params.end"
+                  v-model="params.start"
+                  @input="showStartMenu = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-menu
+                v-model="showEndMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="params.end"
+                    label="End"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  no-title
+                  :min="params.start"
+                  :max="(new Date()).toISOString()"
+                  v-model="params.end"
+                  @input="showEndMenu = false"
+                ></v-date-picker>
+              </v-menu>
             </v-col>
           </v-row>
         </v-card-text>
@@ -56,13 +105,26 @@
 </template>
 
 <script>
+// import parseISO from 'date-fns/parseISO'
+import sub from 'date-fns/sub'
+
 import VizualisationModal from '@/components/VizualisationModal.vue'
 import {getQueryableEntries, getQueryableTags} from '@/utils'
 
+function getDates (start, end) {
+  end = end ? new Date(end) : new Date
+  start = start ? new Date(start) : sub(end, {months: 2})
+  return {
+    start: start.toISOString().slice(0, 10),
+    end: end.toISOString().slice(0, 10)
+  }
+}
 export default {
   props: {
     allEntries: Array,
-    blueprint: {type: Number, default: 0}
+    blueprint: {type: Number, default: 0},
+    defaultStart: {type: String, default: null},
+    defaultEnd: {type: String, default: null},
   },
   components: {
     VizualisationModal,
@@ -70,9 +132,14 @@ export default {
   },
   data () {
     return {
+      showStartMenu: false,
+      showEndMenu: false,
+      params: {
+        ...getDates(this.defaultStart, this.defaultEnd),
+        selectedBlueprintIdx: parseInt(this.blueprint) || 0,
+      },
       showvizualisationModal: false,
       graphDays: 60,
-      selectedBlueprintIdx: parseInt(this.blueprint) || 0,
     }
   },
   async created () {
@@ -83,13 +150,13 @@ export default {
       return this.allEntries
     },
     queryableEntries () {
-      return getQueryableEntries(this.entries, this.graphDays)
+      return getQueryableEntries(this.entries, this.params.start, this.params.end)
     },
     queryableTags () {
       return getQueryableTags(this.queryableEntries)
     },
     selectedBlueprint () {
-      return this.$store.state.loadedBlueprints[this.selectedBlueprintIdx]
+      return this.$store.state.loadedBlueprints[this.params.selectedBlueprintIdx]
     },
     blueprintChoices () {
       let i = -1
@@ -103,11 +170,26 @@ export default {
     }
   },
   watch: {
-    selectedBlueprintIdx (v) {
-      this.$router.push({ path: this.$route.path, query: { q: '', blueprint: v} })
+    params: {
+      handler (v) {
+        let query = {
+          blueprint: v.selectedBlueprintIdx,
+          q: '',
+          start: v.start,
+          end: v.end,
+        }
+        this.$router.push({ path: this.$route.path, query })
+      },
+      deep: true,
     },
     "$route.query.blueprint" (v) {
-      this.selectedBlueprintIdx = parseInt(v || 0)
+      this.params.selectedBlueprintIdx = parseInt(v || 0)
+    },
+    "$route.query.start" (v) {
+      this.params.start = v
+    },
+    "$route.query.end" (v) {
+      this.params.end = v
     },
   }
 }

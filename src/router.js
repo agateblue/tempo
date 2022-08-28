@@ -28,7 +28,12 @@ const routes = [
         path: 'vizualisation',
         name: 'Vizualisation',
         component: Vizualisation,
-        props: (route) => ({ query: route.query.q, blueprint: route.query.blueprint || 0}),
+        props: (route) => ({
+          query: route.query.q,
+          blueprint: route.query.blueprint || 0,
+          defaultEnd: route.query.end || null,
+          defaultStart: route.query.start || null,
+        }),
       },
       {
         path: 'calendar',

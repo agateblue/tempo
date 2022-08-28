@@ -253,10 +253,12 @@ export function getCompleteEntry (e) {
   return entry
 }
 
-export function getQueryableEntries (entries, defaultDays) {
-  let limit = (new Date((new Date()).getTime() - (defaultDays * 24 * 3600 * 1000))).getTime()
+export function getQueryableEntries (entries, start, end) {
+  start = new Date(start).getTime()
+  end = new Date(end).getTime() + 3600 * 24 * 1000
   return entries.filter((e) => {
-    return new Date(e.date) >= limit
+    let eDate = new Date(e.date).getTime()
+    return eDate >= start && eDate < end
   }).map((e) => {
     return getCompleteEntry(e)
   })

@@ -14,6 +14,7 @@ async function getBuiltinBlueprints () {
   return {
     "builtin:mood": (await import("@/blueprints/builtin:mood.json")).default,
     "builtin:tags": (await import("@/blueprints/builtin:tags.json")).default,
+    // "builtin:travel": (await import("@/blueprints/builtin:travel.json")).default,
   }
 }
 
