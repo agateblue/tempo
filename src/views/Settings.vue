@@ -6,6 +6,34 @@
 
     <v-card
       tag="form"
+      id="blueprints"
+      class="section mb-8"
+      :color="$theme.card.color"
+      @submit.prevent="$store.dispatch('setSetting', {name: 'blueprints', value: enabledBlueprints})"
+    >
+      <v-card-title class="headline">Blueprints</v-card-title>
+
+      <v-card-text :class="$theme.card.textSize">
+        <p>
+          Blueprints provide additional features in Tempo such as vizualisations or forms.
+          Some blueprints are enabled by default.
+        </p>
+        <v-checkbox
+          v-model="enabledBlueprints"
+          :label="`${blueprint.label} · ${blueprint.title}`"
+          :value="blueprint.id"
+          v-for="blueprint in $store.state.loadedBlueprints"
+          :key="blueprint.id"
+          hide-details
+        ></v-checkbox>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" type="submit">Save</v-btn>
+      </v-card-actions>
+    </v-card>
+
+    <v-card
+      tag="form"
       id="aliases"
       class="section mb-8"
       :color="$theme.card.color"
@@ -294,6 +322,7 @@ export default {
         board: true,
         settings: true,
       },
+      enabledBlueprints: [...this.$store.state.settings.blueprints || []],
       importLogs: [],
       syncStatus: null,
       toImportFile: null,

@@ -39,6 +39,7 @@ describe('utils', () => {
       favorite: false,
       replies: [],
       thread: null,
+      form: null,
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -53,6 +54,7 @@ describe('utils', () => {
       favorite: false,
       replies: ['bar'],
       thread: 'foo',
+      form: null,
     };
     expect(getNewEntryData(msg, {thread: 'foo', replies: ['bar']})).to.deep.equal(expected);
   });
@@ -72,6 +74,7 @@ describe('utils', () => {
       favorite: false,
       replies: [],
       thread: null,
+      form: null,
     }
     expect(getNewEntryData(msg)).to.deep.equal(expected)
   })
@@ -276,7 +279,8 @@ describe('utils', () => {
         'work:duration': "8.5"
       },
       thread: 'foo',
-      replies: ['bar']
+      replies: ['bar'],
+      form: 'foo:form',
     }
     const expected = {
       ...entry,
@@ -319,7 +323,8 @@ describe('utils', () => {
       },
       favorite: false,
       thread: 'foo',
-      replies: ['bar']
+      replies: ['bar'],
+      form: 'foo:form',
     }
     expected.week = `${expected.year}-${expected.weeknumber}`
     const result = getCompleteEntry(entry)

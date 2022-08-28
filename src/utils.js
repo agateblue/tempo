@@ -450,10 +450,9 @@ export const SETTINGS = [
   }}},
   {name: "blueprints", default: () => {
     return [
-      {id: "builtin:mood"},
-      {id: "builtin:tags"},
-      {id: "builtin:travel"},
-      ]
+      "builtin:mood",
+      "builtin:tags",
+    ]
   }},
 ]
 

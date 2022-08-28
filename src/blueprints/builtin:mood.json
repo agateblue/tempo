@@ -1,6 +1,7 @@
 {
   "id": "builtin:mood",
   "label": "Mood",
+  "title": "Mood-related charts and visualizations",
   "version": "1",
   "vizualisations": [
     {

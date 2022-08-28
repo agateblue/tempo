@@ -1,7 +1,7 @@
 {
   "id": "builtin:travel",
   "label": "Travel",
-  "help": "Information about your trips (distance, destination, means of transportation…)",
+  "title": "Forms and visualizations for your trips",
   "version": "1",
   "fields": [
     {
