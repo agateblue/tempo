@@ -69,6 +69,7 @@ export function getNewEntryData(text, additionalValues = {}) {
     favorite: false,
     thread: additionalValues.thread || null,
     replies: additionalValues.replies || [],
+    form: null,
   }
   let annotations = []
   entryData.tags.forEach(t => {
@@ -232,6 +233,7 @@ export function getCompleteEntry (e) {
     favorite: e.favorite || false,
     thread: e.thread || null,
     replies: e.replies || [],
+    form: e.form,
   }
   e.tags.forEach((t) => {
     entry.tags[t.id] = {
