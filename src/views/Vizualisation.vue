@@ -32,9 +32,9 @@
                   <v-text-field
                     v-model="params.start"
                     label="Start"
-                    readonly
                     v-bind="attrs"
                     v-on="on"
+                    clearable
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -61,9 +61,9 @@
                   <v-text-field
                     v-model="params.end"
                     label="End"
-                    readonly
                     v-bind="attrs"
                     v-on="on"
+                    clearable
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -172,6 +172,12 @@ export default {
   watch: {
     params: {
       handler (v) {
+        if (!v.start) {
+          v.start = this.entries[0].date.slice(0, 10)
+        }
+        if (!v.end) {
+          v.end = this.entries[this.entries.length - 1].date.slice(0, 10)
+        }
         let query = {
           blueprint: v.selectedBlueprintIdx,
           q: '',
