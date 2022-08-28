@@ -14,7 +14,7 @@ async function getBuiltinBlueprints () {
   return {
     "builtin:mood": (await import("@/blueprints/builtin:mood.json")).default,
     "builtin:tags": (await import("@/blueprints/builtin:tags.json")).default,
-    // "builtin:travel": (await import("@/blueprints/builtin:travel.json")).default,
+    "builtin:travel": (await import("@/blueprints/builtin:travel.json")).default,
   }
 }
 
@@ -138,7 +138,35 @@ const store = new Vuex.Store({
       })
       choices.push({value: index, text: 'Done'})
       return choices
-    }
+    },
+    forms: (state) => {
+      let allForms = []
+      state.loadedBlueprints.forEach(l => {
+        allForms = [...allForms, ...(l.forms || [])]
+      })
+      return allForms
+    },
+    formsById: (state, getters) => {
+      let forms = {}
+      getters.forms.forEach(f => {
+        forms[f.id] = f
+      })
+      return forms
+    },
+    fields: (state) => {
+      let allFields = []
+      state.loadedBlueprints.forEach(l => {
+        allFields = [...allFields, ...(l.fields || [])]
+      })
+      return allFields
+    },
+    fieldsById: (state, getters) => {
+      let fields = {}
+      getters.fields.forEach(f => {
+        fields[f.id] = f
+      })
+      return fields
+    },
   },
   actions: {
     async addEntry ({state, dispatch}, entryData) {

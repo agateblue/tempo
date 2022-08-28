@@ -1,78 +1,110 @@
 <template>
   <v-card :color="color" outlined>
     <v-container class="narrow px-0">
-      <v-textarea
-        clearable
-        outlined
-        :name="name"
-        class="mt-0"
-        ref="textarea"
-        id="composer"
-        auto-grow
-        autofocus
-        @keydown.ctrl.enter.exact="submit"
-        :label="textareaLabel"
-        placeholder="How do you feel?"
-        v-model="text"
-        hide-details
-      ></v-textarea>
-      <v-row class="mt-1 mb-3 px-3">
-        <v-btn
-          v-for="shortcut in shortcuts" :key="shortcut.value"
-          :title="shortcut.name"
-          text
-          color="grey"
-          class="px-1"
-          style="min-width: 2.5em"
-          @click.prevent="insertAtCursor($refs.textarea.$el.querySelector('textarea'), shortcut.value)"
+      <v-row v-if="formChoices.length > 1" class="d-flex justify-end">
+        <v-col
+          cols="12"
+          sm="4"
         >
-          
-          {{ shortcut.value }}
-        </v-btn>
+          <v-select
+            v-model="currentFormId"
+            :items="formChoices"
+          ></v-select>
+        </v-col>
       </v-row>
-      <div class="d-flex align-top justify-space-between">
-        <div>
-          <v-switch
-            v-model="showDateField"
-            label="Set date..."
-            class="mt-1"
-          ></v-switch>
-          <template v-if="showDateField">
-            <v-text-field
-              label="Date"
-              v-model="textDate"
-              type="datetime-local"
-              :max="new Date().toLocaleDateString('en-ca')"
-            ></v-text-field>
-            <v-btn
-              small
-              @click.prevent="date = new Date()"
-            >
-              Set to now
-            </v-btn>
-          </template>
-        </div>
-        <div>
+      <form @submit.prevent="submit">
+        <blueprint-form
+
+          v-if="$store.getters.formsById[currentFormId]"
+          :key="blueprintFormKey"
+          :config="$store.getters.formsById[currentFormId]"
+          :available-fields="$store.getters.fieldsById"
+          v-model="formData"
+        />
+        <v-textarea
+          clearable
+          outlined
+          :name="name"
+          class="mt-0"
+          ref="textarea"
+          id="composer"
+          auto-grow
+          autofocus
+          @keydown.ctrl.enter.exact="submit"
+          :label="textareaLabel"
+          placeholder="How do you feel?"
+          v-model="text"
+          hide-details
+        ></v-textarea>
+        <v-row class="mt-1 mb-3 px-3">
           <v-btn
-            v-if="entry || thread" 
+            v-for="shortcut in shortcuts" :key="shortcut.value"
+            :title="shortcut.name"
             text
-            small
-            @click="$emit('cancel')"
+            color="grey"
+            class="px-1"
+            style="min-width: 2.5em"
+            @click.prevent="insertAtCursor($refs.textarea.$el.querySelector('textarea'), shortcut.value)"
           >
-            Cancel
+            
+            {{ shortcut.value }}
           </v-btn>
-          <v-btn :color="$theme.mainButton.color" @click="submit">Save</v-btn>
-        </div>
-      </div>      
+        </v-row>
+        <div class="d-flex align-top justify-space-between">
+          <div>
+            <v-switch
+              v-model="showDateField"
+              label="Set date..."
+              class="mt-1"
+            ></v-switch>
+            <template v-if="showDateField">
+              <v-text-field
+                label="Date"
+                v-model="textDate"
+                type="datetime-local"
+                :max="new Date().toLocaleDateString('en-ca')"
+              ></v-text-field>
+              <v-btn
+                small
+                @click.prevent="date = new Date()"
+              >
+                Set to now
+              </v-btn>
+            </template>
+          </div>
+          <div>
+            <v-btn
+              v-if="entry || thread" 
+              text
+              small
+              @click="$emit('cancel')"
+            >
+              Cancel
+            </v-btn>
+            <v-btn :color="$theme.mainButton.color" type="submit">Save</v-btn>
+          </div>
+        </div>   
+      </form>   
     </v-container>
   </v-card>
 </template>
 
 <script>
+import isEmpty from 'lodash/isEmpty'
 import format from 'date-fns/format'
 import throttle from 'lodash/throttle'
 
+import BlueprintForm from '@/components/BlueprintForm'
 import {getNewEntryData} from '@/utils'
+
+function getFormData (entry, formData) {
+  let d = entry.data || {}
+  d = {
+    ...d,
+    ...(formData || {}),
+  }
+  return isEmpty(d) ? null : d
+}
 
 export default {
   props: {
@@ -83,11 +115,17 @@ export default {
     textareaLabel: {type: String, default: 'Entry content'},
     color: {type: String, default: ''},
   },
+  components: {
+    BlueprintForm
+  },
   data () {
     return {
       text: this.initialText,
+      currentFormId: (this.entry || {}).form || null,
       dateDialog: false,
+      blueprintFormKey: 1,
       date: null,
+      formData: {},
       textDate: null,
       maxDate: null,
       showDateField: false,
@@ -113,11 +151,22 @@ export default {
         {value: "@", label: "Annotation tag"},
         {value: "=", label: "Equal sign for annotation value"},
       ]
+    },
+    formChoices () {
+      return [
+        {text:'Default', value: null},
+        ...this.$store.getters.forms.map((f) => {
+          return {
+            text: f.label,
+            value: f.id
+          }
+        })
+      ]
     }
   },
   methods: {
     async submit () {
-      if (!this.text) {
+      if (!this.text && isEmpty(this.formData)) {
         return
       }
       let e
@@ -134,12 +183,16 @@ export default {
       let data = {
         ...getNewEntryData(this.text, {thread: this.thread}),
         date: date.toISOString(),
+        form: this.currentFormId,
       }
+      data.data = getFormData(data, this.formData)
       data._id = data.date
       let e = await this.$store.dispatch('addEntry', data)
       this.$emit('created', e)
       this.text = ''
       this.date = null
+      this.formData = {}
+      this.blueprintFormKey += 1
       return e
     },
     async update () {
@@ -149,7 +202,9 @@ export default {
         _rev: this.entry._rev,
         _id: this.entry._id,
         date: date.toISOString(),
+        form: this.currentFormId,
       }
+      data.data = getFormData(data, this.formData)
       let e = await this.$store.dispatch('updateEntry', data)
       this.$store.dispatch('forceSync', {updateLastSync: false})
       this.$emit('updated', e)
@@ -202,6 +257,12 @@ export default {
         }
       }, 1000, {leading: true, trailing: true})
     },
+    currentFormId: {
+      immediate: true,
+      handler () {
+        this.formData = {...(this.entry || {}).data || {}}
+      }
+    }
   }
 }
 </script>

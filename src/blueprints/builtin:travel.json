@@ -1,8 +1,44 @@
 {
   "id": "builtin:travel",
   "label": "Travel",
-  "help": "Traveling information (distance, destination, means of transportation…)",
+  "help": "Information about your trips (distance, destination, means of transportation…)",
   "version": "1",
+  "fields": [
+    {
+      "id": "travel:distance",
+      "label": "Distance",
+      "unit": "Kilometers",
+      "type": "number",
+      "min": 0
+    },
+    {
+      "id": "travel:from",
+      "label": "Place of departure",
+      "type": "text"
+    },
+    {
+      "id": "travel:to",
+      "label": "Destination",
+      "type": "text"
+    },
+    {
+      "id": "travel:by",
+      "label": "Transport",
+      "type": "text"
+    }
+  ],
+  "forms": [
+    {
+      "id": "travel:trip",
+      "label": "Trip",
+      "fields": [
+        {"id": "travel:from"},
+        {"id": "travel:to"},
+        {"id": "travel:distance"},
+        {"id": "travel:by"}
+      ]
+    }
+  ],
   "vizualisations": [
     {
       "label": "Travel distance",
@@ -26,47 +62,6 @@
       "query": "SELECT data->`travel:from` as `From`, data->`travel:to` as `To`, sum(data->`travel:distance`) as Distance FROM ? GROUP BY data->`travel:from`, data->`travel:to` ORDER BY Distance DESC",
       "chartType": "table",
       "chartOptions": {}
-    }
-  ],
-  "inputs": [
-    {
-      "id": "travel",
-      "prefix": "travel",
-      "fields": [
-        {
-          "id": "distance",
-          "label": "Distance",
-          "unit": "Kilometers",
-          "type": "number",
-          "min": 0
-        },
-        {
-          "id": "from",
-          "label": "Place of departure",
-          "type": "text"
-        },
-        {
-          "id": "to",
-          "label": "Destination",
-          "type": "text"
-        },
-        {
-          "id": "by",
-          "label": "Transport",
-          "type": "text",
-          "choices": [
-            "bike",
-            "boat",
-            "bus",
-            "car",
-            "foot",
-            "subway",
-            "tramway",
-            "train",
-            "plane"
-          ]
-        }
-      ]
     }
   ]
 }
