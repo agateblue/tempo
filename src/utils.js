@@ -296,17 +296,7 @@ export function pad(n, width, z) {
 }
 
 export function getPrettyTimeFromDate (v) {
-  let iso = v.toISOString().split('T')
-  let time = iso[1].slice(0, 5).split(':')
-  let hours = parseInt(time[0])
-  let minutes = parseInt(time[1]) + (hours * 60)
-  minutes = minutes - v.getTimezoneOffset()
-  let realHours = Math.floor(minutes / 60);
-  if (realHours === 24) {
-    realHours = 0
-  }
-  var realMinutes = minutes % 60;
-  return `${pad(realHours, 2)}:${pad(realMinutes, 2)}`
+  return v.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hourCycle: 'h23' })
 }
 
 export const CHARTTYPES = [
