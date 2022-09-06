@@ -6,6 +6,12 @@
         :color="row.color"
         dot
       >
+        <structured-data
+          class="mb-4"
+          v-if="!isEmpty(row.entry.data)"
+          :data="row.entry.data"
+          :fields="$store.getters.fieldsById"
+        />
         <div
           class="rendered-markdown grey--text text--lighten-2"
           v-html="expand ? row.text : truncatedText"></div>
@@ -196,7 +202,10 @@
   </v-card>
 </template>
 <script>
+import isEmpty from 'lodash/isEmpty'
+
 import EntryForm from '@/components/EntryForm.vue'
+import StructuredData from '@/components/StructuredData.vue'
 import {getShortEntryId} from '@/utils'
 import truncate from 'truncate-html'
 truncate.setup({byWords: true, length: 60, keepWhitespaces: true })
@@ -206,10 +215,12 @@ export default {
     row: Object
   },
   components: {
-    EntryForm
+    EntryForm,
+    StructuredData
   },
   data () {
     return {
+      isEmpty,
       deleteDialog: false,
       deleteAllThread: false,
       isEditing: false,
