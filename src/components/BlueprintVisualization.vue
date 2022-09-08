@@ -7,7 +7,7 @@
       {{ config.help }}
     </v-card-text>
     <v-card-text v-if="queriedData && queriedData[0]">
-      <v-simple-table v-if="chartType === 'table'">
+      <v-simple-table v-if="displayType === 'table'">
         <template v-slot:default>
           <thead>
             <tr>
@@ -26,7 +26,7 @@
 
       <v-textarea
         :background-color="$theme.input.color"
-        v-else-if="chartType === 'json'"
+        v-else-if="displayType === 'json'"
         auto-grow
         :value="JSON.stringify(queriedData, null, 2)"
         rows="2"
@@ -36,7 +36,7 @@
       <chart
         v-else-if="isFrappeChart"
         ref="chart"
-        :options="chartOptions">
+        :options="displayOptions">
       </chart>
     </v-card-text>
     <v-card-actions>
@@ -153,7 +153,7 @@ import merge from 'lodash/merge'
 
 import alasql from '@/alasql'
 
-import {CHARTTYPES} from '@/utils'
+import {DISPLAYTYPES} from '@/utils'
 export default {
   props: ['entries', 'tags', 'config', 'builtin'],
   components: {
@@ -168,17 +168,17 @@ export default {
       expandQuery: false,
       dataQuery: this.config.query,
       queriedData: null,
-      chartType: this.config.chartType,
+      displayType: this.config.displayType,
       chartTitle: this.config.label,
       source: this.config.source || 'entries'
     }
   },
   computed: {
     isFrappeChart () {
-      return ['json', 'table'].indexOf(this.chartType) < 0
+      return ['json', 'table'].indexOf(this.displayType) < 0
     },
-    chartTypes () {
-      return CHARTTYPES
+    displayTypes () {
+      return DISPLAYTYPES
     },
     dataQueryFields () {
       if (this.queriedData && this.queriedData[0]) {
@@ -186,7 +186,7 @@ export default {
       }
       return []
     },
-    chartOptions () {
+    displayOptions () {
       let options = {
         data: {
           datasets: this.getDatasets(this.queriedData),
@@ -197,7 +197,7 @@ export default {
           xIsSeries: true,
         },
         height: 300,
-        type: this.chartType,
+        type: this.displayType,
         maxSlices: 7,
         colors: [
           'light-green',
@@ -217,7 +217,7 @@ export default {
           spaceRatio: 0.1
         }
       }
-      return merge(options, this.config.chartOptions || {})
+      return merge(options, this.config.displayOptions || {})
     },
 
     dataSource () {

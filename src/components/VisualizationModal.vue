@@ -56,8 +56,8 @@
               md="6"
             >
               <v-select
-                :items="chartTypes"
-                v-model="chartType"
+                :items="displayTypes"
+                v-model="displayType"
                 label="Visualization"
                 required
               ></v-select>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import {CHARTTYPES} from '@/utils'
+import {DISPLAYTYPES} from '@/utils'
 
 export default {
   props: {
@@ -98,10 +98,10 @@ export default {
     return {
       field: 'sum(mood) as Mood',
       defaultConfig: this.config,
-      chartTypes: CHARTTYPES,
+      displayTypes: DISPLAYTYPES,
       label: (this.config || {}).label || "Mood by day",
       query: (this.config || {}).query || "SELECT date, sum(mood) as Mood FROM ? GROUP BY date ORDER BY date DESC",
-      chartType: (this.config || {}).chartType || "line",
+      displayType: (this.config || {}).displayType || "line",
       source: (this.config || {}).source || "entries",
     }
   },
@@ -111,7 +111,7 @@ export default {
       return {...config, ...{
         label: this.label,
         query: this.query,
-        chartType: this.chartType,
+        displayType: this.displayType,
         source: this.source,
       }}
     },
