@@ -39,7 +39,7 @@
       ]
     }
   ],
-  "vizualisations": [
+  "visualizations": [
     {
       "label": "Travel distance",
       "help": "In kilometers",
