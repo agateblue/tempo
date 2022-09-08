@@ -3,7 +3,7 @@
   "label": "Mood",
   "title": "Mood-related charts and visualizations",
   "version": "1",
-  "vizualisations": [
+  "visualizations": [
     {
       "label": "Mood by day",
       "help": "Higher is better",

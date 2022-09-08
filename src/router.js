@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Timeline from './views/Timeline.vue'
-import Vizualisation from './views/Vizualisation.vue'
+import Visualization from './views/Visualization.vue'
 import Diary from './views/Diary.vue'
 import Calendar from './views/Calendar.vue'
 import About from './views/About.vue'
@@ -25,9 +25,9 @@ const routes = [
         component: Timeline,
       },
       {
-        path: 'vizualisation',
-        name: 'Vizualisation',
-        component: Vizualisation,
+        path: 'visualization',
+        name: 'Visualization',
+        component: Visualization,
         props: (route) => ({
           query: route.query.q,
           blueprint: route.query.blueprint || 0,

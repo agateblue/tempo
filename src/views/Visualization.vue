@@ -82,10 +82,10 @@
       <!-- <v-btn
         class="mb-4"
         :color="$theme.mainButton.color"
-        @click="showvizualisationModal = true"
+        @click="showvisualizationModal = true"
       >
         <v-icon>{{ $icons.mdiPlus }}</v-icon>
-        Add a new vizualisation
+        Add a new visualization
       </v-btn> -->
     </v-container>
     <v-divider></v-divider>
@@ -95,11 +95,11 @@
         :entries="queryableEntries"
         :tags="queryableTags"
         :days="graphDays"></dataviz>
-      <vizualisation-modal
+      <visualization-modal
         :days="graphDays"
         :entries="queryableEntries"
         :tags="queryableTags"
-        :show.sync="showvizualisationModal" />
+        :show.sync="showvisualizationModal" />
     </v-container>
   </div>
 </template>
@@ -108,7 +108,7 @@
 // import parseISO from 'date-fns/parseISO'
 import sub from 'date-fns/sub'
 
-import VizualisationModal from '@/components/VizualisationModal.vue'
+import VisualizationModal from '@/components/VisualizationModal.vue'
 import {getQueryableEntries, getQueryableTags} from '@/utils'
 
 function getDates (start, end) {
@@ -127,8 +127,8 @@ export default {
     defaultEnd: {type: String, default: null},
   },
   components: {
-    VizualisationModal,
-    Dataviz:  () => import(/* webpackChunkName: "vizualisation" */ "@/components/Dataviz"),
+    VisualizationModal,
+    Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
   },
   data () {
     return {
@@ -138,7 +138,7 @@ export default {
         ...getDates(this.defaultStart, this.defaultEnd),
         selectedBlueprintIdx: parseInt(this.blueprint) || 0,
       },
-      showvizualisationModal: false,
+      showvisualizationModal: false,
       graphDays: 60,
     }
   },

@@ -3,7 +3,7 @@
   "label": "Tags",
   "title": "Tags-related charts and visualizations",
   "version": "1",
-  "vizualisations": [
+  "visualizations": [
     {
       "label": "Predominent tags",
       "query": "SELECT id, entries, mood from ? ORDER BY entries DESC limit 10",

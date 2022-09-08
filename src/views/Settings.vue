@@ -15,7 +15,7 @@
 
       <v-card-text :class="$theme.card.textSize">
         <p>
-          Blueprints provide additional features in Tempo such as vizualisations or forms.
+          Blueprints provide additional features in Tempo such as visualizations or forms.
           Some blueprints are enabled by default.
         </p>
         <v-checkbox

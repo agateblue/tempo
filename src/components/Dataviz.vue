@@ -1,13 +1,13 @@
 <template>
   <div>
-    <blueprint-vizualisation
-      v-for="vizualisation in blueprint.vizualisations"
-      :key="vizualisation.label"
-      :config="vizualisation"
+    <blueprint-visualization
+      v-for="visualization in blueprint.visualizations"
+      :key="visualization.label"
+      :config="visualization"
       :tags="tags"
       :builtin="true"
       :entries="entries">
-    </blueprint-vizualisation>
+    </blueprint-visualization>
   </div>
 </template>
 <script>
@@ -15,7 +15,7 @@
 export default {
   props: ['entries', 'tags', 'days', 'blueprint'],
   components: {
-    BlueprintVizualisation:  () => import(/* webpackChunkName: "vizualisation" */ "@/components/BlueprintVizualisation"),
+    BlueprintVisualization:  () => import(/* webpackChunkName: "visualization" */ "@/components/BlueprintVisualization"),
   },
 }
 </script>
