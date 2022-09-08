@@ -1,24 +1,7 @@
 <template>
   <v-card :color="color" outlined>
     <v-container class="narrow px-0">
-      <v-row v-if="formChoices.length > 1" class="d-flex justify-end">
-        <v-col
-          cols="12"
-          sm="4"
-        >
-          <v-select
-            v-model="currentFormId"
-            :items="formChoices"
-          ></v-select>
-        </v-col>
-      </v-row>
       <form @submit.prevent="submit">
-        <blueprint-form
-          :key="blueprintFormKey"
-          :config="$store.getters.formsById[currentFormId]"
-          :available-fields="$store.getters.fieldsById"
-          v-model="formData"
-        />
         <v-textarea
           clearable
           outlined
@@ -34,26 +17,36 @@
           v-model="text"
           hide-details
         ></v-textarea>
-        <v-row class="mt-1 mb-3 px-3">
-          <v-btn
-            v-for="shortcut in shortcuts" :key="shortcut.value"
-            :title="shortcut.name"
-            text
-            color="grey"
-            class="px-1"
-            style="min-width: 2.5em"
-            @click.prevent="insertAtCursor($refs.textarea.$el.querySelector('textarea'), shortcut.value)"
+        <v-row class="d-flex justify-space-between align-center">
+          <v-col
+            cols="12"
+            sm="8"
+            class="pb-0"
           >
-            
-            {{ shortcut.value }}
-          </v-btn>
-        </v-row>
-        <div class="d-flex align-top justify-space-between">
-          <div>
+            <v-row class="mt-1 mb-3 px-3">
+              <v-btn
+                v-for="shortcut in shortcuts" :key="shortcut.value"
+                :title="shortcut.name"
+                text
+                color="grey"
+                class="px-1"
+                style="min-width: 2.5em"
+                @click.prevent="insertAtCursor($refs.textarea.$el.querySelector('textarea'), shortcut.value)"
+              >
+                
+                {{ shortcut.value }}
+              </v-btn>
+            </v-row>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="4"
+            class="py-0"
+          >
             <v-switch
               v-model="showDateField"
               label="Set date..."
-              class="mt-1"
+              class="mb-0"
             ></v-switch>
             <template v-if="showDateField">
               <v-text-field
@@ -69,8 +62,51 @@
                 Set to now
               </v-btn>
             </template>
-          </div>
-          <div>
+          </v-col>
+        </v-row>
+        <v-row
+          class="mt-0 d-flex justify-space-between align-center">
+          <v-col
+            v-if="formChoices.length > 1"
+            cols="12"
+            sm="4"
+          >
+            <v-select
+              label="Type"
+              v-model="currentFormId"
+              :items="formChoices"
+            ></v-select>
+          </v-col>
+          <v-col
+            v-if="currentFormId"
+            cols="12"
+            sm="4"
+          >
+            <v-btn
+              small
+              @click="$refs.blueprintForm.fillFromLast()"
+            >
+              Reuse last values
+            </v-btn>
+          </v-col>
+          <v-col
+            v-if="!isEmpty(formData) || currentFormId"
+            cols="12"
+            sm="12"
+          >
+            <blueprint-form
+              ref="blueprintForm"
+              :key="blueprintFormKey"
+              :config="$store.getters.formsById[currentFormId]"
+              :available-fields="$store.getters.fieldsById"
+              v-model="formData"
+            />
+          </v-col>
+          <v-col
+            cols="12"
+            :sm="(!isEmpty(formData) || currentFormId || formChoices.length < 2) ? 12 : 6"
+            class="text-right"
+          >
             <v-btn
               v-if="entry || thread" 
               text
@@ -80,8 +116,9 @@
               Cancel
             </v-btn>
             <v-btn :color="$theme.mainButton.color" type="submit">Save</v-btn>
-          </div>
-        </div>   
+          </v-col>
+
+        </v-row>
       </form>   
     </v-container>
   </v-card>
@@ -127,6 +164,7 @@ export default {
       textDate: null,
       maxDate: null,
       showDateField: false,
+      isEmpty,
     }
   },
   async created () {

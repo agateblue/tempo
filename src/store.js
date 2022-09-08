@@ -89,6 +89,9 @@ const store = new Vuex.Store({
       state.db.createIndex({
         index: {fields: ['date', 'type', 'thread']}
       })
+      state.db.createIndex({
+        index: {fields: ['form', 'date']}
+      })
     },
     serviceWorker: (state, value) => {
       state.serviceWorker = {...state.serviceWorker, ...value}
