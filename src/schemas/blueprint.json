@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tempo.agate.blue/schemas/blueprint.json",
+  "title": "Blueprint",
+  "description": "A Tempo blueprint describing forms, fields and visualizations. IDs of fields, forms and visualizations must contain only letters, digits, hyphens and semicolons",
+  "type": "object",
+  "required": [
+    "id",
+    "label"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "A unique id for the blueprint. If needed, use semicolons as a namespace separator",
+      "examples": [
+        "agate:medication",
+        "bob:purchases"
+      ]
+    },
+    "label": {
+      "type": "string",
+      "description": "A human readable name for the blueprint",
+      "examples": [
+        "Medication",
+        "Purchases"
+      ]
+    },
+    "fields": {
+      "type": "array",
+      "default": [],
+      "description": "A list of fields that can be used to build forms in this blueprint",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "type"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique id for the field",
+            "examples": [
+              "agate:medication:molecule",
+              "bob:purchases:price"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "A human readable name for the field",
+            "examples": [
+              "Molecule",
+              "Item price"
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "description": "A unit to be displayed near the field",
+            "examples": [
+              "milligrams",
+              "$",
+              "kilometers"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of data stored in the field",
+            "enum": ["text", "number", "boolean"],
+            "default": "text"
+          },
+          "min": {
+            "type": "number",
+            "description": "For number fields, a minimum value used for validation",
+            "examples": [
+              0,
+              1500
+            ]
+          }
+        }
+      }
+    },
+    "forms": {
+      "type": "array",
+      "default": [],
+      "description": "A list of forms exposed by this blueprint",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "fields"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique id for the form",
+            "examples": [
+              "agate:medication:intake",
+              "bob:purchase:food-order"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "A human readable name for the form",
+            "examples": [
+              "Medication Intake",
+              "Food order"
+            ]
+          },
+          "fields": {
+            "type": "array",
+            "description": "A list of fields used to build the form",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "A list of fields used to build the form"
+                }
+              },
+              "examples": [
+                [{"id": "agate:medication:molecule"}, {"id": "agate:medication:amount"}],
+                [{"id": "bob:purchase:price"}, {"id": "bob:purchase:restaurant"}]
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "visualizations": {
+    "type": "array",
+    "default": [],
+    "description": "A list of visualizations available in this blueprint",
+    "required": [
+      "label",
+      "query",
+      "displayType"
+    ],
+    "items": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "A human readable name for the visualization",
+          "examples": [
+            "Daily expenses",
+            "Favorite restaurants"
+          ]
+        },
+        "help": {
+          "type": "string",
+          "description": "A help text to be displayed near the visualization to provide context",
+          "examples": [
+            "Total amount spent per day, in dollars",
+            "Restaurants ranked by numbor of orders"
+          ]
+        },
+        "query": {
+          "type": "string",
+          "description": "A SQL query used to build the visualization. Please refer to Tempo's documentation on how to build visualization queries.",
+          "examples": [
+            "SELECT data->`bob:purchase:restaurant`, sum(data->`bob:purchase:price`) as 'Amount Spent' FROM ? GROUP BY data->`bob:purchase:restaurant` ORDER BY 'Amount Spent' DESC"
+          ]
+        },
+        "displayType": {
+          "type": "string",
+          "default": "bar",
+          "description": "The type of chart used for the visualization",
+          "enum": [
+            "pie",
+            "bar",
+            "table"
+          ]
+        },
+        "displayOptions": {
+          "type": "object",
+          "default": {},
+          "description": "Options to tweak the rendering of the visualization. Please refer to Tempo's documentation on how to build visualizations.",
+          "additionalProperties": true,
+          "examples": [
+            {"colors": ["green"]}
+          ]
+        }
+      }
+    }
+  }
+}
