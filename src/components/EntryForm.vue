@@ -14,8 +14,6 @@
       </v-row>
       <form @submit.prevent="submit">
         <blueprint-form
-
-          v-if="$store.getters.formsById[currentFormId]"
           :key="blueprintFormKey"
           :config="$store.getters.formsById[currentFormId]"
           :available-fields="$store.getters.fieldsById"
