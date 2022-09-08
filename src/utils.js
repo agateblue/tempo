@@ -301,7 +301,7 @@ export function getPrettyTimeFromDate (v) {
   return v.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hourCycle: 'h23' })
 }
 
-export const CHARTTYPES = [
+export const DISPLAYTYPES = [
   {value: "line", text: "Plot line"},
   {value: "pie", text: "Pie chart"},
   {value: "percentage", text: "Percentage bar"},
