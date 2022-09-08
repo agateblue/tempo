@@ -82,11 +82,36 @@ export default {
       })
     }
   },
+  methods: {
+    async fillFromLast () {
+      let results = await this.$store.state.db.find({
+        selector: {
+          form: this.config.id,
+        },
+        fields: ['date', 'form', 'data'],
+        sort: [{_id: 'desc'}],
+        limit: 1,
+      })
+      let last = results.docs[0]
+      if (last) {
+        this.fields.forEach(f => {
+          if (last.data[f.id] != undefined) {
+            this.$set(this.values, f.id, last.data[f.id])
+          }
+        })
+      }
+    }
+  },
   watch: {
     values: {
       deep: true,
       handler (v) {
         this.$emit('input', v)
+      }
+    },
+    'config.id': {
+      handler () {
+        this.values = {}
       }
     }
   }
