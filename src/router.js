@@ -1,12 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Timeline from './views/Timeline.vue'
-import Visualization from './views/Visualization.vue'
-import Diary from './views/Diary.vue'
-import Calendar from './views/Calendar.vue'
-import About from './views/About.vue'
-import Settings from './views/Settings.vue'
-import Tasks from './views/Tasks.vue'
 
 import store from '@/store'
 import {trackEvent, getCleanUrlForTracking} from '@/utils'
@@ -16,18 +9,18 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/diary',
-    component: Diary,
+    component: () => import(/* webpackChunkName: "Diary" */ './views/Diary.vue'),
     props: (route) => ({ query: route.query.q }),
     children: [
       {
         path: '',
         name: 'Timeline',
-        component: Timeline,
+        component: () => import(/* webpackChunkName: "DiaryTimeline" */ './views/Timeline.vue'),
       },
       {
         path: 'visualization',
         name: 'Visualization',
-        component: Visualization,
+        component: () => import(/* webpackChunkName: "DiaryVisualization" */ './views/Visualization.vue'),
         props: (route) => ({
           query: route.query.q,
           blueprint: route.query.blueprint || 0,
@@ -38,12 +31,12 @@ const routes = [
       {
         path: 'calendar',
         name: 'Calendar',
-        component: Calendar,
+        component: () => import(/* webpackChunkName: "DiaryCalendar" */ './views/Calendar.vue'),
       },
       {
         path: 'e/:entryId',
         name: 'Entry',
-        component: Timeline,
+        component: () => import(/* webpackChunkName: "DiaryTimeline" */ './views/Timeline.vue'),
         props: true
       },
     ]
@@ -51,17 +44,17 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: About,
+    component: () => import(/* webpackChunkName: "About" */ './views/About.vue'),
   },
   {
     path: '/tasks',
-    component: Tasks,
+    component: () => import(/* webpackChunkName: "Tasks" */ './views/Tasks.vue'),
     props: (route) => ({ query: route.query.q }),
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: Settings,
+    component: () => import(/* webpackChunkName: "Settings" */ './views/Settings.vue'),
   }
 ]
 
