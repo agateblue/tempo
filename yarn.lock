@@ -795,6 +795,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@cfworker/json-schema@^1.12.4":
+  version "1.12.4"
+  resolved "https://registry.yarnpkg.com/@cfworker/json-schema/-/json-schema-1.12.4.tgz#93f767038eb04e16fb26ddf66caa36931da02053"
+  integrity sha512-Uixq/lBfvw9Gwj68OP/breqzpWOPgxE+38z/LJB01exvaGhi9hlPoSSNWddClYFg7jTVwrDzCXCefyDFOexMZw==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"

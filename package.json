@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@cfworker/json-schema": "^1.12.4",
     "@mdi/font": "^3.6.95",
     "@toycode/markdown-it-class": "^1.2.4",
     "alasql": "^0.6.7",
