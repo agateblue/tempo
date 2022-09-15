@@ -28,11 +28,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/Settings~31ecd969.db781c55.css"
   },
   {
-    "revision": "bbb904b714d063c0913b",
+    "revision": "d1ed75225e9761adb8b8",
     "url": "/css/Tasks~31ecd969.299a13c7.css"
   },
   {
-    "revision": "15199fad2baf92cf4442",
+    "revision": "b86dd044fe7d3ec29b3b",
     "url": "/css/app~748942c6.80b1214a.css"
   },
   {
@@ -40,8 +40,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/chunk-vendors~fdc6512a.1dffc7ec.css"
   },
   {
-    "revision": "62812ecc26f654aa5693",
-    "url": "/css/tasks~31ecd969.f921b4fd.css"
+    "revision": "1f396f7b417ad7af31fc",
+    "url": "/css/tasks~31ecd969.718e0e0d.css"
   },
   {
     "revision": "8f6cced2ad20582416a3",
@@ -128,7 +128,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "ea087d1294331739052e011100060d11",
+    "revision": "20b4c2b53300eb965ccc8390c431564e",
     "url": "/index.html"
   },
   {
@@ -160,16 +160,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/Settings~31ecd969.69f40af1.js"
   },
   {
-    "revision": "bbb904b714d063c0913b",
-    "url": "/js/Tasks~31ecd969.75e0aeef.js"
+    "revision": "d1ed75225e9761adb8b8",
+    "url": "/js/Tasks~31ecd969.214af30b.js"
   },
   {
     "revision": "19fdb775c2fc6a74c08c",
     "url": "/js/alasql~2a42e354.2bfb585d.js"
   },
   {
-    "revision": "15199fad2baf92cf4442",
-    "url": "/js/app~748942c6.ad1a0e89.js"
+    "revision": "b86dd044fe7d3ec29b3b",
+    "url": "/js/app~748942c6.fbec75c2.js"
   },
   {
     "revision": "78a387c06a47470b7019",
@@ -204,8 +204,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors~fdc6512a.907535d2.js"
   },
   {
-    "revision": "62812ecc26f654aa5693",
-    "url": "/js/tasks~31ecd969.00b5fe37.js"
+    "revision": "1f396f7b417ad7af31fc",
+    "url": "/js/tasks~31ecd969.827552ff.js"
   },
   {
     "revision": "8f6cced2ad20582416a3",
