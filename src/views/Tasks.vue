@@ -250,6 +250,13 @@ export default {
         return t._id != task._id
       })
     },
+    async updateTask (task) {
+      this.tasks.forEach(t => {
+        if (t._id === task._id) {
+          Object.assign(t, task)
+        }
+      })
+    },
     async moveCard (id, list) {
       let task = await this.$store.state.db.get(id)
       task.list = list
