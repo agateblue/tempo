@@ -135,6 +135,8 @@
               class="list-group"
               v-model="tasksByList[idx]"
               :group="{ name: 'tasks' }"
+              filter="input, button"
+              :prevent-on-filter="false"
               @add="moveCard($event.item.dataset.id, idx)">
               <v-lazy
                 :options="{
