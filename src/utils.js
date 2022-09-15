@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import sortBy from 'lodash/sortBy'
 
 const signToMood = {
   '+': 1,
@@ -324,20 +323,14 @@ export function sortChained(list) {
   })
 }
 export async function getEntries (store, sortDesc) {
+  console.time('getEntries')
   let options = {
     include_docs: true,
+    descending: sortDesc
   }
   let result = await store.state.db.allDocs(options)
-  let entries = result.rows.map(r => {
-    return r.doc
-  })
-  entries = entries.filter((e) => {
-    return e.type == 'entry'
-  })
-  entries = sortBy(entries, ["date"])
-  if (sortDesc) {
-    entries.reversed()
-  }
+  let entries = result.rows.flatMap(r => r.doc.type === 'entry' ? [r.doc] : [])
+  console.timeEnd('getEntries')
   return entries
 }
 
