@@ -31,7 +31,7 @@
         {{ category.label }}
       </v-chip>
     </v-card-text>
-    <template v-if="expanded">
+    <form v-if="expanded" @submit.prevent="updateTask">
       <v-divider></v-divider>
       <v-card-text>
         <v-text-field label="Text" v-model="newTask.text">
@@ -50,11 +50,11 @@
          <v-icon left transition="">{{ $icons.mdiDelete }}</v-icon>
           Delete
         </v-btn>
-        <v-btn transition="" small text color="primary" class="float-right" @click.prevent="updateTask">
+        <v-btn transition="" type="submit" small text color="primary" class="float-right">
           Update
         </v-btn>
       </v-card-text>
-    </template>
+    </form>
   </v-card>
 </template>
 
