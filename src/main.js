@@ -43,6 +43,7 @@ import {
   mdiReplyOutline,
   mdiSend,
   mdiSync,
+  mdiTrashCan,
 } from '@mdi/js'
 
 Vue.prototype.$icons = {
@@ -78,6 +79,7 @@ Vue.prototype.$icons = {
   mdiReplyOutline,
   mdiSend,
   mdiSync,
+  mdiTrashCan,
 }
 
 Vue.prototype.$theme = {

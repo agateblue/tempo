@@ -41,15 +41,59 @@
               </v-col>
               <v-col cols="2" v-if="lists[idx].expanded">
                 <v-btn
+                  v-if="idx >= $store.getters['boardLists'].length - 1"
+                  class="float-right"
+                  fab
+                  dark
+                  x-small
+                  @click.prevent="clearDoneDialog = true"
+                  transition=""
+                  title="Clear tasks in column"
+                  color="secondary">
+                  <v-icon transition="">{{ $icons.mdiTrashCan }}</v-icon>
+                </v-btn>
+                <v-btn
+                  v-else
                   class="float-right"
                   fab
                   dark
                   x-small
                   @click.prevent="lists[idx].showForm = !lists[idx].showForm"
                   transition=""
+                  title="Add task"
                   color="secondary">
                   <v-icon transition="">{{ $icons.mdiPlus }}</v-icon>
                 </v-btn>
+                <v-dialog
+                  v-model="clearDoneDialog"
+                  max-width="400"
+                >
+                  <v-card :color="$theme.card.color">
+                    <v-card-title class="headline">Delete {{ tasksByList[idx].length }} tasks from this column?</v-card-title>
+                    <v-card-text>
+                      This will remove all {{ tasksByList[idx].length }} tasks in this column. This action is irresversible.
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        color="secondary"
+                        text
+                        @click="clearDoneDialog = false"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        color="primary"
+                        text
+                        @click="clearDoneDialog = false;removeTasks(tasksByList[idx])"
+                      >
+                        Delete
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-col>
             </v-row>
           </v-card-title>
@@ -154,6 +198,7 @@ export default {
       newTaskText: '',
       newTaskCategory: null,
       trackEvent,
+      clearDoneDialog: false,
     }
   },
   async created () {
@@ -205,6 +250,20 @@ export default {
         await this.updateTasks()
       }
     },
+    async removeTasks(tasks) {
+      let toDelete = tasks.map(t => {
+        return {
+          _id: t._id,
+          _rev: t._rev,
+          _deleted: true,
+        }
+      })
+      console.log(`Deleting ${toDelete.length} tasks…`)
+      await this.$store.state.db.bulkDocs(toDelete)
+      await this.$store.dispatch('forceSync', {updateLastSync: false})
+      this.tasks = await getTasks(this.$store, this.query)
+      this.tasksByList = this.getTasksByList()
+    }
   },
   watch: {
     query: {
