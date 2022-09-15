@@ -1,15 +1,6 @@
 <template>
   <v-card :color="$theme.nestedCard.color">
-    <v-btn
-      icon
-      small
-      class="float-right mx-3 my-2"
-      transition=""
-      @click="expanded = !expanded"
-    >
-      <v-icon transition="" >{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
-    </v-btn>
-    <v-card-text :class="[$theme.nestedCard.textSize, 'py-3 px-3']">
+    <v-card-text :class="[$theme.nestedCard.textSize, 'pt-3 pb-1 px-3']">
       <v-checkbox
         class="task-checkbox my-0 py-0"
         :disabled="isDone"
@@ -17,21 +8,62 @@
         :label="task.text"
       ></v-checkbox>
     </v-card-text>
-    <v-card-text class="px-3 pt-0 pb-2" v-if="category">
-      <v-chip
-        class="px-1"
-        x-small
-        @click.prevent="$router.push({
-          path: '/tasks',
-          query: { q: `category:${category.label}`},
-        })"
-        :color="category.color[0]"
-        :text-color="category.color[1]"
-      >
-        {{ category.label }}
-      </v-chip>
+    <v-card-text :class="[$theme.nestedCard.textSize, 'pt-3 pb-1 px-3']">
+      <v-row>
+        <v-col
+          cols="6"
+          sm="6"
+          class="pb-0"
+        >
+          <v-chip
+            v-if="category"
+            class="px-1"
+            x-small
+            @click.prevent="$router.push({
+              path: '/tasks',
+              query: { q: `category:${category.label}`},
+            })"
+            :color="category.color[0]"
+            :text-color="category.color[1]"
+          >
+            {{ category.label }}
+          </v-chip>
+        </v-col>
+        <v-col
+          cols="6"
+          sm="6"
+          class="text-right pb-0"
+        >
+          <v-btn
+            transition=""
+            transparent
+            depressed
+            icon
+            small
+            color="grey"
+            title="Add subtasks…"
+            @click="showSubtasks = !showSubtasks"
+          >
+            <v-icon transition="" >{{ $icons.mdiFormatListBulleted }}</v-icon>
+          </v-btn>
+          <v-btn
+            transition=""
+            transparent
+            depressed
+            icon
+            small
+            title="Show options…"
+            @click="expanded = !expanded"
+          >
+            <v-icon transition="" >{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-card-text>
-    <form v-if="expanded" @submit.prevent="updateTask">
+    <v-card-actions>
+      <subtask-list v-if="showSubtasks" :value="newTask.subtasks" @input="newTask.subtasks = $event; updateTask()"/>
+    </v-card-actions>
+    <form v-if="expanded" @submit.prevent="updateTask" class="mt-4">
       <v-divider></v-divider>
       <v-card-text>
         <v-text-field label="Text" v-model="newTask.text">
@@ -60,6 +92,8 @@
 
 <script>
 import cloneDeep from 'lodash/cloneDeep'
+import SubtaskList from '@/components/SubtaskList'
+
 const COLOR_CHOICES = [
   ["green", "white"],
   ["blue", "white"],
@@ -73,12 +107,15 @@ const COLOR_CHOICES = [
 export default {
   props: ['task', 'isDone'],
   data () {
+    let localTask = {subtasks: [], ...cloneDeep(this.task)}
     return {
       expanded: false,
-      newTask: cloneDeep(this.task),
+      newTask: localTask,
       completed: this.isDone,
+      showSubtasks: localTask.subtasks.length > 0,
     }
   },
+  components: {SubtaskList},
   computed: {
     category () {
       if (!this.task.category) {
