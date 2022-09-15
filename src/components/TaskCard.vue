@@ -105,7 +105,7 @@ export default {
   methods: {
     deleteTask () {
       this.$store.state.db.remove(this.task)
-      this.$emit('deleted')
+      this.$emit('deleted', this.task)
     },
     async updateTask () {
       let result = await this.$store.state.db.put(this.newTask)

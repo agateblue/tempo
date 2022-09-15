@@ -24,6 +24,7 @@ const version = 1
 const store = new Vuex.Store({
   state: {
     db: null,
+    remoteDb: null,
     pageSize: 30,
     syncHandler: null,
     couchDbUrl: null,
@@ -92,6 +93,9 @@ const store = new Vuex.Store({
       state.db.createIndex({
         index: {fields: ['form', 'date']}
       })
+    },
+    remoteDb (state, value) {
+      state.remoteDb = value
     },
     serviceWorker: (state, value) => {
       state.serviceWorker = {...state.serviceWorker, ...value}
@@ -273,6 +277,7 @@ const store = new Vuex.Store({
         let remoteDb = new PouchDB(state.couchDbUrl)
         console.log('Logging in…')
         await remoteDb.logIn(username, password)
+        commit('remoteDb', remoteDb)
         let syncHandler = state.db.sync(remoteDb, {
           live: true,
           retry: true

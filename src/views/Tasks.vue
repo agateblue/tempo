@@ -8,7 +8,7 @@
       <v-card-title class="headline">Update your board</v-card-title>
 
       <v-card-text :class="$theme.card.textSize">
-        <board-form @updated="tasksByList = getTasksByList(); isEditing = false; trackEvent($store, 'board.updated')"></board-form>
+        <board-form @updated="isEditing = false; trackEvent($store, 'board.updated')"></board-form>
       </v-card-text>
     </v-card>
     <template v-else>
@@ -152,8 +152,8 @@
                   :is-done="idx === $store.getters['boardLists'].length - 1"
                   transition="" 
                   @done="moveCard($event._id, $store.getters['boardLists'].length - 1); trackEvent($store, 'task.completed')"
-                  @deleted="updateTasks; trackEvent($store, 'task.deleted')"
-                  @updated="updateTasks; trackEvent($store, 'task.updated')"
+                  @deleted="deleteTask($event); trackEvent($store, 'task.deleted')"
+                  @updated="updateTask($event); trackEvent($store, 'task.updated')"
                   ></task-card>
               </v-lazy>
             </draggable>
@@ -194,7 +194,6 @@ export default {
         9: {showForm: false, expanded: true},
       },
       tasks: [],
-      tasksByList: {},
       newTaskText: '',
       newTaskCategory: null,
       trackEvent,
@@ -204,8 +203,8 @@ export default {
   async created () {
     this.tasks = await getTasks(this.$store, this.query)
   },
-  methods: {
-    getTasksByList () {
+  computed: {
+    tasksByList () {
       let d = {}
       let i = -1
       this.$store.getters["boardLists"].forEach(() => {
@@ -216,7 +215,9 @@ export default {
         d[i].reverse()
       })
       return d
-    },
+    }
+  },
+  methods: {
     async submitTask(idx) {
       if (!this.newTaskText || this.newTaskText.length === 0) {
         return
@@ -242,13 +243,21 @@ export default {
     async updateTasks () {
       this.tasks = await getTasks(this.$store, this.query)
     },
+    async deleteTask (task) {
+      this.tasks = this.tasks.filter(t => {
+        return t._id != task._id
+      })
+    },
     async moveCard (id, list) {
       let task = await this.$store.state.db.get(id)
       task.list = list
-      await this.$store.state.db.put(task)
-      if (list === this.$store.getters['boardLists'].length - 1) {
-        await this.updateTasks()
-      }
+      let result = await this.$store.state.db.put(task)
+      this.tasks.forEach(t => {
+        if (t._id === id) {
+          t.list = list
+          t._rev = result.rev
+        }
+      })
     },
     async removeTasks(tasks) {
       let toDelete = tasks.map(t => {
@@ -262,7 +271,6 @@ export default {
       await this.$store.state.db.bulkDocs(toDelete)
       await this.$store.dispatch('forceSync', {updateLastSync: false})
       this.tasks = await getTasks(this.$store, this.query)
-      this.tasksByList = this.getTasksByList()
     }
   },
   watch: {
@@ -272,22 +280,6 @@ export default {
       },
       immediate: true,
     },
-
-    tasks: {
-      handler () {
-        this.tasksByList = this.getTasksByList()
-      },
-      immediate: true,
-      deep: true,
-    },
-    "$store.settings.boardConfig": {
-      handler (v) {
-        if (v) {
-          this.tasksByList = this.getTasksByList()
-        }
-      },
-      immediate: true,
-    }
   }
 }
 </script>
