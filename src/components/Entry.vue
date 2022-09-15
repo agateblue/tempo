@@ -1,10 +1,11 @@
 <template>
-  <v-card>
+  <div>
     <v-card-text :class="$theme.card.textSize" v-if="!isEditing">
       <v-badge
         style="display: block !important"
         :color="row.color"
         dot
+        transition=""
       >
         <structured-data
           class="mb-4"
@@ -21,10 +22,10 @@
           @click="expand = !expand"
         >
           <template v-if="expand">
-            Collapse <v-icon>{{ $icons.mdiChevronUp }}</v-icon>
+            Collapse <v-icon transition="">{{ $icons.mdiChevronUp }}</v-icon>
           </template>
           <template v-else>
-            Expand <v-icon>{{ $icons.mdiChevronDown }}</v-icon>
+            Expand <v-icon transition="">{{ $icons.mdiChevronDown }}</v-icon>
           </template>
         </v-btn>
       </div>
@@ -47,7 +48,7 @@
         class="text-body-2 grey--text text--darken-1"
         :date="row.entry.fullDate.toISOString()"
         :title="row.entry.fullDate.toISOString()">
-          <v-icon small color="grey darken-2">{{ $icons.mdiClockOutline}}</v-icon>
+          <v-icon transition="" small color="grey darken-2">{{ $icons.mdiClockOutline}}</v-icon>
           {{ row.time }}
         </time>
       <v-spacer></v-spacer>
@@ -58,6 +59,7 @@
         color="grey"
         title="View thread"
         plain
+        transition=""
         :to="{name: 'Entry', params: {entryId: getShortEntryId(threadId)}}"
       >
         View thread
@@ -69,6 +71,7 @@
         color="grey"
         title="View thread"
         plain
+        transition=""
         :to="{name: 'Entry', params: {entryId: getShortEntryId(threadId)}}"
       >
         <template v-if="row.entry.replies === 1">
@@ -86,9 +89,10 @@
         color="grey"
         title="Detail page"
         plain
+        transition=""
         :to="{name: 'Entry', params: {entryId: getShortEntryId(row.entry._id)}}"
       >
-        <v-icon>{{ $icons.mdiEye}}</v-icon>
+        <v-icon transition="">{{ $icons.mdiEye}}</v-icon>
       </v-btn>
       <v-btn
         icon
@@ -97,8 +101,9 @@
         :color="isReplying ? 'light-blue darken-2' : 'grey darken-2'"
         @click="isReplying = !isReplying"
         title="Reply"
+        transition=""
       >
-        <v-icon left>{{ $icons.mdiReply}}</v-icon>
+        <v-icon transition="" left>{{ $icons.mdiReply}}</v-icon>
       </v-btn>
       <v-btn
         icon
@@ -106,10 +111,11 @@
         class="px-1"
         :color="row.entry.favorite ? 'pink darken-2' : 'grey darken-2'"
         @click="setFavorite(!row.entry.favorite)"
-        title="Edit"
+        title="Set favorite"
+        transition=""
       >
-        <v-icon left v-if="row.entry.favorite">{{ $icons.mdiHeart }}</v-icon>
-        <v-icon left v-else>{{ $icons.mdiHeartOutline }}</v-icon>
+        <v-icon transition="" left v-if="row.entry.favorite">{{ $icons.mdiHeart }}</v-icon>
+        <v-icon transition="" left v-else>{{ $icons.mdiHeartOutline }}</v-icon>
       </v-btn>
       <v-btn
         icon
@@ -119,7 +125,7 @@
         @click="copyToClipboard(row.entry.text)"
         title="Copy to clipboard"
       >
-        <v-icon left>{{ $icons.mdiContentCopy}}</v-icon>
+        <v-icon transition="" left>{{ $icons.mdiContentCopy}}</v-icon>
       </v-btn>
       <v-btn
         icon
@@ -128,8 +134,9 @@
         color="grey darken-2"
         @click="isEditing = !isEditing"
         title="Edit"
+        transition=""
       >
-        <v-icon left>{{ $icons.mdiPencil}}</v-icon>
+        <v-icon transition="" left>{{ $icons.mdiPencil}}</v-icon>
       </v-btn>
       <v-btn
         icon
@@ -138,8 +145,9 @@
         color="grey darken-2"
         @click="deleteDialog = true"
         title="Delete"
+        transition=""
       >
-        <v-icon left>{{ $icons.mdiDelete}}</v-icon>
+        <v-icon transition="" left>{{ $icons.mdiDelete}}</v-icon>
       </v-btn>
 
       <v-dialog
@@ -199,7 +207,7 @@
         @cancel="isReplying = false"
       />
     </v-card-text>
-  </v-card>
+  </div>
 </template>
 <script>
 import isEmpty from 'lodash/isEmpty'
