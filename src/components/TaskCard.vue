@@ -93,7 +93,8 @@ export default {
         index += 1
       })
       let d = {
-        label: this.task.category, 
+        label: this.task.category,
+        color: ['teal', 'white'], 
       }
       if (colorIndex != null) {
         d.color = COLOR_CHOICES[colorIndex]
