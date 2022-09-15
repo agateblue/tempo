@@ -7,13 +7,12 @@
         :options="{
           threshold: .5
         }"
-        :transition="null"
+        transition=""
       >
         <v-card
           v-if="row.type === 'entry'"
           elevation="1"
           class="my-2"
-          :color="row.color"
         >
           <entry
             @updated="$emit('updated', $event)"
