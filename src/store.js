@@ -394,7 +394,7 @@ const store = new Vuex.Store({
       await state.db.put(data)
       commit("setting", {name, value})
     },
-    async loadSettings ({state, commit}) {
+    async loadSettings ({state, commit, dispatch}) {
       let s = {}
       for (const r of SETTINGS) {
         let v
@@ -407,6 +407,7 @@ const store = new Vuex.Store({
         s[r.name] = v
       }
       commit("settings", s)
+      dispatch("loadBlueprints")
     },
     async loadBlueprints ({commit}) {
       let builtins = await getBuiltinBlueprints()
