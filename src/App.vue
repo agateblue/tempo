@@ -154,19 +154,7 @@ export default {
 <style lang="scss">
 @import "~frappe-charts/src/css/charts.scss";
 $roboto-font-path: "~roboto-fontface/fonts";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-black-italic.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-black.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-bold-italic.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-bold.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-light-italic.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-light.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-medium-italic.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-medium.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-regular-italic.scss";
 @import "~roboto-fontface/css/roboto/sass/roboto-fontface-regular.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-thin-italic.scss";
-@import "~roboto-fontface/css/roboto/sass/roboto-fontface-thin.scss";
 
 :root {
   --border-color: rgba(125, 125, 125, 0.2);
