@@ -211,12 +211,11 @@
 </template>
 <script>
 import isEmpty from 'lodash/isEmpty'
+import truncate from 'lodash/truncate'
 
 import EntryForm from '@/components/EntryForm.vue'
 import StructuredData from '@/components/StructuredData.vue'
 import {getShortEntryId} from '@/utils'
-import truncate from 'truncate-html'
-truncate.setup({byWords: true, length: 60, keepWhitespaces: true })
 
 export default {
   props: {
@@ -240,7 +239,7 @@ export default {
   },
   computed: {
     truncatedText () {
-      return truncate(this.row.text)
+      return truncate(this.row.text, {length: 320, separator: ' '})
     },
     isTruncated () {
       return this.truncatedText.length < this.row.text.length
