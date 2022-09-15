@@ -4,9 +4,10 @@
       icon
       small
       class="float-right mx-3 my-2"
+      transition=""
       @click="expanded = !expanded"
     >
-      <v-icon>{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
+      <v-icon transition="" >{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
     </v-btn>
     <v-card-text :class="[$theme.nestedCard.textSize, 'py-3 px-3']">
       <v-checkbox
@@ -45,11 +46,11 @@
           :items="$store.getters['taskListChoices']"
           label="List"
         ></v-select>
-        <v-btn small text color="red" @click.prevent="deleteTask">
-         <v-icon left>{{ $icons.mdiDelete }}</v-icon>
+        <v-btn transition="" small text color="red" @click.prevent="deleteTask">
+         <v-icon left transition="">{{ $icons.mdiDelete }}</v-icon>
           Delete
         </v-btn>
-        <v-btn small text color="primary" class="float-right" @click.prevent="updateTask">
+        <v-btn transition="" small text color="primary" class="float-right" @click.prevent="updateTask">
           Update
         </v-btn>
       </v-card-text>
