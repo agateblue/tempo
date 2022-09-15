@@ -21,6 +21,7 @@
             class="float-right"
             @click="isEditing = true" 
             small
+            transition="" 
             color="secondary">Edit...</v-btn>
         </v-col>
       </v-row>
@@ -32,9 +33,9 @@
           <v-card-title class="px-2 py-0 body-1">
             <v-row class="py-3">
               <v-col cols="10">
-                <v-btn x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
-                  <v-icon v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
-                  <v-icon v-else>{{ $icons.mdiChevronUp }}</v-icon>
+                <v-btn transition="" x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
+                  <v-icon transition="" v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
+                  <v-icon transition="" v-else>{{ $icons.mdiChevronUp }}</v-icon>
                 </v-btn>
                 {{ list.label }} · {{ (tasksByList[idx] || []).length }}
               </v-col>
@@ -45,8 +46,9 @@
                   dark
                   x-small
                   @click.prevent="lists[idx].showForm = !lists[idx].showForm"
+                  transition=""
                   color="secondary">
-                  <v-icon>{{ $icons.mdiPlus }}</v-icon>
+                  <v-icon transition="">{{ $icons.mdiPlus }}</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
@@ -73,12 +75,12 @@
               <v-card-actions class="py-0 px-2 mb-5">
                 <v-row>
                   <v-col>
-                    <v-btn class="float-left" text @click.prevent="lists[idx].showForm = false">
+                    <v-btn transition="" class="float-left" text @click.prevent="lists[idx].showForm = false">
                       Cancel
                     </v-btn>
                   </v-col>
                   <v-col>
-                    <v-btn class="float-right" color="primary" @click.prevent="submitTask(idx)">
+                    <v-btn transition="" class="float-right" color="primary" @click.prevent="submitTask(idx)">
                       Add
                     </v-btn>
                   </v-col>
@@ -96,16 +98,15 @@
                 }"
                 :data-id="task._id"
                 min-height="50"
-                transition="fade-transition"
+                transition=""
                 :key="`task-${task._id}-${task._rev}`"
                 v-for="task in tasksByList[idx]"
               >
                 <task-card
                   class="mb-2"
                   :task="task"
-                  
                   :is-done="idx === $store.getters['boardLists'].length - 1"
-                  
+                  transition="" 
                   @done="moveCard($event._id, $store.getters['boardLists'].length - 1); trackEvent($store, 'task.completed')"
                   @deleted="updateTasks; trackEvent($store, 'task.deleted')"
                   @updated="updateTasks; trackEvent($store, 'task.updated')"
