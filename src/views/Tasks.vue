@@ -135,7 +135,7 @@
               class="list-group"
               v-model="tasksByList[idx]"
               :group="{ name: 'tasks' }"
-              filter="input, button"
+              filter="input, button, textarea"
               :prevent-on-filter="false"
               @add="moveCard($event.item.dataset.id, idx)">
               <v-lazy
@@ -145,7 +145,7 @@
                 :data-id="task._id"
                 min-height="50"
                 transition=""
-                :key="`task-${task._id}-${task._rev}`"
+                :key="`task-${task._id}`"
                 v-for="task in tasksByList[idx]"
               >
                 <task-card
@@ -233,7 +233,8 @@ export default {
         index: -this.tasksByList[idx].length,
         text: this.newTaskText,
         list: idx,
-        category: this.newTaskCategory, 
+        category: this.newTaskCategory,
+        subtasks: [],
       }
       let result = await this.$store.state.db.put(task)
       task._rev = result.rev
