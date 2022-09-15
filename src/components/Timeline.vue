@@ -1,26 +1,34 @@
 <template>
   <div>
     <template v-for="row in timelineRows">
-      <v-card
-        v-if="row.type === 'entry'"
+      <v-lazy
         :key="row.id"
-        elevation="1"
-        class="my-2"
-        :color="row.color"
+        min-height="90"
+        :options="{
+          threshold: .5
+        }"
+        :transition="null"
       >
-        <entry
-          @updated="$emit('updated', $event)"
-          @replied="$emit('replied', $event)"
-          @deleted="$emit('deleted', $event)"
-          :row="row"></entry>
-      </v-card>
-      <h3
-        v-else
-        :key="row.repr"
-        class="pt-2"
-      >
-        <date-entry :row="row"></date-entry>
-      </h3>
+        <v-card
+          v-if="row.type === 'entry'"
+          elevation="1"
+          class="my-2"
+          :color="row.color"
+        >
+          <entry
+            @updated="$emit('updated', $event)"
+            @replied="$emit('replied', $event)"
+            @deleted="$emit('deleted', $event)"
+            :row="row"></entry>
+        </v-card>
+        <h3
+          v-else
+          :key="row.repr"
+          class="pt-2"
+        >
+          <date-entry :row="row"></date-entry>
+        </h3>
+      </v-lazy>
     </template>
   </div>
 </template>
