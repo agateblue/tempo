@@ -65,6 +65,7 @@
         ref="subtaskList"
         v-if="showSubtasks"
         :value="newTask.subtasks"
+        :taskCompleted="completed"
         @input="newTask.subtasks = $event; updateTask()"
       />
     </v-card-actions>
