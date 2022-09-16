@@ -8,17 +8,6 @@
         @submitted="handleCreated"
       />
     </v-container>
-    <v-container
-      v-if="!entryId"
-      class="py-0 px-0 narrow"
-    >
-      <search-form
-        :value="$store.state.searchQuery"
-        :resultCount="allEntries.length"
-        @submit="$store.commit('searchQuery', $event)"
-      />
-    </v-container>
-    <v-divider class="mt-2"></v-divider>
     <v-container v-if="entryId" class="py-0 px-0 narrow d-flex justify-start">
       <v-btn
         class="mt-5 px-0"
@@ -29,6 +18,17 @@
         <v-icon left v-text="$icons.mdiArrowLeft"></v-icon>
         Go back to diary
       </v-btn>
+    </v-container>
+    <v-divider class="mt-2"></v-divider>
+    <v-container
+      v-if="!entryId"
+      class="py-0 px-0 narrow"
+    >
+      <search-form
+        :value="$store.state.searchQuery"
+        :resultCount="allEntries.length"
+        @submit="$store.commit('searchQuery', $event)"
+      />
     </v-container>
     <timeline
       ref="timeline"

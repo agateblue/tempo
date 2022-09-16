@@ -288,4 +288,14 @@ section.v-card, .section.v-card {
 .v-slide-group__next, .v-slide-group__prev {
   min-width: auto !important;
 }
+
+.v-expansion-panel-content__wrap {
+  padding: 0 !important;
+}
+.v-expansion-panel-header {
+  padding: 0 !important;
+}
+.v-expansion-panel-header::before {
+  background-color: transparent !important;
+}
 </style>

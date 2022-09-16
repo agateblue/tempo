@@ -22,90 +22,105 @@
         v-model="text"
         hide-details
       ></v-textarea>
-      <v-expansion-panels focusable flat accordion tile color="transparent">
-        <v-expansion-panel color="transparent" style="background: transparent">
-          <v-expansion-panel-header color="transparent">More options...</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-row class="d-flex justify-space-between align-center my-2">
-              <v-col
-                v-if="formChoices.length > 1"
-                cols="12"
-                sm="4"
-              >
-                <v-select
-                  label="Type"
-                  v-model="currentFormId"
-                  :items="formChoices"
-                ></v-select>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-
-              >
-                <v-text-field
-                  label="Date"
-                  v-model="textDate"
-                  type="datetime-local"
-                  :max="new Date().toLocaleDateString('en-ca')"
-                ></v-text-field>
-              </v-col>
-              <v-col
-                cols="12"
-                sm="4"
-                class="py-0"
-              >
-                <v-btn
-                  small
-                  @click.prevent="date = new Date()"
-                >
-                  Set to now
-                </v-btn>
-              </v-col>
-            </v-row>
-            <v-divider v-if="currentFormId" class="my-4" />
-            <v-row
-              class="mt-0 d-flex justify-space-between align-center">
-              <v-col
-                v-if="currentFormId"
-                cols="12"
-                sm="4"
-              >
-                <v-btn
-                  small
-                  @click="$refs.blueprintForm.fillFromLast()"
-                >
-                  Reuse last values
-                </v-btn>
-              </v-col>
-              <v-col
-                v-if="!isEmpty(formData) || currentFormId"
-                cols="12"
-                sm="12"
-              >
-                <blueprint-form
-                  ref="blueprintForm"
-                  :key="blueprintFormKey"
-                  :config="$store.getters.formsById[currentFormId]"
-                  :available-fields="$store.getters.fieldsById"
-                  v-model="formData"
-                />
-              </v-col>
-            </v-row>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
       <v-card-actions>
-        <v-spacer />
-        <v-btn
-          v-if="entry || thread" 
-          text
-          small
-          @click="$emit('cancel')"
-        >
-          Cancel
-        </v-btn>
-        <v-btn :color="$theme.mainButton.color" type="submit">Save</v-btn>
+        <v-row class="d-flex align-center">
+          <v-col :cols="expandedPanel != 0 ? 6 : 12" class="px-0">
+            <v-expansion-panels
+              focusable
+              flat
+              accordion
+              v-model="expandedPanel"
+              tile color="transparent"
+            >
+              <v-expansion-panel color="transparent" style="background: transparent">
+                <v-expansion-panel-header
+                  :class="expandedPanel != 0 ? 'px-0' : ''"
+                  color="transparent"
+                >Additional options...
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                  <v-row class="d-flex justify-space-between align-center my-2">
+                    <v-col
+                      v-if="formChoices.length > 1"
+                      cols="12"
+                      sm="4"
+                    >
+                      <v-select
+                        label="Type"
+                        v-model="currentFormId"
+                        :items="formChoices"
+                      ></v-select>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="4"
+
+                    >
+                      <v-text-field
+                        label="Date"
+                        v-model="textDate"
+                        type="datetime-local"
+                        :max="new Date().toLocaleDateString('en-ca')"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="4"
+                      class="py-0"
+                    >
+                      <v-btn
+                        small
+                        @click.prevent="date = new Date()"
+                      >
+                        Set to now
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                  <v-divider v-if="currentFormId" class="my-4" />
+                  <v-row
+                    class="mt-0 d-flex justify-space-between align-center">
+                    <v-col
+                      v-if="currentFormId"
+                      cols="12"
+                      sm="4"
+                    >
+                      <v-btn
+                        small
+                        @click="$refs.blueprintForm.fillFromLast()"
+                      >
+                        Reuse last values
+                      </v-btn>
+                    </v-col>
+                    <v-col
+                      v-if="!isEmpty(formData) || currentFormId"
+                      cols="12"
+                      sm="12"
+                    >
+                      <blueprint-form
+                        ref="blueprintForm"
+                        :key="blueprintFormKey"
+                        :config="$store.getters.formsById[currentFormId]"
+                        :available-fields="$store.getters.fieldsById"
+                        v-model="formData"
+                      />
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+        <v-col :cols="expandedPanel != 0 ? 6 : 12" class="text-right px-0">
+            <v-btn
+              v-if="entry || thread" 
+              text
+              small
+              @click="$emit('cancel')"
+            >
+              Cancel
+            </v-btn>
+            <v-btn :color="$theme.mainButton.color" type="submit">Save</v-btn>
+          </v-col>
+        </v-row>
       </v-card-actions>
     </v-card-text>   
   </v-card>
@@ -141,6 +156,7 @@ export default {
     BlueprintForm
   },
   data () {
+    let entryData = (this.entry || {}).data || {}
     return {
       text: this.initialText,
       currentFormId: (this.entry || {}).form || null,
@@ -150,6 +166,7 @@ export default {
       formData: {},
       textDate: null,
       maxDate: null,
+      expandedPanel: isEmpty(entryData) ? null : 0,
       isEmpty,
     }
   },
