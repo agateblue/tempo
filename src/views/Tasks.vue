@@ -116,14 +116,14 @@
                   ></v-select>
                 </v-form>
               </v-card-text>
-              <v-card-actions class="py-0 px-2 mb-5">
+              <v-card-actions class="py-4 px-0">
                 <v-row>
-                  <v-col>
+                  <v-col class="ml-3">
                     <v-btn transition="" class="float-left" text @click.prevent="lists[idx].showForm = false">
                       Cancel
                     </v-btn>
                   </v-col>
-                  <v-col>
+                  <v-col class="mr-4">
                     <v-btn transition="" class="float-right" color="primary" @click.prevent="submitTask(idx)">
                       Add
                     </v-btn>
