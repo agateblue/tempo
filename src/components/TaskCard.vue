@@ -61,7 +61,12 @@
       </v-row>
     </v-card-text>
     <v-card-actions>
-      <subtask-list v-if="showSubtasks" :value="newTask.subtasks" @input="newTask.subtasks = $event; updateTask()"/>
+      <subtask-list
+        ref="subtaskList"
+        v-if="showSubtasks"
+        :value="newTask.subtasks"
+        @input="newTask.subtasks = $event; updateTask()"
+      />
     </v-card-actions>
     <form v-if="expanded" @submit.prevent="updateTask" class="mt-4">
       <v-divider></v-divider>
@@ -155,6 +160,14 @@ export default {
     completed (v) {
       if (v) {
         this.$emit('done', this.task)
+      }
+    },
+    showSubtasks (v) {
+      if (v) {
+        this.$nextTick(() => {
+          let textareas = this.$refs.subtaskList.$el.getElementsByTagName('textarea')
+          textareas[textareas.length - 1].focus()
+        })
       }
     }
   }
