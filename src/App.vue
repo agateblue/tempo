@@ -46,12 +46,31 @@
     </v-main>
     <v-bottom-navigation fixed>
       <v-spacer></v-spacer>
-      <v-btn :style="bottomNavBarButtonStyle" to="/diary">
+      <v-btn
+        :style="bottomNavBarButtonStyle"
+        exact
+        :to="{path: '/diary', query: {q: $store.state.searchQuery}}">
         <span>Diary</span>
-
         <v-icon v-text="$icons.mdiBook"></v-icon>
       </v-btn>
-      <v-btn :style="bottomNavBarButtonStyle" to="/tasks">
+      <v-btn
+        :style="bottomNavBarButtonStyle"
+        exact
+        :to="{path: '/diary/calendar', query: {q: $store.state.searchQuery}}">
+        <span>Calendar</span>
+        <v-icon v-text="$icons.mdiCalendar"></v-icon>
+      </v-btn>
+      <v-btn
+        :style="bottomNavBarButtonStyle"
+        exact
+        :to="{path: '/diary/visualization', query: {q: $store.state.searchQuery}}">
+        <span>Data</span>
+        <v-icon v-text="$icons.mdiChartTimelineVariant"></v-icon>
+      </v-btn>
+      <v-btn
+        :style="bottomNavBarButtonStyle"
+        exact
+        to="/tasks">
         <span>Tasks</span>
 
         <v-icon v-text="$icons.mdiCheck"></v-icon>

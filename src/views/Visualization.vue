@@ -79,6 +79,7 @@
           <search-form
             :value="$store.state.searchQuery"
             @submit="$store.commit('searchQuery', $event)"
+            :resultCount="allEntries.length"
           />
         </v-card-text>
       </v-card>

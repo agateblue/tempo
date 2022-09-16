@@ -3,7 +3,7 @@
     tag="form"
     @submit.prevent="$emit('submit', localValue)"
     class="d-flex justify-space-between align-items-center mt-3">
-    <v-col sm="6">
+    <v-col sm="5">
       <v-text-field
         class="mt-0"
         v-model="localValue"
@@ -15,7 +15,7 @@
         @click:clear="localValue = ''; $emit('submit', '')"
       ></v-text-field>
     </v-col>
-    <v-col sm="6">
+    <v-col sm="4">
       <v-select
         v-model="filters"
         :items="filtersChoices"
@@ -26,12 +26,19 @@
         deletable-chips
       ></v-select>
     </v-col>
+    <v-col sm="3">
+      <v-chip
+        v-if="resultCount != null"
+        class="mt-3"
+      >Results: {{ resultCount }}</v-chip>
+    </v-col>
   </v-row>
 </template>
 <script>
 export default {
   props: {
-    value: {default: ''}
+    value: {default: ''},
+    resultCount: {default: null}
   },
   data () {
     return {

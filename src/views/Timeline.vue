@@ -17,6 +17,7 @@
     >
       <search-form
         :value="$store.state.searchQuery"
+        :resultCount="allEntries.length"
         @submit="$store.commit('searchQuery', $event)"
       />
     </v-container>

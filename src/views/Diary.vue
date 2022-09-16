@@ -1,22 +1,5 @@
 <template>
   <div class="pb-8">
-    <v-container v-if="$route.name != 'Entry'">
-      <v-tabs
-        show-arrows
-        centered
-        height="36"
-        background-color="transparent">
-        <v-tab
-          :to="{path: '/diary', query: {q: $store.state.searchQuery}}"
-          exact
-          :key="entries.length"
-        >
-          Entries · {{ entries.length }}
-        </v-tab>
-        <v-tab :to="{path: '/diary/calendar', query: {q: $store.state.searchQuery}}">Calendar</v-tab>
-        <v-tab :to="{path: '/diary/visualization', query: {q: $store.state.searchQuery}}">Visualization</v-tab>
-      </v-tabs>
-    </v-container>
     <router-view
       :all-entries="entries"
       :query="$store.state.searchQuery"
