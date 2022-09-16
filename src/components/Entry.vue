@@ -35,7 +35,6 @@
         textarea-label="Update entry"
         :entry="row.entry"
         :initial-text="row.entry.text"
-        color="transparent"
         :key="`timeline-${$store.state.lastSync}`"
         ref="entryForm"
         @submitted="update"

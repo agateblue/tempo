@@ -1,16 +1,15 @@
 <template>
   <div class="pb-8">
-    <template v-if="!entryId">
+    <v-container v-if="!entryId" class="narrow">
       <entry-form
         
         textarea-label="Write a new entry"
-        color="transparent"
         :key="`timeline-form-${$store.state.lastSync}`"
         ref="entryForm"
         @submitted="handleCreated"
       />
       <v-divider></v-divider>
-    </template>
+    </v-container>
     <v-container
       v-if="!entryId"
       class="py-0 px-0 narrow"
