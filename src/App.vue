@@ -5,10 +5,11 @@
       dense
       :color="$theme.appBar.color">
       <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
       <v-toolbar-title @click="$router.push('/')" class="mr-4" style="cursor: pointer">
         Tempo
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-btn
@@ -35,7 +36,6 @@
       <v-btn small icon to="/settings" title="Settings" class="ml-3">
         <v-icon v-text="$icons.mdiCog"></v-icon>
       </v-btn>
-      <v-spacer></v-spacer>
       <v-spacer></v-spacer>
 
     </v-app-bar>
