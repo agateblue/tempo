@@ -118,7 +118,7 @@ export default {
       expanded: false,
       newTask: localTask,
       completed: this.isDone,
-      showSubtasks: localTask.subtasks.length > 0,
+      showSubtasks: this.isDone ? false : localTask.subtasks.length > 0,
     }
   },
   components: {SubtaskList},
