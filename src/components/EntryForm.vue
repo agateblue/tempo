@@ -6,7 +6,7 @@
     @submit.prevent="submit"
     @keydown.ctrl.enter.exact="submit"
   >
-    <v-card-text class="narrow px-0" color="transparent">
+    <v-card-text class="narrow px-0 py-0" color="transparent">
       <v-textarea
         clearable
         outlined
@@ -14,6 +14,7 @@
         class="mt-0"
         ref="textarea"
         id="composer"
+        rows="3"
         auto-grow
         autofocus
         :label="textareaLabel"

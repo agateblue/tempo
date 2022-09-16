@@ -1,14 +1,12 @@
 <template>
   <div class="pb-8">
-    <v-container v-if="!entryId" class="narrow">
+    <v-container v-if="!entryId" class="narrow mt-2 px-0 py-0">
       <entry-form
-        
         textarea-label="Write a new entry"
         :key="`timeline-form-${$store.state.lastSync}`"
         ref="entryForm"
         @submitted="handleCreated"
       />
-      <v-divider></v-divider>
     </v-container>
     <v-container
       v-if="!entryId"
@@ -20,6 +18,7 @@
         @submit="$store.commit('searchQuery', $event)"
       />
     </v-container>
+    <v-divider class="mt-2"></v-divider>
     <v-container v-if="entryId" class="py-0 px-0 narrow d-flex justify-start">
       <v-btn
         class="mt-5 px-0"

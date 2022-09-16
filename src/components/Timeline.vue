@@ -3,7 +3,7 @@
     <template v-for="row in timelineRows">
       <v-lazy
         :key="row.id"
-        min-height="90"
+        min-height="50"
         :options="{
           threshold: .5
         }"
@@ -23,9 +23,9 @@
         <h3
           v-else
           :key="row.repr"
-          class="pt-2"
+          class="py-2 font-weight-light text--lighten"
         >
-          <date-entry :row="row"></date-entry>
+          {{ row.repr }}
         </h3>
       </v-lazy>
     </template>
@@ -40,7 +40,6 @@ import {
   getPrettyTimeFromDate
 } from '@/utils'
 import Entry from './Entry'
-import DateEntry from './DateEntry'
 
 let aggregateConfigs = [
   {
@@ -100,7 +99,7 @@ export default {
     entries: {},
     entryId: {required: false}
   },
-  components: {Entry, DateEntry},
+  components: {Entry},
   computed: {
     timelineRows () {
       let aggregates = {}

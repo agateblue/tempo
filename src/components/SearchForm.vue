@@ -3,7 +3,7 @@
     tag="form"
     @submit.prevent="$emit('submit', localValue)"
     class="d-flex justify-space-between align-items-center mt-3">
-    <v-col cols="6" sm="5">
+    <v-col cols="6" sm="5" class="py-0">
       <v-text-field
         class="mt-0"
         v-model="localValue"
@@ -15,7 +15,7 @@
         @click:clear="localValue = ''; $emit('submit', '')"
       ></v-text-field>
     </v-col>
-    <v-col cols="6" sm="4">
+    <v-col cols="6" sm="4" class="py-0">
       <v-select
         v-model="filters"
         :items="filtersChoices"
@@ -29,6 +29,7 @@
     <v-col cols="6" sm="3" class="py-0">
       <v-chip
         v-if="resultCount != null"
+        small
         class=" my-3"
       >Results: {{ resultCount }}</v-chip>
     </v-col>
