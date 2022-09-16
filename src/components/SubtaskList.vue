@@ -14,7 +14,10 @@
       >
         <v-checkbox
           class="my-0 mt-2 py-0"
-          v-model="row.done"
+          :disabled="taskCompleted"
+          :value="row.done"
+          :input-value="row.done"
+          @change="row.done = $event"
           small
         ></v-checkbox>
       </v-col>
@@ -26,6 +29,7 @@
         <v-textarea
           class="py-0 my-0"
           v-model="row.label"
+          :disabled="taskCompleted"
           rows="1"
           dense
           auto-grow
@@ -43,6 +47,7 @@
           text
           icon
           small
+          :disabled="taskCompleted"
           color="grey"
           title="Delete"
           type="noop"
@@ -62,10 +67,16 @@ import debounce from 'lodash/debounce'
 export default {
   props: {
     value: {default: () => {return []}},
+    taskCompleted: {default: false}
   },
   data () {
     return {
-      localValue: [...this.value]
+      localValue: [...this.value].map(t => {
+        if (this.taskCompleted) {
+          t.done = true
+        }
+        return t
+      })
     }
   },
   computed: {
@@ -85,6 +96,9 @@ export default {
       immediate: true,
       deep: true,
       handler (v) {
+        if (this.taskCompleted) {
+          return
+        }
         if (v.length === 0 || v[v.length - 1].label.trim()) {
           this.localValue.push({label: '', done: false})
         }
@@ -95,7 +109,6 @@ export default {
       handler: debounce(
         function (v, o) {
           if (!isEqual(v, o) && this) {
-            console.log('changed')
             this.$emit('input', v)
           }
         }, 500
