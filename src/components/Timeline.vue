@@ -23,7 +23,7 @@
         <h3
           v-else
           :key="row.repr"
-          class="py-2 font-weight-light text--lighten"
+          class="py-4 font-weight-light text--lighten text-center"
         >
           {{ row.repr }}
         </h3>
