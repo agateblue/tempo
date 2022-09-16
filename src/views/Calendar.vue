@@ -1,116 +1,115 @@
 <template>
-  <div>
-    <v-container>
-      <v-container  class="narrow">
-        <search-form
-          :value="$store.state.searchQuery"
-          @submit="$store.commit('searchQuery', $event)"
-          :resultCount="allEntries.length"
-        />
-      </v-container>
-      <v-sheet
-        tile
-      > 
-        <v-toolbar dense flat>
-          <v-toolbar-title v-if="$refs.calendar">
-            {{ $refs.calendar.title }}
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-switch
-            class="mt-5"
-            v-model="expanded"
-            label="Show all events"
-          ></v-switch>
-        </v-toolbar>
-        <v-toolbar dense flat>
-          <v-menu
-            bottom
-            right
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                outlined
-                v-bind="attrs"
-                v-on="on"
-                small
-              >
-                <span>{{ type }}</span>
-                <v-icon right>
-                  {{ $icons.mdiMenuDown}}
-                </v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="type = 'day'">
-                <v-list-item-title>Day</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'week'">
-                <v-list-item-title>Week</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'month'">
-                <v-list-item-title>Month</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            @click="$refs.calendar.prev()"
-          >
-            <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
-            Previous
-          </v-btn>
-          <v-btn
-            text
-            @click="$refs.calendar.next()"
-          >
-            Next
-            <v-icon>{{ $icons.mdiChevronRight }}</v-icon>
-          </v-btn>
-
-          <v-spacer></v-spacer>
-          <v-btn
-            outlined
-            small
-            @click="setToday"
-          >
-            Today
-          </v-btn>
-          
-        </v-toolbar>
-      </v-sheet>
-      <v-sheet :height="expanded ? '' : '60vh'" :min-height="expanded ? '' : 600">
-        <v-calendar
-          ref="calendar"
-          v-model="value"
-          :weekdays="weekday"
-          :type="type"
-          :events="events"
-          :event-overlap-mode="mode"
-          :event-overlap-threshold="30"
-          @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="viewDay"
-
-        ></v-calendar>
-        <v-menu
-          v-model="selectedOpen"
-          :close-on-content-click="false"
-          :activator="selectedElement"
-          offset-x
-        >
-          <v-card
-            min-width="350px"
-            max-width="350px"
-          >
-            <v-card-text>
-              <span v-html="renderMarkdown(selectedEvent.details)"></span>
-            </v-card-text>
-          </v-card>
-        </v-menu>
-      </v-sheet>
+  <v-container class="px-0 py-0">
+    <v-container  class="narrow px-0 py-0 mb-4">
+      <search-form
+        class="mt-0"
+        :value="$store.state.searchQuery"
+        @submit="$store.commit('searchQuery', $event)"
+        :resultCount="allEntries.length"
+      />
     </v-container>
-  </div>
+    <v-sheet
+      tile
+    > 
+      <v-toolbar dense flat>
+        <v-toolbar-title v-if="$refs.calendar">
+          {{ $refs.calendar.title }}
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-switch
+          class="mt-5"
+          v-model="expanded"
+          label="Show all events"
+        ></v-switch>
+      </v-toolbar>
+      <v-toolbar dense flat>
+        <v-menu
+          bottom
+          right
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              outlined
+              v-bind="attrs"
+              v-on="on"
+              small
+            >
+              <span>{{ type }}</span>
+              <v-icon right>
+                {{ $icons.mdiMenuDown}}
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="type = 'day'">
+              <v-list-item-title>Day</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = 'week'">
+              <v-list-item-title>Week</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = 'month'">
+              <v-list-item-title>Month</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-spacer></v-spacer>
+        <v-btn
+          text
+          @click="$refs.calendar.prev()"
+        >
+          <v-icon>{{ $icons.mdiChevronLeft }}</v-icon>
+          Previous
+        </v-btn>
+        <v-btn
+          text
+          @click="$refs.calendar.next()"
+        >
+          Next
+          <v-icon>{{ $icons.mdiChevronRight }}</v-icon>
+        </v-btn>
+
+        <v-spacer></v-spacer>
+        <v-btn
+          outlined
+          small
+          @click="setToday"
+        >
+          Today
+        </v-btn>
+        
+      </v-toolbar>
+    </v-sheet>
+    <v-sheet :height="expanded ? '' : '60vh'" :min-height="expanded ? '' : 600">
+      <v-calendar
+        ref="calendar"
+        v-model="value"
+        :weekdays="weekday"
+        :type="type"
+        :events="events"
+        :event-overlap-mode="mode"
+        :event-overlap-threshold="30"
+        @click:event="showEvent"
+        @click:more="viewDay"
+        @click:date="viewDay"
+
+      ></v-calendar>
+      <v-menu
+        v-model="selectedOpen"
+        :close-on-content-click="false"
+        :activator="selectedElement"
+        offset-x
+      >
+        <v-card
+          min-width="350px"
+          max-width="350px"
+        >
+          <v-card-text>
+            <span v-html="renderMarkdown(selectedEvent.details)"></span>
+          </v-card-text>
+        </v-card>
+      </v-menu>
+    </v-sheet>
+  </v-container>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container class="narrow">
+    <v-container class="narrow py-0 px-0">
       <v-card tag="section" class="mb-8" :color="$theme.card.color">
         <v-card-title class="headline">Options</v-card-title>
 
@@ -93,8 +93,7 @@
         Add a new visualization
       </v-btn> -->
     </v-container>
-    <v-divider></v-divider>
-    <v-container class="mt-4" v-if="selectedBlueprint">
+    <v-container class="mt-4 py-0 px-0" v-if="selectedBlueprint">
       <dataviz 
         :blueprint="selectedBlueprint"      
         :entries="queryableEntries"
