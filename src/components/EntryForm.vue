@@ -128,7 +128,6 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty'
-import format from 'date-fns/format'
 import throttle from 'lodash/throttle'
 
 import BlueprintForm from '@/components/BlueprintForm'
@@ -141,6 +140,12 @@ function getFormData (entry, formData) {
     ...(formData || {}),
   }
   return isEmpty(d) ? null : d
+}
+
+function toLocal(date) {
+  var local = new Date(date)
+  local.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+  return local.toJSON().slice(0, 16)
 }
 
 export default {
@@ -244,14 +249,14 @@ export default {
         if (!v) {
           this.textDate = null
         } else {
-          this.textDate = format(v, "yyyy-MM-dd'T'HH:mm")
+          this.textDate = toLocal(v)
         }
       },
       immediate: true,
     },
     textDate: {
       handler (v) {
-        if (v) {
+        if (v && toLocal != toLocal(this.date)) {
           this.date = new Date(v)
         }
       },
