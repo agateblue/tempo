@@ -4,7 +4,6 @@
     outlined
     color="transparent"
     @submit.prevent="submit"
-    @keydown.ctrl.enter.exact="submit"
   >
     <v-card-text class="narrow px-0 py-0" color="transparent">
       <v-textarea
@@ -21,6 +20,7 @@
         placeholder="How do you feel?"
         v-model="text"
         hide-details
+        @keydown.ctrl.enter.exact="submit"
       ></v-textarea>
       <v-card-actions>
         <v-row class="d-flex align-center">
