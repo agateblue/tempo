@@ -158,6 +158,11 @@ export default {
     },
   },
   watch: {
+    'newTask.subtasks' (v) {
+      if (v.filter(t => {return t.done}).length === v.length) {
+        this.completed = true
+      }
+    },
     completed (v) {
       if (v) {
         this.$emit('done', this.task)
