@@ -7,8 +7,7 @@
         <v-card-text :class="$theme.card.textSize">
           <v-row>
             <v-col
-              cols="12"
-              sm="4"
+              cols="4"
             >
               <v-select
                 v-model="params.selectedBlueprintIdx"
@@ -17,8 +16,7 @@
               ></v-select>
             </v-col>
             <v-col
-              cols="12"
-              sm="4"
+              cols="4"
             >
               <v-menu
                 v-model="showStartMenu"
@@ -46,8 +44,7 @@
               </v-menu>
             </v-col>
             <v-col
-              cols="12"
-              sm="4"
+              cols="4"
             >
               <v-menu
                 v-model="showEndMenu"
