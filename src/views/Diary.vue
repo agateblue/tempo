@@ -7,18 +7,19 @@
         height="36"
         background-color="transparent">
         <v-tab
-          :to="{path: '/diary', query: {q: query}}"
+          :to="{path: '/diary', query: {q: $store.state.searchQuery}}"
           exact
           :key="entries.length"
         >
           Entries · {{ entries.length }}
         </v-tab>
-        <v-tab :to="{path: '/diary/calendar', query: {q: query}}">Calendar</v-tab>
-        <v-tab :to="{path: '/diary/visualization', query: {q: query}}">Visualization</v-tab>
+        <v-tab :to="{path: '/diary/calendar', query: {q: $store.state.searchQuery}}">Calendar</v-tab>
+        <v-tab :to="{path: '/diary/visualization', query: {q: $store.state.searchQuery}}">Visualization</v-tab>
       </v-tabs>
     </v-container>
     <router-view
       :all-entries="entries"
+      :query="$store.state.searchQuery"
       @deleted="handleDelete"
       @updated="handleUpdate"
       @replied="handleCreated"
@@ -32,15 +33,20 @@ import {search, trackEvent} from '@/utils'
 
 export default {
   props: {
-    query: String
+    query: {default: ''}
   },
   data () {
     return {
+      localQuery: (this.query || '').trim(),
       entries: [],
     }
   },
   async created () {
-    this.search()
+    if (this.localQuery) {
+      this.$store.commit('searchQuery', this.localQuery)
+    } else {
+      await this.search()
+    }
   },
   methods: {    
     
@@ -79,12 +85,12 @@ export default {
       this.entries = await search({
         store: this.$store,
         sortDesc: this.sortDesc,
-        query: this.query
+        query: this.$store.state.searchQuery,
       })
     },
   },
   watch: {
-    async query () {
+    '$store.state.searchQuery': async function () {
       await this.search()
     },
     "$store.state.lastSync": {

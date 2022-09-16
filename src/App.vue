@@ -10,53 +10,42 @@
         Tempo
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="searchQuery"
-        dense
-        solo
-        hide-details
-        clearable
-        ref="search"
-        placeholder="Search"
-        class="search"
-        :append-icon="$icons.mdiMagnify"
-        @click:append="expandSearch = true; $store.commit('searchQuery', searchQuery)"
-        @keydown.enter="$store.commit('searchQuery', searchQuery)"
-        @click:clear="$store.commit('searchQuery', '')"
-      ></v-text-field>
-      <v-btn small icon class="ml-3" to="/about">
-        <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
-      </v-btn>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-
-    </v-app-bar>
-    <v-main >
-      <v-container fluid tag="main" style="padding-bottom: 64px">
-        <router-view ref="view"></router-view>
-      </v-container>
-    </v-main>
-    <v-bottom-navigation fixed>
       <v-spacer></v-spacer>
       <v-btn
-        :style="bottomNavBarButtonStyle"
         :loading="$store.state.sync.loading"
+        small
+        icon
         @click.stop.prevent="$store.dispatch('forceSync', {updateLastSync: true})"
         v-if="$store.state.couchDbUrl"
+        title="Sync"
       >
         <span v-if="!$store.state.sync.loading && $store.state.sync.error">
           Sync error:
           <span v-if="$store.state.sync.error.name">{{ $store.state.sync.error.name }}</span>
           <span v-else>Unknown</span>
         </span>
-        <span v-else>
-          Sync
-        </span>
         <v-icon v-text="$icons.mdiSync"></v-icon>
         <template v-slot:loader>
           <span>Syncing…</span>
         </template>
       </v-btn>
+      <v-btn small icon class="ml-3" to="/about" title="About">
+        <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
+      </v-btn>
+      <v-btn small icon to="/settings" title="Settings" class="ml-3">
+        <v-icon v-text="$icons.mdiCog"></v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+
+    </v-app-bar>
+    <v-main>
+      <v-container fluid tag="main" style="padding-bottom: 64px">
+        <router-view ref="view"></router-view>
+      </v-container>
+    </v-main>
+    <v-bottom-navigation fixed>
+      <v-spacer></v-spacer>
       <v-btn :style="bottomNavBarButtonStyle" to="/diary">
         <span>Diary</span>
 
@@ -67,11 +56,6 @@
 
         <v-icon v-text="$icons.mdiCheck"></v-icon>
       </v-btn>
-      <v-btn :style="bottomNavBarButtonStyle" to="/settings">
-        <span>Settings</span>
-
-        <v-icon v-text="$icons.mdiCog"></v-icon>
-      </v-btn>
       <v-spacer></v-spacer>
     </v-bottom-navigation>
   </v-app>
@@ -81,7 +65,6 @@ export default {
   data() {
     return {
       drawer: null,
-      searchQuery: this.$route.query.q || "",
       exportDialog: false,
     };
   },
@@ -134,18 +117,10 @@ export default {
     },
   },
   watch: {
-    "$route.path": {
-      handler (v) {
-        if (v === "/") {
-          this.$router.push("/diary")
-        }
-      },
-      immediate: true,
-    },
     "$store.state.searchQuery": {
       handler (v) {
         this.searchQuery = v
-        this.$router.push({ path: this.$route.path, query: { q: v } })
+        this.$router.push({ path: this.$route.path, query: {...this.$route.query, q: v}})
       }
     }
   },

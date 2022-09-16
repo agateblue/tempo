@@ -11,16 +11,14 @@
       />
       <v-divider></v-divider>
     </template>
-    <v-container v-if="!entryId" class="py-0 px-0 narrow d-flex justify-end">
-      <v-switch
-        class="mr-2"
-        v-model="filters.threads"
-        label="Show threads"
-      ></v-switch>
-      <v-switch
-        v-model="filters.favorites"
-        label="Show favorites"
-      ></v-switch>
+    <v-container
+      v-if="!entryId"
+      class="py-0 px-0 narrow"
+    >
+      <search-form
+        :value="$store.state.searchQuery"
+        @submit="$store.commit('searchQuery', $event)"
+      />
     </v-container>
     <v-container v-if="entryId" class="py-0 px-0 narrow d-flex justify-start">
       <v-btn
@@ -65,6 +63,7 @@
 import Timeline from '@/components/Timeline.vue'
 import debounce from 'lodash/debounce'
 import EntryForm from '@/components/EntryForm.vue'
+import SearchForm from '@/components/SearchForm.vue'
 
 export default {
   props: {
@@ -74,13 +73,10 @@ export default {
   components: {
     Timeline,
     EntryForm,
+    SearchForm,
   },
   data () {
     return {
-      filters: {
-        favorites: false,
-        threads: false,
-      },
       showEntryModal: false,
       showShowMoreButton: false,
       count: this.$store.state.pageSize,
@@ -111,25 +107,11 @@ export default {
     }, 1000, {leading: true, trailing: false, maxWait: 500})
   },
   watch: {
-    
     shownEntries () {
       setTimeout(() => {
         this.showShowMoreButton = true
       }, 1000)
     },
-    filters: {
-      handler (v) {
-        let query = []
-        if (v.favorites) {
-          query.push('is:fav')
-        }
-        if (v.threads) {
-          query.push('is:threads')
-        }
-        this.$store.commit('searchQuery', query.join(' '))
-      },
-      deep: true
-    }
   },
 }
 </script>

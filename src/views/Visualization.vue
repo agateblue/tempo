@@ -76,6 +76,10 @@
               </v-menu>
             </v-col>
           </v-row>
+          <search-form
+            :value="$store.state.searchQuery"
+            @submit="$store.commit('searchQuery', $event)"
+          />
         </v-card-text>
       </v-card>
       
@@ -108,6 +112,7 @@
 // import parseISO from 'date-fns/parseISO'
 import sub from 'date-fns/sub'
 
+import SearchForm from '@/components/SearchForm.vue'
 import VisualizationModal from '@/components/VisualizationModal.vue'
 import {getQueryableEntries, getQueryableTags} from '@/utils'
 
@@ -128,6 +133,7 @@ export default {
   },
   components: {
     VisualizationModal,
+    SearchForm,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
   },
   data () {
