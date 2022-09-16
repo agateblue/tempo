@@ -53,7 +53,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      sm="4"
+                      sm="5"
 
                     >
                       <v-text-field
@@ -65,7 +65,7 @@
                     </v-col>
                     <v-col
                       cols="12"
-                      sm="4"
+                      sm="3"
                       class="py-0"
                     >
                       <v-btn
