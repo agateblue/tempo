@@ -9,6 +9,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/diary',
+    alias: '/',
     component: () => import(/* webpackChunkName: "Diary" */ './views/Diary.vue'),
     props: (route) => ({ query: route.query.q }),
     children: [

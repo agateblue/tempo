@@ -1,6 +1,12 @@
 <template>
   <div>
     <v-container>
+      <v-container  class="narrow">
+        <search-form
+          :value="$store.state.searchQuery"
+          @submit="$store.commit('searchQuery', $event)"
+        />
+      </v-container>
       <v-sheet
         tile
       > 
@@ -109,10 +115,14 @@
 <script>
 import RENDERER from '@/markdown'
 import {insertTagMarkup} from '@/utils'
+import SearchForm from '@/components/SearchForm.vue'
 
 export default {
   props: {
     allEntries: Array
+  },
+  components: {
+    SearchForm
   },
   data: () => ({
     type: 'month',
