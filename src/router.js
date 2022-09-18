@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter } from "vue-router"
+import { createWebHashHistory, createRouter } from "vue-router"
 
 import store from '@/store'
 import {trackEvent, getCleanUrlForTracking} from '@/utils'
@@ -57,7 +57,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 })
 
