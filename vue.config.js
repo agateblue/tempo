@@ -1,14 +1,19 @@
-module.exports = {
+const { defineConfig } = require('@vue/cli-service')
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+module.exports = defineConfig({
+  transpileDependencies: true,
   pluginOptions: {
-    webpackBundleAnalyzer: {
-      openAnalyzer: false,
-      analyzerMode: process.env.BUNDLE_ANALYZE || "disabled"
-    }
+    vuetify: {
+			// https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+		}
   },
 
   productionSourceMap: false,
   runtimeCompiler: true,
   configureWebpack:{
+    plugins: [
+      new NodePolyfillPlugin()
+    ],
     optimization: {
       splitChunks: {
         minSize: 250000,
@@ -65,8 +70,5 @@ module.exports = {
       maskIcon: 'favicon.png',
       msTileImage: 'favicon.png'
     }
-  },
-  "transpileDependencies": [
-    "vuetify"
-  ]
-}
+  }
+})

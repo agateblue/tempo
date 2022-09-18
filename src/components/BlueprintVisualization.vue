@@ -55,7 +55,7 @@
         @click="expandQuery = !expandQuery"
       >
         Query
-        <v-icon right>{{ expandQuery ? $icons.mdiChevronUp : $icons.mdiChevronDown  }}</v-icon>
+        <v-icon right :icon="expandQuery ? $icons.mdiChevronUp : $icons.mdiChevronDown"></v-icon>
       </v-btn>
       <v-menu v-if="config._id" bottom left>
         <template v-slot:activator="{ on }">
@@ -63,14 +63,14 @@
             icon
             v-on="on"
           >
-            <v-icon>{{ $icons.mdiDotsHorizontal}}</v-icon>
+            <v-icon :icon="$icons.mdiDotsHorizontal"></v-icon>
           </v-btn>
         </template>
 
         <v-list>
           <v-list-item @click="showVisualizationModal = true">
             <v-list-item-icon>
-              <v-icon>{{ $icons.mdiPencil }}</v-icon>
+              <v-icon :icon="$icons.mdiPencil"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>Edit</v-list-item-title>
@@ -78,7 +78,7 @@
           </v-list-item>
           <v-list-item @click="deleteDialog = true">
             <v-list-item-icon>
-              <v-icon>{{ $icons.mdiDelete }}</v-icon>
+              <v-icon :icon="$icons.mdiDelete"></v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>Delete</v-list-item-title>
@@ -87,7 +87,7 @@
         </v-list>
       </v-menu>
       <visualization-modal
-        :show.sync="showVisualizationModal"
+        v-model:show="showVisualizationModal"
         :config="config"
         :entries="entries"
         :tags="tags"

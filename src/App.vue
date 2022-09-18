@@ -25,16 +25,16 @@
           <span v-if="$store.state.sync.error.name">{{ $store.state.sync.error.name }}</span>
           <span v-else>Unknown</span>
         </span>
-        <v-icon v-text="$icons.mdiSync"></v-icon>
+        <v-icon>{{ $icons.mdiSync }}</v-icon>
         <template v-slot:loader>
           <span>Syncing…</span>
         </template>
       </v-btn>
       <v-btn small icon class="ml-3" to="/about" title="About">
-        <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
+        <v-icon>{{ $icons.mdiHelpCircleOutline }}</v-icon>
       </v-btn>
       <v-btn small icon to="/settings" title="Settings" class="ml-3">
-        <v-icon v-text="$icons.mdiCog"></v-icon>
+        <v-icon>{{ $icons.mdiCog }}</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
 
@@ -51,21 +51,21 @@
         exact
         :to="{path: '/diary', query: {q: $store.state.searchQuery}}">
         <span>Diary</span>
-        <v-icon v-text="$icons.mdiBook"></v-icon>
+        <v-icon>{{ $icons.mdiBook }}</v-icon>
       </v-btn>
       <v-btn
         :style="bottomNavBarButtonStyle"
         exact
         :to="{path: '/diary/calendar', query: {q: $store.state.searchQuery}}">
         <span>Calendar</span>
-        <v-icon v-text="$icons.mdiCalendar"></v-icon>
+        <v-icon>{{ $icons.mdiCalendar }}</v-icon>
       </v-btn>
       <v-btn
         :style="bottomNavBarButtonStyle"
         exact
         :to="{path: '/diary/visualization', query: {q: $store.state.searchQuery}}">
         <span>Data</span>
-        <v-icon v-text="$icons.mdiChartTimelineVariant"></v-icon>
+        <v-icon> {{ $icons.mdiChartTimelineVariant }}</v-icon>
       </v-btn>
       <v-btn
         :style="bottomNavBarButtonStyle"
@@ -73,7 +73,7 @@
         to="/tasks">
         <span>Tasks</span>
 
-        <v-icon v-text="$icons.mdiCheck"></v-icon>
+        <v-icon>{{ $icons.mdiCheck }}</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
     </v-bottom-navigation>

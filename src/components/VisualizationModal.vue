@@ -4,7 +4,7 @@
     <v-card>
       <v-toolbar :color="$theme.appBar.color">
         <v-btn icon @click="$emit('update:show', false)">
-          <v-icon>{{ $icons.mdiClose }}</v-icon>
+          <v-icon :icon="$icons.mdiClose"></v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-toolbar-title v-if="config">Update chart</v-toolbar-title>
@@ -87,7 +87,7 @@ export default {
   props: {
     entries: {type: Array},
     tags: {type: Array},
-    show: {type: Boolean, default: false},
+    // show: {type: Boolean, default: false},
     config: {type: Object, default: null},
     days: {type: Number, default: null},
   },
@@ -96,6 +96,7 @@ export default {
   },
   data () {
     return {
+      show: false,
       field: 'sum(mood) as Mood',
       defaultConfig: this.config,
       displayTypes: DISPLAYTYPES,

@@ -96,11 +96,11 @@
         :entries="queryableEntries"
         :tags="queryableTags"
         :days="graphDays"></dataviz>
-      <visualization-modal
+      <!-- <visualization-modal
         :days="graphDays"
         :entries="queryableEntries"
         :tags="queryableTags"
-        :show.sync="showvisualizationModal" />
+        :show.sync="showvisualizationModal" /> -->
     </v-container>
   </div>
 </template>
@@ -110,7 +110,7 @@
 import sub from 'date-fns/sub'
 
 import SearchForm from '@/components/SearchForm.vue'
-import VisualizationModal from '@/components/VisualizationModal.vue'
+// import VisualizationModal from '@/components/VisualizationModal.vue'
 import {getQueryableEntries, getQueryableTags} from '@/utils'
 
 function getDates (start, end) {
@@ -129,7 +129,7 @@ export default {
     defaultEnd: {type: String, default: null},
   },
   components: {
-    VisualizationModal,
+    // VisualizationModal,
     SearchForm,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
   },

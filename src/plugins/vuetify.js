@@ -1,13 +1,23 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+// Styles
+import 'vuetify/styles'
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+// Vuetify
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+export default createVuetify({
+  components,
+  directives,
   icons: {
-    iconfont: 'mdiSvg',
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
   },
   theme: {
+    defaultTheme: 'dark',
     options: {
       customProperties: true,
     },
@@ -24,4 +34,4 @@ export default new Vuetify({
       },
     },
   },
-});
+})

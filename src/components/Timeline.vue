@@ -1,8 +1,7 @@
 <template>
   <div>
-    <template v-for="row in timelineRows">
+    <template v-for="row in timelineRows" :key="row.id">
       <v-lazy
-        :key="row.id"
         min-height="50"
         :options="{
           threshold: .5

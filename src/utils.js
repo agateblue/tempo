@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import app from './app.js'
 
 const signToMood = {
   '+': 1,
@@ -497,7 +497,7 @@ export function trackEvent(store, event, props = {}, eventData = {}) {
     return
   }
   try {
-    Vue.$plausible.trackEvent(event, {props, callback () {
+    app.$plausible.trackEvent(event, {props, callback () {
       console.debug("[telemetry] sent")
     }}, {
       url: getCleanUrlForTracking(window.location, window.location.href.split("#")[1]),

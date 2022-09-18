@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createWebHistory, createRouter } from "vue-router"
 
 import store from '@/store'
 import {trackEvent, getCleanUrlForTracking} from '@/utils'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
@@ -49,7 +46,7 @@ const routes = [
   },
   {
     path: '/tasks',
-    component: () => import(/* webpackChunkName: "Tasks" */ './views/Tasks.vue'),
+    component: () => import(/* webpackChunkName: "Board" */ './views/Tasks.vue'),
     props: (route) => ({ query: route.query.q }),
   },
   {
@@ -59,8 +56,9 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
-  routes
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
 })
 
 export function shouldTrackPageView(to, from) {

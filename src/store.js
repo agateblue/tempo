@@ -1,12 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find'
 import PouchDBAuthentication from 'pouchdb-authentication'
 PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
-
-Vue.use(Vuex)
 
 import {SETTINGS, getSettingValue, getNewEntryData} from '@/utils'
 
@@ -21,7 +18,7 @@ async function getBuiltinBlueprints () {
 
 const version = 1
 
-const store = new Vuex.Store({
+const store = createStore({
   state: {
     db: null,
     remoteDb: null,
