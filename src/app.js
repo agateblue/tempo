@@ -102,30 +102,30 @@ app.config.globalProperties.$icons = {
 
 app.config.globalProperties.$theme = {
   appBar: {
-    color: "pink darken-4",
+    color: "pink-darken-4",
   },
   card: {
-    color: "grey darken-4",
+    color: "grey-darken-4",
     textSize: "body-1",
   },
   nestedCard: {
-    color: "blue-grey darken-4",
+    color: "blue-grey-darken-4",
     textSize: "body-2",
   },
   drawer: {
-    color: "grey darken-4",
+    color: "grey-darken-4",
   },
   menu: {
-    color: "grey darken-4",
+    color: "grey-darken-4",
   },
   switch: {
     color: "pink",
   },
   input: {
-    color: "grey darken-4",
+    color: "grey-darken-4",
   },
   mainButton: {
-    color: "pink darken-4",
+    color: "pink-darken-4",
   },
 }
 
