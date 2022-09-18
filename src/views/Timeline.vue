@@ -15,7 +15,7 @@
         plain
         small
       >
-        <v-icon left v-text="$icons.mdiArrowLeft"></v-icon>
+        <v-icon left :icon="$icons.mdiArrowLeft"></v-icon>
         Go back to diary
       </v-btn>
     </v-container>
@@ -30,15 +30,20 @@
         @submit="$store.commit('searchQuery', $event)"
       />
     </v-container>
-    <timeline
-      ref="timeline"
-      class="mt-0 container narrow px-0"
-      :entries="shownEntries"
-      :entry-id="entryId"
-      :key="`timeline-${$store.state.lastSync}`"
-      @updated="$emit('updated', $event)"
-      @replied="$emit('replied', $event)"
-      @deleted="$emit('deleted', $event)"></timeline>
+    <v-container
+      v-if="!entryId"
+      class="py-0 px-0 narrow"
+    >
+      <timeline
+        ref="timeline"
+        class="mt-0 container narrow px-0"
+        :entries="shownEntries"
+        :entry-id="entryId"
+        :key="`timeline-${$store.state.lastSync}`"
+        @updated="$emit('updated', $event)"
+        @replied="$emit('replied', $event)"
+        @deleted="$emit('deleted', $event)"></timeline>
+     </v-container>
     <v-container
       v-if="!entryId && shownEntries.length < entries.length"
       class="narrow"

@@ -2,7 +2,7 @@
   <v-app id="tempo" dark>
     <v-app-bar
       app
-      dense
+      density="compact"
       :color="$theme.appBar.color">
       <v-spacer></v-spacer>
       <v-toolbar-title @click="$router.push('/')" class="mr-4" style="cursor: pointer">
@@ -169,7 +169,7 @@ html {
 .theme--dark.v-application {
   background: var(--application-background) !important;
 }
-.container.narrow {
+.v-container.narrow, .container.narrow {
   max-width: var(--single-column-width);
 }
 section.v-card, .section.v-card {

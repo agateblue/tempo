@@ -11,7 +11,7 @@
     <v-sheet
       tile
     > 
-      <v-toolbar dense flat>
+      <v-toolbar density="compact" flat>
         <v-toolbar-title v-if="$refs.calendar">
           {{ $refs.calendar.title }}
         </v-toolbar-title>
@@ -22,7 +22,7 @@
           label="Show all events"
         ></v-switch>
       </v-toolbar>
-      <v-toolbar dense flat>
+      <v-toolbar density="compact" flat>
         <v-menu
           bottom
           right

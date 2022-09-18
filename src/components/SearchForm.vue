@@ -22,7 +22,7 @@
         label="Filters"
         multiple
         chips
-        dense
+        density="compact"
         deletable-chips
       ></v-select>
     </v-col>
