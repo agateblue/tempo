@@ -50,30 +50,29 @@
         :style="bottomNavBarButtonStyle"
         exact
         :to="{path: '/diary', query: {q: $store.state.searchQuery}}">
-        <span>Diary</span>
         <v-icon>{{ $icons.mdiBook }}</v-icon>
+        <span>Diary</span>
       </v-btn>
       <v-btn
         :style="bottomNavBarButtonStyle"
         exact
         :to="{path: '/diary/calendar', query: {q: $store.state.searchQuery}}">
-        <span>Calendar</span>
         <v-icon>{{ $icons.mdiCalendar }}</v-icon>
+        <span>Calendar</span>
       </v-btn>
       <v-btn
         :style="bottomNavBarButtonStyle"
         exact
         :to="{path: '/diary/visualization', query: {q: $store.state.searchQuery}}">
-        <span>Data</span>
         <v-icon> {{ $icons.mdiChartTimelineVariant }}</v-icon>
+        <span>Data</span>
       </v-btn>
       <v-btn
         :style="bottomNavBarButtonStyle"
         exact
         to="/tasks">
-        <span>Tasks</span>
-
         <v-icon>{{ $icons.mdiCheck }}</v-icon>
+        <span>Tasks</span>
       </v-btn>
       <v-spacer></v-spacer>
     </v-bottom-navigation>

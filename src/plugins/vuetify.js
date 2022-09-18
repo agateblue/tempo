@@ -7,7 +7,110 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { mdi } from 'vuetify/iconsets/mdi-svg'
 
-export default createVuetify({
+
+// three shaking icons to reduce bundle size
+import {
+  mdiArrowLeft,
+  mdiBook,
+  mdiCalendar,
+  mdiChartTimelineVariant,
+  mdiCheck,
+  mdiChevronDown,
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiChevronUp,
+  mdiClock,
+  mdiClockOutline,
+  mdiClose,
+  mdiCog,
+  mdiContentCopy,
+  mdiDelete,
+  mdiDeleteOutline,
+  mdiDotsHorizontal,
+  mdiDownload,
+  mdiEye,
+  mdiEyeOff,
+  mdiFormatListBulleted,
+  mdiHeart,
+  mdiHeartOutline,
+  mdiHelpCircleOutline,
+  mdiMagnify,
+  mdiMenuDown,
+  mdiPencil,
+  mdiPlus,
+  mdiReply,
+  mdiReplyOutline,
+  mdiSend,
+  mdiSync,
+  mdiTrashCan,
+} from '@mdi/js'
+
+export const icons = {
+  mdiArrowLeft,
+  mdiBook,
+  mdiCalendar,
+  mdiChartTimelineVariant,
+  mdiCheck,
+  mdiChevronDown,
+  mdiChevronLeft,
+  mdiChevronRight,
+  mdiChevronUp,
+  mdiClock,
+  mdiClockOutline,
+  mdiClose,
+  mdiCog,
+  mdiContentCopy,
+  mdiDelete,
+  mdiDeleteOutline,
+  mdiDotsHorizontal,
+  mdiDownload,
+  mdiEye,
+  mdiEyeOff,
+  mdiFormatListBulleted,
+  mdiHeart,
+  mdiHeartOutline,
+  mdiHelpCircleOutline,
+  mdiMagnify,
+  mdiMenuDown,
+  mdiPencil,
+  mdiPlus,
+  mdiReply,
+  mdiReplyOutline,
+  mdiSend,
+  mdiSync,
+  mdiTrashCan,
+}
+
+export const theme = {
+  appBar: {
+    color: "pink-darken-4",
+  },
+  card: {
+    color: "grey-darken-4",
+    textSize: "body-1",
+  },
+  nestedCard: {
+    color: "blue-grey-darken-4",
+    textSize: "body-2",
+  },
+  drawer: {
+    color: "grey-darken-4",
+  },
+  menu: {
+    color: "grey-darken-4",
+  },
+  switch: {
+    color: "pink",
+  },
+  input: {
+    color: "grey-darken-4",
+  },
+  mainButton: {
+    color: "pink-darken-4",
+  },
+}
+
+export const vuetify = createVuetify({
   components,
   directives,
   icons: {

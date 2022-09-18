@@ -34,8 +34,8 @@
             <v-row class="py-3">
               <v-col cols="10">
                 <v-btn :transition="null" x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
-                  <v-icon :transition="null" v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
-                  <v-icon :transition="null" v-else>{{ $icons.mdiChevronUp }}</v-icon>
+                  <v-icon :transition="null" v-if="lists[idx].expanded" :icon="$icons.mdiChevronDown"></v-icon>
+                  <v-icon :transition="null" v-else :icon="$icons.mdiChevronUp"></v-icon>
                 </v-btn>
                 {{ list.label }} · {{ (tasksByList[idx] || []).length }}
               </v-col>
@@ -50,7 +50,7 @@
                   :transition="null"
                   title="Clear tasks in column"
                   color="secondary">
-                  <v-icon :transition="null">{{ $icons.mdiTrashCan }}</v-icon>
+                  <v-icon :transition="null" :icon="$icons.mdiTrashCan"></v-icon>
                 </v-btn>
                 <v-btn
                   v-else
@@ -62,7 +62,7 @@
                   :transition="null"
                   title="Add task"
                   color="secondary">
-                  <v-icon :transition="null">{{ $icons.mdiPlus }}</v-icon>
+                  <v-icon :transition="null" :icon="$icons.mdiPlus"></v-icon>
                 </v-btn>
                 <v-dialog
                   v-model="clearDoneDialog"

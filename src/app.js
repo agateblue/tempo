@@ -3,45 +3,8 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
-import vuetify from './plugins/vuetify';
+import {vuetify, icons, theme} from './plugins/vuetify';
 import { VuePlausible } from 'vue-plausible'
-
-// three shaking icons to reduce bundle size
-import {
-  mdiArrowLeft,
-  mdiBook,
-  mdiCalendar,
-  mdiChartTimelineVariant,
-  mdiCheck,
-  mdiChevronDown,
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiChevronUp,
-  mdiClock,
-  mdiClockOutline,
-  mdiClose,
-  mdiCog,
-  mdiContentCopy,
-  mdiDelete,
-  mdiDeleteOutline,
-  mdiDotsHorizontal,
-  mdiDownload,
-  mdiEye,
-  mdiEyeOff,
-  mdiFormatListBulleted,
-  mdiHeart,
-  mdiHeartOutline,
-  mdiHelpCircleOutline,
-  mdiMagnify,
-  mdiMenuDown,
-  mdiPencil,
-  mdiPlus,
-  mdiReply,
-  mdiReplyOutline,
-  mdiSend,
-  mdiSync,
-  mdiTrashCan,
-} from '@mdi/js'
 
 const app = createApp({
   extends: App,
@@ -63,71 +26,9 @@ const app = createApp({
 .use(router)
 .use(store)
 
+app.config.globalProperties.$icons = icons
+app.config.globalProperties.$theme = theme
 
-app.config.globalProperties.$icons = {
-  mdiArrowLeft,
-  mdiBook,
-  mdiCalendar,
-  mdiChartTimelineVariant,
-  mdiCheck,
-  mdiChevronDown,
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiChevronUp,
-  mdiClock,
-  mdiClockOutline,
-  mdiClose,
-  mdiCog,
-  mdiContentCopy,
-  mdiDelete,
-  mdiDeleteOutline,
-  mdiDotsHorizontal,
-  mdiDownload,
-  mdiEye,
-  mdiEyeOff,
-  mdiFormatListBulleted,
-  mdiHeart,
-  mdiHeartOutline,
-  mdiHelpCircleOutline,
-  mdiMagnify,
-  mdiMenuDown,
-  mdiPencil,
-  mdiPlus,
-  mdiReply,
-  mdiReplyOutline,
-  mdiSend,
-  mdiSync,
-  mdiTrashCan,
-}
-
-app.config.globalProperties.$theme = {
-  appBar: {
-    color: "pink-darken-4",
-  },
-  card: {
-    color: "grey-darken-4",
-    textSize: "body-1",
-  },
-  nestedCard: {
-    color: "blue-grey-darken-4",
-    textSize: "body-2",
-  },
-  drawer: {
-    color: "grey-darken-4",
-  },
-  menu: {
-    color: "grey-darken-4",
-  },
-  switch: {
-    color: "pink",
-  },
-  input: {
-    color: "grey-darken-4",
-  },
-  mainButton: {
-    color: "pink-darken-4",
-  },
-}
 
 if (process.env.VUE_APP_PLAUSIBLE_HOST) {
   let options = {

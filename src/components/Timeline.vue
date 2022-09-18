@@ -6,7 +6,7 @@
         :options="{
           threshold: .5
         }"
-        transition=""
+        :transition="null"
       >
         <v-card
           v-if="row.type === 'entry'"
