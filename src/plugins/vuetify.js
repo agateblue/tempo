@@ -96,6 +96,9 @@ export const theme = {
   drawer: {
     color: "grey-darken-4",
   },
+  bottomNavigation: {
+    color: "grey-darken-3",
+  },
   menu: {
     color: "grey-darken-4",
   },

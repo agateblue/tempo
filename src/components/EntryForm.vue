@@ -33,12 +33,12 @@
               tile color="transparent"
             >
               <v-expansion-panel color="transparent" style="background: transparent">
-                <v-expansion-panel-header
-                  :class="expandedPanel != 0 ? 'px-0' : ''"
+                <v-expansion-panel-title
+                  :class="expandedPanel != 0 ? 'px-2' : ''"
                   color="transparent"
                 >Additional options...
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
                   <v-row class="d-flex justify-space-between align-center my-2">
                     <v-col
                       v-if="formChoices.length > 1"
@@ -105,7 +105,7 @@
                       />
                     </v-col>
                   </v-row>
-                </v-expansion-panel-content>
+                </v-expansion-panel-text>
               </v-expansion-panel>
             </v-expansion-panels>
           </v-col>

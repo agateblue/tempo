@@ -44,7 +44,7 @@
         <router-view ref="view"></router-view>
       </v-container>
     </v-main>
-    <v-bottom-navigation fixed>
+    <v-bottom-navigation fixed :bg-color="$theme.bottomNavigation.color">
       <v-spacer></v-spacer>
       <v-btn
         :style="bottomNavBarButtonStyle"
