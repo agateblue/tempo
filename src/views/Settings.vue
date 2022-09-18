@@ -31,7 +31,6 @@
         <v-btn color="primary" type="submit">Save</v-btn>
       </v-card-actions>
     </v-card>
-
     <v-card
       tag="form"
       id="aliases"
@@ -99,7 +98,12 @@
       <v-card-title class="headline">Import data</v-card-title>
       <v-card-text :class="$theme.card.textSize">
         <p>Import data from a previously generated Tempo JSON File. Existing notes and tasks will be kept.</p>
-        <v-file-input accept=".json,application/json" label="JSON File" v-model="toImportFile"></v-file-input>
+        <v-file-input
+          accept=".json,application/json"
+          label="JSON File"
+          variant="underlined"
+          v-model="toImportFile"
+        ></v-file-input>
         <v-checkbox
           hide-details
           v-model="importConfig.entries"
@@ -124,7 +128,7 @@
         </v-textarea>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" type="submit" :disabled="!toImportFile">Import</v-btn>
+        <v-btn color="primary" type="submit" :disabled="toImportFile.length === 0">Import</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -140,18 +144,21 @@
             name="couchdb-url"
             placeholder="http://localhost:5984/tempo"
             required
+            variant="underlined"
           ></v-text-field>
           <v-text-field
             v-model="couchDbUsername"
             label="CouchDB Username"
             name="couchdb-username"
             required
+            variant="underlined"
           ></v-text-field>
           <v-text-field
             :append-icon="showdbPassword ? $icons.mdiEye : $icons.mdiEyeOff"
             :type="showdbPassword ? 'text' : 'password'"
             name="couchdb-password"
             required
+            variant="underlined"
             label="CouchDB Password"
             v-model="couchDbPassword"
             class="input-group--focused"
@@ -179,6 +186,7 @@
             name="webhookurl"
             type="url"
             required
+            variant="underlined"
           ></v-text-field>
         <v-btn
           class="mr-4"
@@ -322,10 +330,11 @@ export default {
         board: true,
         settings: true,
       },
+      toto: null,
       enabledBlueprints: [...this.$store.state.settings.blueprints || []],
       importLogs: [],
       syncStatus: null,
-      toImportFile: null,
+      toImportFile: [],
       showdbPassword: false,
       couchDbUrl: this.$store.state.couchDbUrl,
       couchDbUsername: this.$store.state.couchDbUsername,
@@ -377,12 +386,13 @@ export default {
     },
     async importData () {
       this.importLogs = []
-      if (!this.toImportFile) {
+      let toImport = this.toImportFile[0]
+      if (!toImport) {
         console.log('No file to import')
         return
       }
       this.importLogs.push("[info] Loading file...")
-      let text = await this.toImportFile.text()
+      let text = await toImport.text()
       this.importLogs.push("[info] Parsing file...")
       let data = JSON.parse(text)
       if (this.importConfig.entries ){

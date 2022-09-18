@@ -12,6 +12,7 @@
           hide-details
           v-model="name"
           required
+          variant="underlined"
         ></v-text-field>
       </v-col>
       <v-col
@@ -24,6 +25,7 @@
           :hint="`${matchingEntries} matching entries.`"
           v-model="query"
           required
+          variant="underlined"
         ></v-text-field>
       </v-col>
       <v-col
