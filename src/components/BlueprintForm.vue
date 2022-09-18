@@ -17,6 +17,7 @@
         <v-text-field
           v-else
           v-model="values[field.id]"
+          variant="underlined"
           :label="field.label"
           :type="field.type || 'text'"
           :required="field.required === undefined ? true : field.required"

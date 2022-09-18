@@ -6,6 +6,7 @@
     <v-col cols="6" sm="5" class="py-0">
       <v-text-field
         class="mt-0"
+        variant="underlined"
         v-model="localValue"
         :append-icon="$icons.mdiMagnify"
         placeholder="tag:sleep"
@@ -23,7 +24,8 @@
         multiple
         chips
         density="compact"
-        deletable-chips
+        closable-chips
+        variant="underlined"
       ></v-select>
     </v-col>
     <v-col cols="6" sm="3" class="py-0">
@@ -45,13 +47,13 @@ export default {
     return {
       filters: [],
       filtersChoices: [
-        {text: 'Favorite', value: 'is:fav'},
-        {text: 'Form', value: 'is:form'},
-        {text: 'Reply', value: 'is:reply'},
-        {text: 'Thread', value: 'is:thread'},
-        {text: 'Important', value: '!'},
-        {text: 'Positive', value: '+'},
-        {text: 'Negative', value: '-'},
+        {title: 'Favorite', value: 'is:fav'},
+        {title: 'Form', value: 'is:form'},
+        {title: 'Reply', value: 'is:reply'},
+        {title: 'Thread', value: 'is:thread'},
+        {title: 'Important', value: '!'},
+        {title: 'Positive', value: '+'},
+        {title: 'Negative', value: '-'},
       ],
       localValue: this.value
     }

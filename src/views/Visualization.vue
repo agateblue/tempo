@@ -13,6 +13,7 @@
                 v-model="params.selectedBlueprintIdx"
                 :items="blueprintChoices"
                 label="Name"
+                variant="underlined"
               ></v-select>
             </v-col>
             <v-col
@@ -33,6 +34,7 @@
                     v-bind="attrs"
                     v-on="on"
                     clearable
+                    variant="underlined"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -61,6 +63,7 @@
                     v-bind="attrs"
                     v-on="on"
                     clearable
+                    variant="underlined"
                   ></v-text-field>
                 </template>
                 <v-date-picker

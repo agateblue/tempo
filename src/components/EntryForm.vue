@@ -8,7 +8,7 @@
     <v-card-text class="narrow px-0 py-0" color="transparent">
       <v-textarea
         clearable
-        outlined
+        variant="outlined"
         :name="name"
         class="mt-0"
         ref="textarea"
@@ -49,6 +49,7 @@
                         label="Type"
                         v-model="currentFormId"
                         :items="formChoices"
+                        variant="underlined"
                       ></v-select>
                     </v-col>
                     <v-col
@@ -58,6 +59,7 @@
                     >
                       <v-text-field
                         label="Date"
+                        variant="underlined"
                         v-model="textDate"
                         type="datetime-local"
                         :max="new Date().toLocaleDateString('en-ca')"
@@ -186,10 +188,10 @@ export default {
   computed: {
     formChoices () {
       return [
-        {text:'Default', value: null},
+        {title:'Default', value: null},
         ...this.$store.getters.forms.map((f) => {
           return {
-            text: f.label,
+            title: f.label,
             value: f.id
           }
         })
