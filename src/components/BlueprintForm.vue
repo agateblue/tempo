@@ -14,20 +14,27 @@
           :label="field.label"
 
         />
-        <v-text-field
+        <component
           v-else
+          v-bind:is="getComponent(field)"
           v-model="values[field.id]"
           :label="field.label"
           :type="field.type || 'text'"
           :required="field.required === undefined ? true : field.required"
           clearable
-        ></v-text-field>
+          :hint="field.unit"
+          persistent-hint
+          :items="getSuggestions(field)"
+          :step="field.step || 'any'"
+        ></component>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
+import { VTextField, VCombobox } from 'vuetify/lib';
+
 function getValueType(value) {
   switch (typeof value) {
     case 'boolean':
@@ -100,6 +107,15 @@ export default {
           }
         })
       }
+    },
+    getSuggestions (field) {
+      return field.suggestions || []
+    },
+    getComponent(field) {
+      if (this.getSuggestions(field).length > 0) {
+        return VCombobox
+      }
+      return VTextField
     }
   },
   watch: {

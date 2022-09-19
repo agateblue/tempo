@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://tempo.agate.blue/schemas/blueprint.json",
   "title": "Blueprint",
   "description": "A Tempo blueprint describing forms, fields and visualizations. IDs of fields, forms and visualizations must contain only letters, digits, hyphens and semicolons",
@@ -65,7 +64,7 @@
           "type": {
             "type": "string",
             "description": "The type of data stored in the field",
-            "enum": ["text", "number", "boolean"],
+            "enum": ["text", "number", "boolean", "date"],
             "default": "text"
           },
           "min": {
@@ -74,6 +73,34 @@
             "examples": [
               0,
               1500
+            ]
+          },
+          "step": {
+            "anyOf": [
+              {"type": "string"},
+              {"type": "number"}
+            ],
+            "description": "For number fields, step used for increments / decrements. Default to any.",
+            "examples": [
+              "any",
+              0.1,
+              2
+            ]
+          },
+          "suggestions": {
+            "type": "array",
+            "description": "Text and number fields, offer a list of suggestions for easier selection",
+            "items": {
+              "anyOf": [
+                {"type": "string"},
+                {"type": "number"},
+                {"type": "integer"},
+                {"type": "null"}
+              ]
+            },
+            "minItems": 1,
+            "examples": [
+              ["Paracetamol", "D Vitamin", "B12 Vitamin"]
             ]
           }
         }
@@ -127,61 +154,62 @@
           }
         }
       }
-    }
-  },
-  "visualizations": {
-    "type": "array",
-    "default": [],
-    "description": "A list of visualizations available in this blueprint",
-    "required": [
-      "label",
-      "query",
-      "displayType"
-    ],
-    "items": {
-      "type": "object",
-      "properties": {
-        "label": {
-          "type": "string",
-          "description": "A human readable name for the visualization",
-          "examples": [
-            "Daily expenses",
-            "Favorite restaurants"
-          ]
-        },
-        "help": {
-          "type": "string",
-          "description": "A help text to be displayed near the visualization to provide context",
-          "examples": [
-            "Total amount spent per day, in dollars",
-            "Restaurants ranked by numbor of orders"
-          ]
-        },
-        "query": {
-          "type": "string",
-          "description": "A SQL query used to build the visualization. Please refer to Tempo's documentation on how to build visualization queries.",
-          "examples": [
-            "SELECT data->`bob:purchase:restaurant`, sum(data->`bob:purchase:price`) as 'Amount Spent' FROM ? GROUP BY data->`bob:purchase:restaurant` ORDER BY 'Amount Spent' DESC"
-          ]
-        },
-        "displayType": {
-          "type": "string",
-          "default": "bar",
-          "description": "The type of chart used for the visualization",
-          "enum": [
-            "pie",
-            "bar",
-            "table"
-          ]
-        },
-        "displayOptions": {
-          "type": "object",
-          "default": {},
-          "description": "Options to tweak the rendering of the visualization. Please refer to Tempo's documentation on how to build visualizations.",
-          "additionalProperties": true,
-          "examples": [
-            {"colors": ["green"]}
-          ]
+    },
+    "visualizations": {
+      "type": "array",
+      "default": [],
+      "description": "A list of visualizations available in this blueprint",
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "query",
+          "displayType"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "A human readable name for the visualization",
+            "examples": [
+              "Daily expenses",
+              "Favorite restaurants"
+            ]
+          },
+          "help": {
+            "type": "string",
+            "description": "A help text to be displayed near the visualization to provide context",
+            "examples": [
+              "Total amount spent per day, in dollars",
+              "Restaurants ranked by numbor of orders"
+            ]
+          },
+          "query": {
+            "type": "string",
+            "description": "A SQL query used to build the visualization. Please refer to Tempo's documentation on how to build visualization queries.",
+            "examples": [
+              "SELECT data->`bob:purchase:restaurant`, sum(data->`bob:purchase:price`) as 'Amount Spent' FROM ? GROUP BY data->`bob:purchase:restaurant` ORDER BY 'Amount Spent' DESC"
+            ]
+          },
+          "displayType": {
+            "type": "string",
+            "default": "bar",
+            "description": "The type of chart used for the visualization",
+            "enum": [
+              "line",
+              "pie",
+              "bar",
+              "table"
+            ]
+          },
+          "displayOptions": {
+            "type": "object",
+            "default": {},
+            "description": "Options to tweak the rendering of the visualization. Please refer to Tempo's documentation on how to build visualizations.",
+            "additionalProperties": true,
+            "examples": [
+              {"colors": ["green"]}
+            ]
+          }
         }
       }
     }

@@ -14,7 +14,7 @@ describe('schemas', () => {
     expect(result).to.deep.equal({valid: true, errors: []})
   })
   it(`can validate travel blueprint`, () => {
-    const blueprint = require('@/blueprints/builtin:travel.json')
+    const blueprint = require('@/blueprints/example:pets.json')
     let result = blueprintValidator.validate(blueprint);
     expect(result).to.deep.equal({valid: true, errors: []})
   })
