@@ -1,0 +1,70 @@
+{
+  "id": "example:pets",
+  "label": "Example schema",
+  "title": "An example schema for you to play with",
+  "version": "1",
+  "fields": [
+    {
+      "id": "example:pets:type",
+      "label": "Pet's type",
+      "type": "text",
+      "suggestions": [
+        "Bird",
+        "Cat",
+        "Dog",
+        "Fish",
+        "Rabbit"
+      ]
+    },
+    {
+      "id": "example:pets:name",
+      "label": "Pet's name",
+      "type": "text"
+    },
+    {
+      "id": "example:pets:birthday",
+      "label": "Pet's birth date",
+      "type": "date"
+    },
+    {
+      "id": "example:pets:adoption-date",
+      "label": "Pet's adoption date",
+      "type": "date"
+    },
+    {
+      "id": "example:pets:weight",
+      "label": "Pet's weight",
+      "type": "number",
+      "unit": "Kilograms",
+      "step": 0.01
+    }
+  ],
+  "forms": [
+    {
+      "id": "example:pets:adoption",
+      "label": "Pet adoption",
+      "fields": [
+        {"id": "example:pets:type"},
+        {"id": "example:pets:name"},
+        {"id": "example:pets:adoption-date"},
+        {"id": "example:pets:birthday"}
+      ]
+    },
+    {
+      "id": "example:pets:checkup",
+      "label": "Pet check-up",
+      "fields": [
+        {"id": "example:pets:name"},
+        {"id": "example:pets:weight"}
+      ]
+    }
+  ],
+  "visualizations": [
+    {
+      "label": "Weight evolution",
+      "help": "In kilograms",
+      "query": "SELECT date, data->`example:pets:name` as Name, data->`example:pets:weight` as Weight FROM ? GROUP BY date, Name ORDER BY date DESC",
+      "displayType": "line"
+    }
+  ]
+}

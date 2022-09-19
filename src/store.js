@@ -14,7 +14,6 @@ async function getBuiltinBlueprints () {
   return {
     "builtin:mood": (await import("@/blueprints/builtin:mood.json")).default,
     "builtin:tags": (await import("@/blueprints/builtin:tags.json")).default,
-    "builtin:travel": (await import("@/blueprints/builtin:travel.json")).default,
   }
 }
 
@@ -148,7 +147,9 @@ const store = new Vuex.Store({
     },
     enabledBlueprints: (state) => {
       return state.loadedBlueprints.filter(b => {
-        return state.settings.blueprints.indexOf(b.id) > -1
+        if (b) {
+          return state.settings.blueprints.indexOf(b.id) > -1
+        }
       })
     },
     forms: (state, getters) => {
@@ -414,10 +415,20 @@ const store = new Vuex.Store({
       commit("settings", s)
       dispatch("loadBlueprints")
     },
-    async loadBlueprints ({commit}) {
+    async loadBlueprints ({commit, state}) {
       let builtins = await getBuiltinBlueprints()
-      let allBlueprints = {...builtins}
-
+      let local = await state.db.find({
+        selector: {
+          type: 'blueprint',
+        },
+        limit: 99999,
+      })
+      let allBlueprints = {
+        ...builtins,
+      }
+      local.docs.forEach(b => {
+        allBlueprints[b._id] = b.definition
+      })
       commit("loadedBlueprints", Object.keys(allBlueprints).map(b => {return allBlueprints[b]}))
     },
   },

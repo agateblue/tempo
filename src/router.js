@@ -56,6 +56,12 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: () => import(/* webpackChunkName: "Settings" */ './views/Settings.vue'),
+  },
+  {
+    path: '/blueprint-editor/:id?',
+    name: 'BlueprintEditor',
+    props: true,
+    component: () => import(/* webpackChunkName: "Blueprints" */ './views/BlueprintEditor.vue'),
   }
 ]
 

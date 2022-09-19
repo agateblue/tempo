@@ -13,22 +13,56 @@
     >
       <v-card-title class="headline">Blueprints</v-card-title>
 
-      <v-card-text :class="$theme.card.textSize">
+      <v-card-text :class="$theme.card.textSize" class="mb-4">
         <p>
           Blueprints provide additional features in Tempo such as visualizations or forms.
           Some blueprints are enabled by default.
         </p>
-        <v-checkbox
-          v-model="enabledBlueprints"
-          :label="`${blueprint.label} · ${blueprint.title}`"
-          :value="blueprint.id"
+        <v-row
           v-for="blueprint in $store.state.loadedBlueprints"
           :key="blueprint.id"
-          hide-details
-        ></v-checkbox>
+          class="py-0 d-flex justify-space-between align-center"
+        >
+          <v-col class="py-2" cols="8">
+            <v-checkbox
+              v-model="enabledBlueprints"
+              :label="`${blueprint.label} · ${blueprint.title}`"
+              :value="blueprint.id"
+              hide-details
+              class="mt-0"
+            ></v-checkbox>
+          </v-col>
+          <v-col class="py-2 text-right" cols="4">
+            <v-btn
+              v-if="blueprint.id.startsWith('builtin:')"
+              small
+              icon
+              color="grey"
+              :to="{name: 'BlueprintEditor', params: {id: blueprint.id}}"
+              title="View"
+            >
+              <v-icon v-text="$icons.mdiEye"></v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              small
+              icon
+              color="grey"
+              :to="{name: 'BlueprintEditor', params: {id: blueprint.id}}"
+              title="View"
+            >
+              <v-icon v-text="$icons.mdiPencil"></v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="flex-d justify-space-between">
         <v-btn color="primary" type="submit">Save</v-btn>
+        <router-link
+          :to="{path: '/blueprint-editor'}"
+        >
+          Create a new blueprint
+        </router-link>
       </v-card-actions>
     </v-card>
 
