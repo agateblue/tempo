@@ -130,7 +130,8 @@ export function parseQuery(query) {
     } else if (stripped.startsWith('is:form')) {
       tokens.push({form: true})
     } else if (stripped.startsWith('form:')) {
-      tokens.push({formId: stripped.split(':')[1]})
+      let formId = stripped.split(':').slice(1).join(':')
+      tokens.push({formId})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(/:(.+)/)[1]})
     } else if (stripped.startsWith('c:') || stripped.startsWith('category:') ) {
