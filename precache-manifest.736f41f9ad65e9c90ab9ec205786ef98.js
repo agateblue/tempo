@@ -1,38 +1,42 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5c3d48321ed78319c097",
+    "revision": "9405a63124ec0397b6dd",
     "url": "/css/About~31ecd969.42c6a1f1.css"
   },
   {
-    "revision": "ca5f38141eff589cd474",
+    "revision": "76f42fa6fdb8216a267c",
+    "url": "/css/Blueprints~31ecd969.bec05644.css"
+  },
+  {
+    "revision": "721275d0a399436facee",
+    "url": "/css/Blueprints~DiaryCalendar~DiaryTimeline~DiaryVisualization~Tasks~d939e436.da614ddb.css"
+  },
+  {
+    "revision": "bc5654c50e921213e2e6",
     "url": "/css/DiaryCalendar~31ecd969.52c11f62.css"
   },
   {
-    "revision": "e0cf773af567072193af",
+    "revision": "240c671a7bf589d6a6c3",
     "url": "/css/DiaryCalendar~DiaryTimeline~31ecd969.a17370a0.css"
   },
   {
-    "revision": "19def3f6632bb7f66845",
-    "url": "/css/DiaryCalendar~DiaryTimeline~DiaryVisualization~Tasks~d939e436.da614ddb.css"
+    "revision": "339d724d2f53aa199282",
+    "url": "/css/DiaryTimeline~31ecd969.b2f31361.css"
   },
   {
-    "revision": "c635302efe6b64f6960e",
-    "url": "/css/DiaryTimeline~31ecd969.d91f6e93.css"
-  },
-  {
-    "revision": "c1c07da48de9c85a402f",
+    "revision": "d153a85a9b13a2f0b3ac",
     "url": "/css/DiaryVisualization~31ecd969.a90b2d8a.css"
   },
   {
-    "revision": "45f8ec7672ebf6e432a9",
+    "revision": "f71ce9cd41d437e702a4",
     "url": "/css/Settings~31ecd969.ac0ea1ae.css"
   },
   {
-    "revision": "f8694cea68758736bfda",
+    "revision": "f7ec6ec63fcac00b2294",
     "url": "/css/Tasks~31ecd969.d02844a9.css"
   },
   {
-    "revision": "56beafc2c453160a0ce8",
+    "revision": "af599517b8df7a989c09",
     "url": "/css/app~748942c6.7621a46a.css"
   },
   {
@@ -40,11 +44,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/chunk-vendors~fdc6512a.0b897033.css"
   },
   {
-    "revision": "229a2e4c0e525953f5bc",
+    "revision": "c39470d138dfe8940869",
     "url": "/css/tasks~31ecd969.718e0e0d.css"
   },
   {
-    "revision": "8f6cced2ad20582416a3",
+    "revision": "e26536b8628bc65afbd7",
     "url": "/css/visualization~31ecd969.f7eef330.css"
   },
   {
@@ -128,60 +132,64 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "91d374c9e188400fbfbfffa3ad1e6a27",
+    "revision": "c091f632033c3d817c4ce4cae00167e6",
     "url": "/index.html"
   },
   {
-    "revision": "5c3d48321ed78319c097",
-    "url": "/js/About~31ecd969.dcdedc9b.js"
+    "revision": "9405a63124ec0397b6dd",
+    "url": "/js/About~31ecd969.5f845ab5.js"
   },
   {
-    "revision": "ca5f38141eff589cd474",
-    "url": "/js/DiaryCalendar~31ecd969.ef6bddab.js"
+    "revision": "76f42fa6fdb8216a267c",
+    "url": "/js/Blueprints~31ecd969.248aad88.js"
   },
   {
-    "revision": "e0cf773af567072193af",
-    "url": "/js/DiaryCalendar~DiaryTimeline~31ecd969.797732c4.js"
+    "revision": "721275d0a399436facee",
+    "url": "/js/Blueprints~DiaryCalendar~DiaryTimeline~DiaryVisualization~Tasks~d939e436.38b42f29.js"
   },
   {
-    "revision": "19def3f6632bb7f66845",
-    "url": "/js/DiaryCalendar~DiaryTimeline~DiaryVisualization~Tasks~d939e436.ef936e93.js"
+    "revision": "bc6a4181c980f7949a67",
+    "url": "/js/Blueprints~bbbcffbe.b6bc98bf.js"
   },
   {
-    "revision": "c635302efe6b64f6960e",
-    "url": "/js/DiaryTimeline~31ecd969.a05ed41f.js"
+    "revision": "bc5654c50e921213e2e6",
+    "url": "/js/DiaryCalendar~31ecd969.eaf120bd.js"
   },
   {
-    "revision": "c1c07da48de9c85a402f",
-    "url": "/js/DiaryVisualization~31ecd969.4ac653c4.js"
+    "revision": "240c671a7bf589d6a6c3",
+    "url": "/js/DiaryCalendar~DiaryTimeline~31ecd969.d7452880.js"
   },
   {
-    "revision": "a4ea5b5b04174f0e9426",
-    "url": "/js/Diary~31ecd969.76b619ac.js"
+    "revision": "339d724d2f53aa199282",
+    "url": "/js/DiaryTimeline~31ecd969.54eb7645.js"
   },
   {
-    "revision": "45f8ec7672ebf6e432a9",
-    "url": "/js/Settings~31ecd969.232cfa59.js"
+    "revision": "d153a85a9b13a2f0b3ac",
+    "url": "/js/DiaryVisualization~31ecd969.613a764f.js"
   },
   {
-    "revision": "f8694cea68758736bfda",
-    "url": "/js/Tasks~31ecd969.39d3120c.js"
+    "revision": "15c5c12e1d3c7a060268",
+    "url": "/js/Diary~31ecd969.b6a578a8.js"
+  },
+  {
+    "revision": "f71ce9cd41d437e702a4",
+    "url": "/js/Settings~31ecd969.1f0818dc.js"
+  },
+  {
+    "revision": "f7ec6ec63fcac00b2294",
+    "url": "/js/Tasks~31ecd969.da304541.js"
   },
   {
     "revision": "19fdb775c2fc6a74c08c",
     "url": "/js/alasql~2a42e354.2bfb585d.js"
   },
   {
-    "revision": "56beafc2c453160a0ce8",
-    "url": "/js/app~748942c6.83a1d727.js"
+    "revision": "af599517b8df7a989c09",
+    "url": "/js/app~748942c6.2efc5ccf.js"
   },
   {
     "revision": "78a387c06a47470b7019",
     "url": "/js/chunk-2d0b3a5b.4b92ba8c.js"
-  },
-  {
-    "revision": "63a24a9fc56846eb7ca2",
-    "url": "/js/chunk-2d0e1bc2.86a4c6b0.js"
   },
   {
     "revision": "4a9e479effe3b3e54f92",
@@ -208,12 +216,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/chunk-vendors~fdc6512a.2d29ab4d.js"
   },
   {
-    "revision": "229a2e4c0e525953f5bc",
-    "url": "/js/tasks~31ecd969.d9c8547c.js"
+    "revision": "c39470d138dfe8940869",
+    "url": "/js/tasks~31ecd969.f90df4ba.js"
   },
   {
-    "revision": "8f6cced2ad20582416a3",
-    "url": "/js/visualization~31ecd969.38ec4ae4.js"
+    "revision": "e26536b8628bc65afbd7",
+    "url": "/js/visualization~31ecd969.49a10d4f.js"
   },
   {
     "revision": "f9ff1a3a453d31f89db208cd0a1b5556",
