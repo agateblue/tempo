@@ -129,6 +129,8 @@ export function parseQuery(query) {
       tokens.push({reply: true})
     } else if (stripped.startsWith('is:form')) {
       tokens.push({form: true})
+    } else if (stripped.startsWith('form:')) {
+      tokens.push({formId: stripped.split(':')[1]})
     } else if (stripped.startsWith('t:') || stripped.startsWith('tag:') ) {
       tokens.push({tagName: stripped.split(/:(.+)/)[1]})
     } else if (stripped.startsWith('c:') || stripped.startsWith('category:') ) {
@@ -173,6 +175,9 @@ export function matchTokens(entry, tokens, aliasesById = {}) {
       return false
     }
     if (token.form && !entry.form) {
+      return false
+    }
+    if (token.formId && entry.form != token.formId) {
       return false
     }
     if (token.thread && (entry.replies || []).length === 0) {

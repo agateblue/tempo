@@ -94,12 +94,13 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'is:fav is:thread is:reply is:form hello #world + - date:2020 t:mytag $dreams'
+    const query = 'is:fav is:thread is:reply is:form form:noop hello #world + - date:2020 t:mytag $dreams'
     const expected = [
       {favorite: true},
       {thread: true},
       {reply: true},
       {form: true},
+      {formId: 'noop'},
       {text: 'hello'},
       {tag: '#world'},
       {sign: '+'},
@@ -202,6 +203,23 @@ describe('utils', () => {
     const entryNotMatching = {
       text: 'bar',
       form: null,
+    }
+    let result = matchTokens(entryMatching, tokens)
+    expect(result).equal(true)
+    result = matchTokens(entryNotMatching, tokens)
+    expect(result).equal(false)
+  })
+  it('match formId', () => {
+    const tokens = [
+      {formId: 'foo'},
+    ]
+    const entryMatching = {
+      text: 'noop',
+      form: 'foo'
+    }
+    const entryNotMatching = {
+      text: 'bar',
+      form: 'bar',
     }
     let result = matchTokens(entryMatching, tokens)
     expect(result).equal(true)
