@@ -86,14 +86,6 @@
           </v-list-item>
         </v-list>
       </v-menu>
-      <visualization-modal
-        :show.sync="showVisualizationModal"
-        :config="config"
-        :entries="entries"
-        :tags="tags"
-        @updated="update">
-      </visualization-modal>
-
       <v-dialog
 
         v-model="deleteDialog"
@@ -158,7 +150,6 @@ export default {
   props: ['entries', 'tags', 'config', 'builtin'],
   components: {
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
-    VisualizationModal:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationModal"),
   },
   data () {
     return {
