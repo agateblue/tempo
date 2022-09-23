@@ -1,126 +1,24 @@
 <template>
   <div>
     <v-container class="narrow py-0 px-0">
-      <v-card tag="section" class="mb-8" :color="$theme.card.color">
-        <v-card-title class="headline">Options</v-card-title>
-
-        <v-card-text :class="$theme.card.textSize">
-          <v-row>
-            <v-col
-              cols="4"
-            >
-              <v-select
-                v-model="params.selectedBlueprintId"
-                :items="blueprintChoices"
-                label="Name"
-              ></v-select>
-            </v-col>
-            <v-col
-              cols="4"
-            >
-              <v-menu
-                v-model="showStartMenu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="params.start"
-                    label="Start"
-                    v-bind="attrs"
-                    v-on="on"
-                    clearable
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  no-title
-                  :max="params.end"
-                  v-model="params.start"
-                  @input="showStartMenu = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-            <v-col
-              cols="4"
-            >
-              <v-menu
-                v-model="showEndMenu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="params.end"
-                    label="End"
-                    v-bind="attrs"
-                    v-on="on"
-                    clearable
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  no-title
-                  :min="params.start"
-                  :max="(new Date()).toISOString()"
-                  v-model="params.end"
-                  @input="showEndMenu = false"
-                ></v-date-picker>
-              </v-menu>
-            </v-col>
-          </v-row>
-          <search-form
-            :value="$store.state.searchQuery"
-            @submit="$store.commit('searchQuery', $event)"
-            :resultCount="allEntries.length"
-          />
-        </v-card-text>
-      </v-card>
-      
-      <!-- <v-btn
-        class="mb-4"
-        :color="$theme.mainButton.color"
-        @click="showvisualizationModal = true"
-      >
-        <v-icon>{{ $icons.mdiPlus }}</v-icon>
-        Add a new visualization
-      </v-btn> -->
+      <visualization-config
+        v-model="params"
+        :all-entries="allEntries"
+      ></visualization-config>
     </v-container>
     <v-container class="mt-4 py-0 px-0" v-if="selectedBlueprint">
       <dataviz 
         :blueprint="selectedBlueprint"      
         :entries="queryableEntries"
         :tags="queryableTags"
-        :days="graphDays"></dataviz>
-      <visualization-modal
-        :days="graphDays"
-        :entries="queryableEntries"
-        :tags="queryableTags"
-        :show.sync="showvisualizationModal" />
+      ></dataviz>
     </v-container>
   </div>
 </template>
 
 <script>
-// import parseISO from 'date-fns/parseISO'
-import sub from 'date-fns/sub'
+import {getQueryableEntries, getQueryableTags, getDates} from '@/utils'
 
-import SearchForm from '@/components/SearchForm.vue'
-import VisualizationModal from '@/components/VisualizationModal.vue'
-import {getQueryableEntries, getQueryableTags} from '@/utils'
-
-function getDates (start, end) {
-  end = end ? new Date(end) : new Date
-  start = start ? new Date(start) : sub(end, {months: 2})
-  return {
-    start: start.toISOString().slice(0, 10),
-    end: end.toISOString().slice(0, 10)
-  }
-}
 export default {
   props: {
     allEntries: Array,
@@ -129,25 +27,20 @@ export default {
     defaultEnd: {type: String, default: null},
   },
   components: {
-    VisualizationModal,
-    SearchForm,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
+    VisualizationConfig:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationConfig"),
   },
   data () {
     return {
-      showStartMenu: false,
-      showEndMenu: false,
       params: {
         ...getDates(this.defaultStart, this.defaultEnd),
-        selectedBlueprintId: null,
+        selectedBlueprintId: this.blueprint,
       },
-      showvisualizationModal: false,
-      graphDays: 60,
     }
   },
   async created () {
     await this.$store.dispatch("loadBlueprints")
-    this.params.selectedBlueprintId = this.$store.state.loadedBlueprints[0].id
+    this.params.selectedBlueprintId = this.blueprint || this.$store.state.loadedBlueprints[0].id
   },
   computed: {
     entries () {
@@ -163,16 +56,6 @@ export default {
       return this.$store.getters.enabledBlueprints.filter(b => {
         return b.id === this.params.selectedBlueprintId
       })[0]
-    },
-    blueprintChoices () {
-      return this.$store.getters.enabledBlueprints.filter(b => {
-        return (b.visualizations || []).length > 0
-      }).map(b => {
-        return {
-          text: b.label,
-          value: b.id,
-        }
-      })
     }
   },
   watch: {

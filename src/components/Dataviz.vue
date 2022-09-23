@@ -13,7 +13,7 @@
 <script>
 
 export default {
-  props: ['entries', 'tags', 'days', 'blueprint'],
+  props: ['entries', 'tags', 'blueprint'],
   components: {
     BlueprintVisualization:  () => import(/* webpackChunkName: "visualization" */ "@/components/BlueprintVisualization"),
   },

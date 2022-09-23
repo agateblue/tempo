@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import sub from 'date-fns/sub'
 
 const signToMood = {
   '+': 1,
@@ -521,5 +522,14 @@ export function trackEvent(store, event, props = {}, eventData = {}) {
     })
   } catch (e) {
     console.warn("Could not track event", e)
+  }
+}
+
+export function getDates (start, end) {
+  end = end ? new Date(end) : new Date
+  start = start ? new Date(start) : sub(end, {months: 2})
+  return {
+    start: start.toISOString().slice(0, 10),
+    end: end.toISOString().slice(0, 10)
   }
 }
