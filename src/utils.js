@@ -390,6 +390,15 @@ export async function getTasks (store, query) {
   )
 }
 
+export async function getBlueprints (store) {
+  let result = await store.state.db.find({
+    selector: {
+      type: 'blueprint',
+    }
+  })
+  return result.docs
+}
+
 export function getSettingValue(s) {
   const excludedAttrs = ["_rev", "_id", "_", "type"]
   for (const key in s) {

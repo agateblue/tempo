@@ -115,6 +115,11 @@
         ></v-checkbox>
         <v-checkbox
           hide-details
+          v-model="exportConfig.blueprints"
+          label="Export blueprints"
+        ></v-checkbox>
+        <v-checkbox
+          hide-details
           v-model="exportConfig.settings"
           label="Export Tempo settings"
         ></v-checkbox>
@@ -143,6 +148,11 @@
           hide-details
           v-model="importConfig.board"
           label="Import tasks and board configuration"
+        ></v-checkbox>
+        <v-checkbox
+          hide-details
+          v-model="importConfig.blueprints"
+          label="Import blueprints"
         ></v-checkbox>
         <v-checkbox
           hide-details
@@ -272,7 +282,15 @@
 <script>
 import AliasForm from '@/components/AliasForm'
 
-import {search, getTasks, downloadFile, getSettings, bulkInsertAndUpdate, trackEvent} from '@/utils'
+import {
+  search,
+  getBlueprints,
+  getTasks,
+  downloadFile,
+  getSettings,
+  bulkInsertAndUpdate,
+  trackEvent
+} from '@/utils'
 
 async function importEntries(entries, db, logs) {
   entries = entries || []
@@ -339,6 +357,29 @@ async function importSettings(settings, db, logs) {
 }
 
 
+async function importBlueprints(blueprints, db, logs) {
+  blueprints = blueprints || []
+  blueprints = blueprints.filter(b => {
+    return !b._id.startsWith('builtin:')
+  })
+  logs.push(`[info] Importing ${blueprints.length} blueprints...`)
+  let result = await bulkInsertAndUpdate(blueprints, db)
+  let success = result.filter((e) => {
+    return e.ok
+  }).length
+  let failed = result.filter((e) => {
+    return !e.ok
+  }).length
+  if (failed > 0) {
+    logs.push(`[error] ${failed} blueprints failed to import`)
+  }
+  if (success > 0) {
+    logs.push(`[info] ${success} blueprints imported successfully...`)
+  }
+  return result
+}
+
+
 export default {
   components: {
     AliasForm
@@ -349,11 +390,13 @@ export default {
       exportConfig: {
         entries: true,
         board: true,
+        blueprints: true,
         settings: true,
       },
       importConfig: {
         entries: true,
         board: true,
+        blueprints: true,
         settings: true,
       },
       enabledBlueprints: [...this.$store.state.settings.blueprints || []],
@@ -387,6 +430,9 @@ export default {
           settings: this.$store.state.settings.boardConfig,
           tasks: await getTasks(this.$store, '')
         }
+      }
+      if (this.exportConfig.blueprints) {
+        data.blueprints = await getBlueprints(this.$store)
       }
       if (this.exportConfig.settings) {
         let settings = await getSettings(this.$store)
@@ -424,6 +470,9 @@ export default {
       }
       if (this.importConfig.board ){
         await importBoard(data.board, this.$store.state.db, this.$store.dispatch, this.importLogs)
+      }
+      if (this.importConfig.blueprints ){
+        await importBlueprints(data.blueprints, this.$store.state.db, this.importLogs)
       }
       if (this.importConfig.settings ){
         await importSettings(data.settings, this.$store.state.db, this.importLogs)
