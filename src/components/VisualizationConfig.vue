@@ -5,6 +5,7 @@
       <v-row>
         <v-col
           cols="4"
+          v-if="showBlueprintSelector"
         >
           <v-select
             v-model="params.selectedBlueprintId"
@@ -87,6 +88,7 @@ export default {
   props: {
     value: {},
     allEntries: {},
+    showBlueprintSelector: {default: true},
   },
   components: {
     SearchForm,

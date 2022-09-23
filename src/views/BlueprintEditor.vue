@@ -13,7 +13,10 @@
     <h1 v-if="id" class="headline mb-4">Edit blueprint "{{ blueprint.label }}"</h1>
     <h1 v-else class="headline mb-4">Create a new blueprint</h1>
     <v-row v-if="blueprint">
-      <v-col cols="12" sm="6">
+      <v-col
+        cols="12"
+        sm="6"
+        :style="$vuetify.breakpoint.mdAndUp ? 'position: sticky; top: 3em; align-self: flex-start' : ''">
         <v-card tag="section" class="mt-2" :color="$theme.card.color">
 
           <v-card-title>Definition</v-card-title>
@@ -72,6 +75,26 @@
                   </div>
                 </v-expansion-panel-content>
               </v-expansion-panel>
+              <v-expansion-panel
+                style="background: transparent"
+              >
+                <v-expansion-panel-header>Visualizations</v-expansion-panel-header>
+                <v-expansion-panel-content
+                  v-if="blueprint.visualizations && blueprint.visualizations.length > 0"
+                >
+                  {{ queryableEntries.length }}
+                  <visualization-config
+                    v-model="visualizationParams"
+                    :all-entries="entries"
+                    :show-blueprint-selector="false"
+                  ></visualization-config>
+                  <dataviz 
+                    :blueprint="blueprint"      
+                    :entries="queryableEntries"
+                    :tags="queryableTags"
+                  ></dataviz>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-expansion-panels>
           </v-card-text>
         </v-card>
@@ -86,6 +109,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import BlueprintField from '@/components/BlueprintField'
 import BlueprintEditorForm from '@/components/BlueprintEditorForm'
 import BlueprintForm from '@/components/BlueprintForm'
+import {getQueryableEntries, getQueryableTags, getDates, search} from '@/utils'
 const exampleBlueprint = require('@/blueprints/example:pets.json')
 
 export default {
@@ -96,11 +120,18 @@ export default {
     BlueprintEditorForm,
     BlueprintForm,
     BlueprintField,
+    Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
+    VisualizationConfig:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationConfig"),
   },
   data () {
     return {
       panels: [],
-      blueprint: null
+      blueprint: null,
+      entries: [],
+      visualizationParams: {
+        ...getDates(this.defaultStart, this.defaultEnd),
+      }
+
     }
   },
   async created () {
@@ -113,6 +144,16 @@ export default {
       })
     }
     this.blueprint = cloneDeep(definition || exampleBlueprint)
+    await this.search()
+  },
+  methods: {
+    async search () {
+      this.entries = await search({
+        store: this.$store,
+        sortDesc: true,
+        query: this.$store.state.searchQuery,
+      })
+    },
   },
   computed: {
     availableFields () {
@@ -121,7 +162,19 @@ export default {
         fields[f.id] = f
       })
       return fields
-    }
+    },
+    
+    queryableEntries () {
+      return getQueryableEntries(this.entries, this.visualizationParams.start, this.visualizationParams.end)
+    },
+    queryableTags () {
+      return getQueryableTags(this.queryableEntries)
+    },
+  },
+  watch: {
+    '$store.state.searchQuery': async function () {
+      await this.search()
+    },
   }
 }
 </script>
