@@ -29,7 +29,7 @@ import { VTextField, VCombobox } from 'vuetify/lib';
 export default {
   props: {
     field: {},
-    value: {}
+    value: {default: null},
   },
   data () {
     return {
