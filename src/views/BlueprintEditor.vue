@@ -25,8 +25,8 @@
         </v-card-text> 
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6">
-        <h2 class="headline mb-4">Rendering</h2>
+      <v-col cols="12" sm="6" v-if="blueprint.forms && blueprint.forms.length > 0">
+        <h2 class="headline mb-4">Forms</h2>
         <v-card
           tag="section"
           class="mb-4"
@@ -34,7 +34,7 @@
           v-for="form in blueprint.forms"
           :key="form.id"
         >
-          <v-card-title>Form - {{ form.label }}</v-card-title>
+          <v-card-title>{{ form.label }}</v-card-title>
           <v-card-text :class="$theme.card.textSize">
             <blueprint-form
               ref="blueprintForm"
