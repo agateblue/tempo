@@ -8,32 +8,15 @@
         cols="12"
         sm="6"
       >
-        <v-checkbox
-          v-if="field.type === 'boolean'"
-          v-model="values[field.id]"
-          :label="field.label"
-
-        />
-        <component
-          v-else
-          v-bind:is="getComponent(field)"
-          v-model="values[field.id]"
-          :label="field.label"
-          :type="field.type || 'text'"
-          :required="field.required === undefined ? true : field.required"
-          clearable
-          :hint="field.unit"
-          persistent-hint
-          :items="getSuggestions(field)"
-          :step="field.step || 'any'"
-        ></component>
+        <blueprint-field v-model="values[field.id]" :field="field" />
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import { VTextField, VCombobox } from 'vuetify/lib';
+
+import BlueprintField from '@/components/BlueprintField'
 
 function getValueType(value) {
   switch (typeof value) {
@@ -45,11 +28,15 @@ function getValueType(value) {
       return 'text'
   }
 }
+
 export default {
   props: {
     value: {default: () => {return {}}},
     config: {},
     availableFields: {},
+  },
+  components: {
+    BlueprintField
   },
   data () {
     let values = {...this.value}
@@ -108,15 +95,6 @@ export default {
         })
       }
     },
-    getSuggestions (field) {
-      return field.suggestions || []
-    },
-    getComponent(field) {
-      if (this.getSuggestions(field).length > 0) {
-        return VCombobox
-      }
-      return VTextField
-    }
   },
   watch: {
     values: {
