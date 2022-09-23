@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/About~31ecd969.42c6a1f1.css"
   },
   {
-    "revision": "76f42fa6fdb8216a267c",
+    "revision": "a47d1abb3202814b0cd7",
     "url": "/css/Blueprints~31ecd969.bec05644.css"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/Blueprints~DiaryCalendar~DiaryTimeline~DiaryVisualization~Tasks~d939e436.da614ddb.css"
   },
   {
-    "revision": "bc5654c50e921213e2e6",
+    "revision": "04bf5be6647517d0a20a",
     "url": "/css/DiaryCalendar~31ecd969.52c11f62.css"
   },
   {
@@ -20,23 +20,23 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/DiaryCalendar~DiaryTimeline~31ecd969.a17370a0.css"
   },
   {
-    "revision": "339d724d2f53aa199282",
+    "revision": "3854906cb755826b1c0a",
     "url": "/css/DiaryTimeline~31ecd969.b2f31361.css"
   },
   {
-    "revision": "d153a85a9b13a2f0b3ac",
+    "revision": "8cefda8dcf4a095e8e5f",
     "url": "/css/DiaryVisualization~31ecd969.a90b2d8a.css"
   },
   {
-    "revision": "f71ce9cd41d437e702a4",
+    "revision": "0464f2b37686054bbb78",
     "url": "/css/Settings~31ecd969.ac0ea1ae.css"
   },
   {
-    "revision": "f7ec6ec63fcac00b2294",
+    "revision": "262a814f685b27bcab58",
     "url": "/css/Tasks~31ecd969.d02844a9.css"
   },
   {
-    "revision": "b912d42b4156a95930b7",
+    "revision": "c8fa5ecff23c321a9205",
     "url": "/css/app~748942c6.7621a46a.css"
   },
   {
@@ -48,7 +48,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/tasks~31ecd969.718e0e0d.css"
   },
   {
-    "revision": "e26536b8628bc65afbd7",
+    "revision": "a051fc9777c2e3810575",
     "url": "/css/visualization~31ecd969.f7eef330.css"
   },
   {
@@ -132,7 +132,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "df5eec22d1c9d30630d3383c1004bdb7",
+    "revision": "e1d0fa58c9920b850640afebd005ec36",
     "url": "/index.html"
   },
   {
@@ -140,8 +140,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/About~31ecd969.5f845ab5.js"
   },
   {
-    "revision": "76f42fa6fdb8216a267c",
-    "url": "/js/Blueprints~31ecd969.248aad88.js"
+    "revision": "a47d1abb3202814b0cd7",
+    "url": "/js/Blueprints~31ecd969.36b0516e.js"
   },
   {
     "revision": "721275d0a399436facee",
@@ -152,40 +152,40 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/Blueprints~bbbcffbe.b6bc98bf.js"
   },
   {
-    "revision": "bc5654c50e921213e2e6",
-    "url": "/js/DiaryCalendar~31ecd969.eaf120bd.js"
+    "revision": "04bf5be6647517d0a20a",
+    "url": "/js/DiaryCalendar~31ecd969.d4031895.js"
   },
   {
     "revision": "240c671a7bf589d6a6c3",
     "url": "/js/DiaryCalendar~DiaryTimeline~31ecd969.d7452880.js"
   },
   {
-    "revision": "339d724d2f53aa199282",
-    "url": "/js/DiaryTimeline~31ecd969.54eb7645.js"
+    "revision": "3854906cb755826b1c0a",
+    "url": "/js/DiaryTimeline~31ecd969.7bd5f7f5.js"
   },
   {
-    "revision": "d153a85a9b13a2f0b3ac",
-    "url": "/js/DiaryVisualization~31ecd969.613a764f.js"
+    "revision": "8cefda8dcf4a095e8e5f",
+    "url": "/js/DiaryVisualization~31ecd969.87bbf11f.js"
   },
   {
-    "revision": "15c5c12e1d3c7a060268",
-    "url": "/js/Diary~31ecd969.b6a578a8.js"
+    "revision": "9eb191f347b35fe8505b",
+    "url": "/js/Diary~31ecd969.26631dd4.js"
   },
   {
-    "revision": "f71ce9cd41d437e702a4",
-    "url": "/js/Settings~31ecd969.1f0818dc.js"
+    "revision": "0464f2b37686054bbb78",
+    "url": "/js/Settings~31ecd969.aa1c6b23.js"
   },
   {
-    "revision": "f7ec6ec63fcac00b2294",
-    "url": "/js/Tasks~31ecd969.da304541.js"
+    "revision": "262a814f685b27bcab58",
+    "url": "/js/Tasks~31ecd969.a1b5317c.js"
   },
   {
     "revision": "19fdb775c2fc6a74c08c",
     "url": "/js/alasql~2a42e354.2bfb585d.js"
   },
   {
-    "revision": "b912d42b4156a95930b7",
-    "url": "/js/app~748942c6.be6ec6e0.js"
+    "revision": "c8fa5ecff23c321a9205",
+    "url": "/js/app~748942c6.48dd392c.js"
   },
   {
     "revision": "78a387c06a47470b7019",
@@ -220,8 +220,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/tasks~31ecd969.f90df4ba.js"
   },
   {
-    "revision": "e26536b8628bc65afbd7",
-    "url": "/js/visualization~31ecd969.49a10d4f.js"
+    "revision": "a051fc9777c2e3810575",
+    "url": "/js/visualization~31ecd969.4a374701.js"
   },
   {
     "revision": "f9ff1a3a453d31f89db208cd0a1b5556",
