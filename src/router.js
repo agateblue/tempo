@@ -24,7 +24,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "DiaryVisualization" */ './views/Visualization.vue'),
         props: (route) => ({
           query: route.query.q,
-          blueprint: route.query.blueprint || 0,
+          blueprint: route.query.blueprint,
           defaultEnd: route.query.end || null,
           defaultStart: route.query.start || null,
         }),

@@ -10,7 +10,7 @@
               cols="4"
             >
               <v-select
-                v-model="params.selectedBlueprintIdx"
+                v-model="params.selectedBlueprintId"
                 :items="blueprintChoices"
                 label="Name"
               ></v-select>
@@ -124,7 +124,7 @@ function getDates (start, end) {
 export default {
   props: {
     allEntries: Array,
-    blueprint: {type: Number, default: 0},
+    blueprint: {type: String, default: null},
     defaultStart: {type: String, default: null},
     defaultEnd: {type: String, default: null},
   },
@@ -139,7 +139,7 @@ export default {
       showEndMenu: false,
       params: {
         ...getDates(this.defaultStart, this.defaultEnd),
-        selectedBlueprintIdx: parseInt(this.blueprint) || 0,
+        selectedBlueprintId: null,
       },
       showvisualizationModal: false,
       graphDays: 60,
@@ -147,6 +147,7 @@ export default {
   },
   async created () {
     await this.$store.dispatch("loadBlueprints")
+    this.params.selectedBlueprintId = this.$store.state.loadedBlueprints[0].id
   },
   computed: {
     entries () {
@@ -159,15 +160,17 @@ export default {
       return getQueryableTags(this.queryableEntries)
     },
     selectedBlueprint () {
-      return this.$store.getters.enabledBlueprints[this.params.selectedBlueprintIdx]
+      return this.$store.getters.enabledBlueprints.filter(b => {
+        return b.id === this.params.selectedBlueprintId
+      })[0]
     },
     blueprintChoices () {
-      let i = -1
-      return this.$store.getters.enabledBlueprints.map(b => {
-        i += 1
+      return this.$store.getters.enabledBlueprints.filter(b => {
+        return (b.visualizations || []).length > 0
+      }).map(b => {
         return {
           text: b.label,
-          value: i,
+          value: b.id,
         }
       })
     }
@@ -182,7 +185,7 @@ export default {
           v.end = this.entries[this.entries.length - 1].date.slice(0, 10)
         }
         let query = {
-          blueprint: v.selectedBlueprintIdx,
+          blueprint: v.selectedBlueprintId,
           q: '',
           start: v.start,
           end: v.end,
@@ -192,7 +195,7 @@ export default {
       deep: true,
     },
     "$route.query.blueprint" (v) {
-      this.params.selectedBlueprintIdx = parseInt(v || 0)
+      this.params.selectedBlueprintId = v
     },
     "$route.query.start" (v) {
       this.params.start = v
