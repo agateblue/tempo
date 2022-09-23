@@ -44,9 +44,9 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 @import '~vanilla-jsoneditor/themes/jse-theme-dark.css';
-.json-editor {
+.jse-contents {
   overflow-y: scroll;
   max-height: 60vh;
 }
