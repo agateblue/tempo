@@ -117,6 +117,7 @@ export default {
       }
       await this.$store.state.db.put(doc)
       await this.$store.dispatch('loadBlueprints')
+      this.$store.dispatch('forceSync', {updateLastSync: false})
     },
     async handleDelete () {
       let existing = await this.getBlueprintFromDb()
