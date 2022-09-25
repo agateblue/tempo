@@ -153,6 +153,21 @@ export function matchString(q, s) {
   let r = new RegExp(q, 'i')
   return s.match(r) || false
 }
+
+export function objectValuesAndKeys (object) {
+  if (!object) {
+    return []
+  }
+  let values = []
+  for (const key in object) {
+    if (Object.hasOwnProperty.call(object, key)) {
+      values.push(key)
+      values.push(object[key])
+    }
+  }
+  return values
+}
+
 export function matchTokens(entry, tokens, aliasesById = {}) {
   for (let index = 0; index < tokens.length; index++) {
     const token = tokens[index];
@@ -162,8 +177,15 @@ export function matchTokens(entry, tokens, aliasesById = {}) {
         return false
       }
     }
-    if (token.text && !entry.text.toLowerCase().includes(token.text.toLowerCase())) {
-      return matchString(token.text, entry.text)
+    if (token.text) {
+      let additionalContent = objectValuesAndKeys(entry.data)
+      if (entry.form) {
+        additionalContent.push(entry.form)
+      }
+      let haystack = `${entry.text} ${additionalContent.join(' ')}`
+      if (!haystack.toLowerCase().includes(token.text.toLowerCase())) {
+        return matchString(token.text, haystack)
+      }
     }
     if (token.tag) {
       let matching = entry.tags.filter((t) => {

@@ -115,6 +115,9 @@ describe('utils', () => {
   it('match tokens true', () => {
     const tokens = [
       {text: 'hello'},
+      {text: 'fieldContent'},
+      {text: 'formName'},
+      {text: 'fieldName'},
       {tagName: 'foo'},
       {sign: '+'},
     ]
@@ -124,7 +127,12 @@ describe('utils', () => {
         {text: "+happy", id: "happy", type: "feeling", mood: 1, sign: '+'},
         {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
         {text: "--foo", id: "foo", type: "feeling", mood: 0, sign: '-'},
-      ]
+      ],
+      form: 'formName',
+      data: {
+        field1: 'fieldContent',
+        fieldName: 'noop'
+      }
     }
     const result = matchTokens(entry, tokens)
     expect(result).equal(true)
