@@ -7,6 +7,17 @@
         dot
         transition=""
       >
+        <h3
+          v-if="row.entry.form && $store.getters.formsById[row.entry.form]"
+        >
+          <v-btn
+            @click.prevent="$store.commit('searchQuery', `form:${row.entry.form}`)"
+            text
+            title="Search all entries for this form"
+          >
+            {{ $store.getters.formsById[row.entry.form].label }}
+          </v-btn>
+        </h3>
         <structured-data
           class="mb-4"
           v-if="!isEmpty(row.entry.data)"

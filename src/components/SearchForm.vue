@@ -65,6 +65,9 @@ export default {
     computedQuery (v) {
       this.localValue = v
       this.$emit('submit', this.localValue)
+    },
+    '$store.state.searchQuery' (v) {
+      this.localValue = v
     }
   }
 }
