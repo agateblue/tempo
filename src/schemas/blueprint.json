@@ -140,14 +140,25 @@
             "minItems": 1,
             "items": {
               "type": "object",
+              "description": "Configuration of each field of this form. Only the field id is required, but all supported fields options can be overriden here.",
+              "additionalProperties": true,
+              "required": [
+                "id"
+              ],
               "properties": {
                 "id": {
                   "type": "string",
                   "description": "A list of fields used to build the form"
+                },
+                "required": {
+                  "type": "boolean",
+                  "description": "Indicate if the field is required or not. Defaults to true."
                 }
               },
               "examples": [
-                [{"id": "agate:medication:molecule"}, {"id": "agate:medication:amount"}],
+                [
+                  {"id": "agate:medication:molecule", "required": false},
+                  {"id": "agate:medication:amount", "step": 0.3}],
                 [{"id": "bob:purchase:price"}, {"id": "bob:purchase:restaurant"}]
               ]
             }
@@ -202,10 +213,10 @@
             ]
           },
           "displayOptions": {
+            "additionalProperties": true,
             "type": "object",
             "default": {},
             "description": "Options to tweak the rendering of the visualization. Please refer to Tempo's documentation on how to build visualizations.",
-            "additionalProperties": true,
             "examples": [
               {"colors": ["green"]}
             ]
