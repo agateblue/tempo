@@ -42,7 +42,7 @@ module.exports = {
     manifestOptions: {
       display: "standalone",
       start_url: '.',
-      description: 'Find your own rythm',
+      description: 'Find your own rhythm',
       scope: "/",
       categories: ["notes", "note",, "diary", "log", "health", "mood tracker"],
       icons: [
