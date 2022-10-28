@@ -146,15 +146,17 @@ export default {
     }
   },
   methods: {
-    deleteTask () {
+    async deleteTask () {
       this.$store.state.db.remove(this.task)
       this.$emit('deleted', this.task)
+      await this.$store.dispatch('forceSync', {updateLastSync: false})
     },
     async updateTask () {
       let result = await this.$store.state.db.put(this.newTask)
       this.newTask._rev = result.rev
       this.expanded = false
       this.$emit('updated', this.newTask)
+      await this.$store.dispatch('forceSync', {updateLastSync: false})
     },
   },
   watch: {

@@ -242,6 +242,7 @@ export default {
       this.newTaskText = null
       this.newTaskCategory = null
       trackEvent(this.$store, "task.created")
+      await this.$store.dispatch('forceSync', {updateLastSync: false})
     },
     async updateTasks () {
       this.tasks = await getTasks(this.$store, this.query)
@@ -268,6 +269,7 @@ export default {
           t._rev = result.rev
         }
       })
+      await this.$store.dispatch('forceSync', {updateLastSync: false})
     },
     async removeTasks(tasks) {
       let toDelete = tasks.map(t => {
