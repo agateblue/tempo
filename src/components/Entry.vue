@@ -173,12 +173,14 @@
               v-if="row.entry.thread"
               v-model="deleteAllThread"
               :label="`Delete other entries from this thread`"
+              :ripple="false"
             ></v-checkbox>
             <v-checkbox
               hide-details
               v-else
               v-model="deleteAllThread"
               :label="`Delete ${row.entry.replies.length} other entries from this thread`"
+              :ripple="false"
             ></v-checkbox>
           </v-card-text>
           <v-card-text>

@@ -4,6 +4,7 @@
       v-if="field.type === 'boolean'"
       v-model="localValue"
       :label="field.label"
+      :ripple="false"
 
     />
     <component

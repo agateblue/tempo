@@ -30,6 +30,7 @@
               :value="blueprint.id"
               hide-details
               class="mt-0"
+              :ripple="false"
             ></v-checkbox>
           </v-col>
           <v-col class="py-2 text-right" cols="4">
@@ -107,21 +108,25 @@
           hide-details
           v-model="exportConfig.entries"
           label="Export diary notes"
+          :ripple="false"
         ></v-checkbox>
         <v-checkbox
           hide-details
           v-model="exportConfig.board"
           label="Export tasks and board configuration"
+          :ripple="false"
         ></v-checkbox>
         <v-checkbox
           hide-details
           v-model="exportConfig.blueprints"
           label="Export blueprints"
+          :ripple="false"
         ></v-checkbox>
         <v-checkbox
           hide-details
           v-model="exportConfig.settings"
           label="Export Tempo settings"
+          :ripple="false"
         ></v-checkbox>
       </v-card-text>
       <v-card-actions>
@@ -143,21 +148,25 @@
           hide-details
           v-model="importConfig.entries"
           label="Import diary notes"
+          :ripple="false"
         ></v-checkbox>
         <v-checkbox
           hide-details
           v-model="importConfig.board"
           label="Import tasks and board configuration"
+          :ripple="false"
         ></v-checkbox>
         <v-checkbox
           hide-details
           v-model="importConfig.blueprints"
           label="Import blueprints"
+          :ripple="false"
         ></v-checkbox>
         <v-checkbox
           hide-details
           v-model="importConfig.settings"
           label="Import Tempo settings"
+          :ripple="false"
         ></v-checkbox>
         <v-textarea
           v-if="importLogs.length > 0"

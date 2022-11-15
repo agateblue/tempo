@@ -6,6 +6,7 @@
         :disabled="isDone"
         v-model="completed"
         :label="task.text"
+        :ripple="false"
       ></v-checkbox>
     </v-card-text>
     <v-card-text :class="[$theme.nestedCard.textSize, 'pt-3 pb-1 px-3']">

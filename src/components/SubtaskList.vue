@@ -18,7 +18,7 @@
           :value="row.done"
           :input-value="row.done"
           @change="row.done = $event"
-          small
+          :ripple="false"
         ></v-checkbox>
       </v-col>
       <v-col
