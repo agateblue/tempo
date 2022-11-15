@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find'
 import PouchDBAuthentication from 'pouchdb-authentication'
+
+import sortBy from 'lodash/sortBy'
+
 PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
 
@@ -157,7 +160,7 @@ const store = new Vuex.Store({
       getters.enabledBlueprints.forEach(l => {
         allForms = [...allForms, ...(l.forms || [])]
       })
-      return allForms
+      return sortBy(allForms, ['label'])
     },
     formsById: (state, getters) => {
       let forms = {}
