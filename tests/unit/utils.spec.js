@@ -24,6 +24,30 @@ describe('utils', () => {
     ]
     expect(parseTags(msg)).to.deep.equal(expected)
   })
+  it('can extract tags from text edge cases', () => {
+    
+    let cases = [
+      ['--', []],
+      ['--boui-boui', [{
+        id: 'boui-boui',
+        sign: '-',
+        mood: -2,
+        text: '--boui-boui',
+        type: 'feeling'
+      }]],
+      ['@weight:variation=-12', [{
+        id: 'weight:variation',
+        sign: '@',
+        mood: null,
+        text: '@weight:variation=-12',
+        value: '-12',
+        type: 'annotation'
+      }]],
+    ]
+    cases.forEach(row => {
+      expect(parseTags(row[0])).to.deep.equal(row[1])
+    })
+  })
   it('can get entry data', () => {
     const msg = 'Today was quite +happy, but I feel ~tired because of #work.'
     const expected = {
