@@ -32,7 +32,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/Tasks~31ecd969.d02844a9.css"
   },
   {
-    "revision": "4882fc5968e79920e815",
+    "revision": "b6c00449183294f70ab0",
     "url": "/css/app~748942c6.7621a46a.css"
   },
   {
@@ -128,7 +128,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "7fe17007fa4485865684de2aa21fb331",
+    "revision": "e1c0ec1a6036185d4f2489b8edf0e283",
     "url": "/index.html"
   },
   {
@@ -176,8 +176,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/alasql~2a42e354.2bfb585d.js"
   },
   {
-    "revision": "4882fc5968e79920e815",
-    "url": "/js/app~748942c6.b60b4956.js"
+    "revision": "b6c00449183294f70ab0",
+    "url": "/js/app~748942c6.0ccf9ca3.js"
   },
   {
     "revision": "78a387c06a47470b7019",
