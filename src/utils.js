@@ -116,11 +116,11 @@ export function parseQuery(query) {
       return
     }
     if (signToType[stripped[0]]) {
-      let sign = stripped[0]
       if (stripped.length === 1) {
         tokens.push({sign: stripped[0]})
       } else {
-        tokens.push({tagName: stripped.substring(1), sign})
+        let tag = parseTags(stripped)[0]
+        tokens.push({tagName: tag.id, sign: tag.sign === '#' ? null : tag.sign})
       }
     } else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
       tokens.push({date: stripped.split(':')[1]})
