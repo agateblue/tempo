@@ -16,6 +16,7 @@ const signToType = {
   '~': 'feeling',
   '?': 'feeling',
   '#': 'tag',
+  '!': 'tag',
   '@': 'annotation',
 }
 const tagRegex = /(^|\s)((#|\+{1,5}|-{1,5}|~|\?|!|@)([:A-zÀ-ÿ\d][:A-zÀ-ÿ\d-]*(=(true|false|[:A-zÀ-ÿ\d-]+|".*")?(-?\d*(\.(\d+))?)?)?))/gi
@@ -114,11 +115,12 @@ export function parseQuery(query) {
     if (!stripped) {
       return
     }
-    if (Object.keys(signToMood).indexOf(stripped[0]) > -1) {
+    if (signToType[stripped[0]]) {
+      let sign = stripped[0]
       if (stripped.length === 1) {
         tokens.push({sign: stripped[0]})
       } else {
-        tokens.push({tag: stripped})
+        tokens.push({tagName: stripped.substring(1), sign})
       }
     } else if (stripped.startsWith('d:') || stripped.startsWith('date:') ) {
       tokens.push({date: stripped.split(':')[1]})
@@ -177,7 +179,15 @@ export function matchTokens(entry, tokens, aliasesById = {}) {
         return false
       }
     }
-    if (token.text) {
+    if (token.tag) {
+      let matching = entry.tags.filter((t) => {
+        return matchString(token.tag.text, t.text)
+      })
+      if (matching.length === 0) {
+        return false
+      }
+    }
+    else if (token.text) {
       let additionalContent = objectValuesAndKeys(entry.data)
       if (entry.form) {
         additionalContent.push(entry.form)
@@ -185,14 +195,6 @@ export function matchTokens(entry, tokens, aliasesById = {}) {
       let haystack = `${entry.text} ${additionalContent.join(' ')}`
       if (!haystack.toLowerCase().includes(token.text.toLowerCase())) {
         return matchString(token.text, haystack)
-      }
-    }
-    if (token.tag) {
-      let matching = entry.tags.filter((t) => {
-        return matchString(token.tag.text, t.text)
-      })
-      if (matching.length === 0) {
-        return false
       }
     }
     if (token.favorite && !entry.favorite) {

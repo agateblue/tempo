@@ -126,7 +126,7 @@ describe('utils', () => {
       {form: true},
       {formId: 'noop:form'},
       {text: 'hello'},
-      {tag: '#world'},
+      {tagName: 'world', sign: '#'},
       {sign: '+'},
       {sign: '-'},
       {date: '2020'},
