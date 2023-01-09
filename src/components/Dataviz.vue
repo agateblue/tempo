@@ -6,6 +6,7 @@
       :config="visualization"
       :tags="tags"
       :builtin="true"
+      :group-by-period="params.groupByPeriod"
       :entries="entries">
     </blueprint-visualization>
   </div>
@@ -13,7 +14,7 @@
 <script>
 
 export default {
-  props: ['entries', 'tags', 'blueprint'],
+  props: ['entries', 'tags', 'blueprint', 'params'],
   components: {
     BlueprintVisualization:  () => import(/* webpackChunkName: "visualization" */ "@/components/BlueprintVisualization"),
   },

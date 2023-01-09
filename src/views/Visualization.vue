@@ -4,6 +4,7 @@
       <visualization-config
         v-model="params"
         :all-entries="allEntries"
+        :selected-blueprint="selectedBlueprint" 
       ></visualization-config>
     </v-container>
     <v-container class="mt-4 py-0 px-0" v-if="selectedBlueprint">
@@ -11,6 +12,7 @@
         :blueprint="selectedBlueprint"      
         :entries="queryableEntries"
         :tags="queryableTags"
+        :params="params"
       ></dataviz>
     </v-container>
   </div>
@@ -25,6 +27,7 @@ export default {
     blueprint: {type: String, default: null},
     defaultStart: {type: String, default: null},
     defaultEnd: {type: String, default: null},
+    defaultGroupByPeriod: {type: String, default: 'date'},
   },
   components: {
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
@@ -35,6 +38,7 @@ export default {
       params: {
         ...getDates(this.defaultStart, this.defaultEnd),
         selectedBlueprintId: this.blueprint,
+        groupByPeriod: this.defaultGroupByPeriod,
       },
     }
   },
@@ -72,6 +76,7 @@ export default {
           q: '',
           start: v.start,
           end: v.end,
+          period: v.groupByPeriod || 'date'
         }
         this.$router.push({ path: this.$route.path, query })
       },

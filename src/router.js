@@ -27,6 +27,7 @@ const routes = [
           blueprint: route.query.blueprint,
           defaultEnd: route.query.end || null,
           defaultStart: route.query.start || null,
+          defaultGroupByPeriod: route.query.period || 'date',
         }),
       },
       {

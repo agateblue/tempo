@@ -5,18 +5,18 @@
   "version": "1",
   "visualizations": [
     {
-      "label": "Mood by day",
+      "label": "Mood by period: {{ groupByPeriodLabel }}",
       "help": "Higher is better",
-      "query": "SELECT date, sum(CASE WHEN mood > 0 THEN mood ELSE 0 END) as Positive, sum(CASE WHEN mood < 0 THEN mood ELSE 0 END) as Negative FROM ? GROUP BY date ORDER BY date DESC",
+      "query": "SELECT {{ groupByPeriod }}, sum(CASE WHEN mood > 0 THEN mood ELSE 0 END) as Positive, sum(CASE WHEN mood < 0 THEN mood ELSE 0 END) as Negative FROM ? GROUP BY {{ groupByPeriod }} ORDER BY {{ groupByPeriod }} DESC",
       "displayType": "bar",
       "displayOptions": {
         "colors": ["green", "orange"]
       }
     },
     {
-      "label": "Mood instability",
+      "label": "Mood instability by period: {{ groupByPeriodLabel }}",
       "help": "Lower is stabler",
-      "query": "Select date, posmood * negmood / 10 as instability From (SELECT date, sum(CASE when mood>0 then mood else 0 END) as posmood,  sum(CASE when mood<0 then abs(mood) else 0 END) AS negmood FROM ? GROUP BY date ORDER BY date DESC)",
+      "query": "Select {{ groupByPeriod }}, (min(posmood, abs(negmood)) / max(max(posmood, abs(negmood)), 1)) as instability From (SELECT {{ groupByPeriod }}, sum(CASE when mood>0 then mood else 0 END) as posmood,  sum(CASE when mood<0 then mood else 0 END) AS negmood FROM ? GROUP BY {{ groupByPeriod }} ORDER BY {{ groupByPeriod }} DESC)",
       "displayType": "bar",
       "displayOptions": {
         "colors": ["purple"]

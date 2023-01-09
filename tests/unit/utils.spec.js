@@ -371,10 +371,13 @@ describe('utils', () => {
       fullDate: date,
       date: date.toISOString().split('T')[0],
       year: date.getFullYear(),
-      month: date.getMonth() + 1,
+      month : date.getMonth() + 1,
+      monthNumber: date.getMonth() + 1,
       day: date.getDate(),
-      weekday: date.getDay() + 1,
-      weeknumber: getWeekNumber(date),
+      weekDay: date.getDay() + 1,
+      weekNumber: getWeekNumber(date),
+      yearWeek: `${date.getFullYear()}-${String(getWeekNumber(date)).padStart(2, '0')}`,
+      yearMonth: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`,
       tags: {
         "happy": {
           id: "happy",
@@ -407,7 +410,6 @@ describe('utils', () => {
       replies: ['bar'],
       form: 'foo:form',
     }
-    expected.week = `${expected.year}-${expected.weeknumber}`
     const result = getCompleteEntry(entry)
     expect(result).to.deep.equal(expected)
   })
