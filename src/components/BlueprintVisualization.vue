@@ -1,10 +1,10 @@
 <template>
   <v-card class="mb-8">
     <v-card-title>
-      {{ config.label }}
+      {{ replaceTemplateValues(config.label) }}
     </v-card-title>
     <v-card-text v-if="config.help">
-      {{ config.help }}
+      {{ replaceTemplateValues(config.help) }}
     </v-card-text>
     <v-card-text v-if="queriedData && queriedData[0]">
       <v-simple-table v-if="displayType === 'table'">
@@ -145,9 +145,9 @@ import merge from 'lodash/merge'
 
 import alasql from '@/alasql'
 
-import {DISPLAYTYPES} from '@/utils'
+import {DISPLAYTYPES, groupByPeriodOptionsByValue} from '@/utils'
 export default {
-  props: ['entries', 'tags', 'config', 'builtin'],
+  props: ['entries', 'tags', 'config', 'builtin', 'groupByPeriod'],
   components: {
     Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
   },
@@ -170,6 +170,9 @@ export default {
     },
     displayTypes () {
       return DISPLAYTYPES
+    },
+    finalQuery () {
+      return this.replaceTemplateValues(this.dataQuery)
     },
     dataQueryFields () {
       if (this.queriedData && this.queriedData[0]) {
@@ -206,8 +209,12 @@ export default {
         ],
         barOptions: {
           spaceRatio: 0.1
+        },
+        __internal: {
+          groupByPeriod: this.groupByPeriod,
         }
       }
+      console.log('HELLO', options)
       return merge(options, this.config.displayOptions || {})
     },
 
@@ -223,7 +230,7 @@ export default {
       if (!query) {
         return null
       }
-      return await alasql(this.dataQuery,[this.dataSource]);
+      return await alasql(query, [this.dataSource]);
     },
 
     getLabels (data) {
@@ -234,7 +241,12 @@ export default {
       labels.reverse()
       return labels
     },
-
+    replaceTemplateValues (t) {
+      let period = this.groupByPeriod || 'date'
+      t = t.replace(/\{\{ groupByPeriod \}\}/g, period)
+      t = t.replace(/\{\{ groupByPeriodLabel \}\}/g, groupByPeriodOptionsByValue[period])
+      return t
+    },
     getDatasets (data) {
       let allFields = Object.keys(data[0]).slice(1)
       let datasets = []
@@ -261,12 +273,12 @@ export default {
   },
   watch: {
 
-    dataQuery: {
+    finalQuery: {
       handler: debounce(
         async function (v) {
           this.$emit('query:updated', v)
           try {
-            this.queriedData = await this.queryData(v)
+            this.queriedData = await this.queryData(this.finalQuery)
           } catch (e) {
             console.log('SQL Error', e)
             this.queriedData = null
@@ -282,7 +294,7 @@ export default {
       immediate: true,
       handler: async function () {
         try {
-          this.queriedData = await this.queryData(this.dataQuery)
+          this.queriedData = await this.queryData(this.finalQuery)
         } catch (e) {
           console.log('SQL Error', e)
           this.queriedData = null

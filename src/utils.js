@@ -1,6 +1,22 @@
 import Vue from 'vue'
 import sub from 'date-fns/sub'
 
+export const groupByPeriodOptions = [
+  {text: 'Date', value: 'date'},
+  {text: 'Year - Week', value: 'yearWeek'},
+  {text: 'Year - Month', value: 'yearMonth'},
+  {text: 'Month', value: 'month'},
+  {text: 'Day of month', value: 'day'},
+  {text: 'Day of week', value: 'weekDay'},
+  {text: 'Week', value: 'weekNumber'},
+  {text: 'Year', value: 'year'},
+]
+export const groupByPeriodOptionsByValue = {}
+
+groupByPeriodOptions.forEach(v => {
+  groupByPeriodOptionsByValue[v.value] = v.text
+})
+
 const signToMood = {
   '+': 1,
   '-': -1,
@@ -250,6 +266,7 @@ export function getCompleteEntry (e) {
   let fullDate = new Date(e.date)
   let weekNumber = getWeekNumber(fullDate)
   let year = fullDate.getFullYear()
+  let month = fullDate.getMonth() + 1
   let entry = {
     text: e.text,
     _id: e._id,
@@ -258,11 +275,13 @@ export function getCompleteEntry (e) {
     fullDate: fullDate,
     date: fullDate.toISOString().split('T')[0],
     year: year,
-    month: fullDate.getMonth() + 1,
+    month,
+    monthNumber: month,
+    yearMonth: `${year}-${String(month).padStart(2, '0')}`,
     day: fullDate.getDate(),
-    weekday: fullDate.getDay() + 1,
-    weeknumber: weekNumber,
-    week: `${year}-${weekNumber}`,
+    weekDay: fullDate.getDay() + 1,
+    weekNumber: weekNumber,
+    yearWeek: `${year}-${String(weekNumber).padStart(2, '0')}`,
     tags: {},
     data: e.data || null,
     favorite: e.favorite || false,

@@ -1,18 +1,15 @@
 <template>
   <v-card tag="section" class="mb-8" :color="$theme.card.color">
-    <v-card-title class="headline">Options</v-card-title>
+    <v-card-title class="headline">
+      
+      <v-select
+        v-model="params.selectedBlueprintId"
+        :items="blueprintChoices"
+        label="Visualization"
+      ></v-select>
+    </v-card-title>
     <v-card-text :class="$theme.card.textSize">
       <v-row>
-        <v-col
-          cols="4"
-          v-if="showBlueprintSelector"
-        >
-          <v-select
-            v-model="params.selectedBlueprintId"
-            :items="blueprintChoices"
-            label="Name"
-          ></v-select>
-        </v-col>
         <v-col
           cols="4"
         >
@@ -70,6 +67,16 @@
             ></v-date-picker>
           </v-menu>
         </v-col>
+        <v-col
+          cols="4"
+          v-if="showGroupByPeriodControl"
+        >
+          <v-select
+            v-model="params.groupByPeriod"
+            :items="groupByPeriodOptions"
+            label="Group by period"
+          ></v-select>
+        </v-col>
       </v-row>
       <search-form
         :value="$store.state.searchQuery"
@@ -83,11 +90,12 @@
 <script>
 import isEqual from 'lodash/isEqual'
 import SearchForm from '@/components/SearchForm.vue'
-
+import {groupByPeriodOptions} from '@/utils'
 export default {
   props: {
     value: {},
     allEntries: {},
+    selectedBlueprint: {},
     showBlueprintSelector: {default: true},
   },
   components: {
@@ -99,7 +107,8 @@ export default {
       showEndMenu: false,
       params: {
         ...this.value
-      }
+      },
+      groupByPeriodOptions
     }
   },
   computed: {
@@ -112,7 +121,20 @@ export default {
           value: b.id,
         }
       })
-    }
+    },
+    showGroupByPeriodControl () {
+      if (!this.selectedBlueprint) {
+        return false
+      }
+      let visualizations = this.selectedBlueprint.visualizations || []
+      for (let index = 0; index < visualizations.length; index++) {
+        const v = visualizations[index];
+        if (v.query.includes('{{ groupByPeriod }}')) {
+          return true
+        }
+      }
+      return false
+    } 
   },
   watch: {
     params: {
