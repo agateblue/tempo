@@ -7,7 +7,7 @@
       {{ replaceTemplateValues(config.help) }}
     </v-card-text>
     <v-card-text v-if="queriedData && queriedData[0]">
-      <v-simple-table v-if="displayType === 'table'">
+      <v-table v-if="displayType === 'table'">
         <template v-slot:default>
           <thead>
             <tr>
@@ -22,7 +22,7 @@
             </tr>
           </tbody>
         </template>
-      </v-simple-table>
+      </v-table>
 
       <v-textarea
         :background-color="$theme.input.color"
@@ -55,7 +55,7 @@
         @click="expandQuery = !expandQuery"
       >
         Query
-        <v-icon right>{{ expandQuery ? $icons.mdiChevronUp : $icons.mdiChevronDown  }}</v-icon>
+        <v-icon right :icon="expandQuery ? $icons.mdiChevronUp : $icons.mdiChevronDown"></v-icon>
       </v-btn>
       <v-menu v-if="config._id" bottom left>
         <template v-slot:activator="{ on }">
@@ -149,7 +149,7 @@ import {DISPLAYTYPES, groupByPeriodOptionsByValue} from '@/utils'
 export default {
   props: ['entries', 'tags', 'config', 'builtin', 'groupByPeriod'],
   components: {
-    Chart:  () => import(/* webpackChunkName: "visualization" */ "@/components/Chart"),
+    Chart:  () => import(/* webpackChunkName: "visualizationChunk" */ "@/components/Chart"),
   },
   data () {
     return {

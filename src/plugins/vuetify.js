@@ -1,19 +1,24 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import { createVuetify } from 'vuetify'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
-Vue.use(Vuetify);
-
-export default new Vuetify({
+export default createVuetify({
   icons: {
-    iconfont: 'mdiSvg',
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
+  global: {
+    ripple: false,
   },
   theme: {
     options: {
       customProperties: true,
     },
-    dark: true,
+    defaultTheme: 'dark',
     themes: {
-      light: {
+      dark: {
         primary: '#ee44aa',
         secondary: '#424242',
         accent: '#82B1FF',

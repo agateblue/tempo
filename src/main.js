@@ -1,12 +1,51 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
-import { VuePlausible } from 'vue-plausible'
+// import { VuePlausible } from 'vue-plausible'
 
-Vue.config.productionTip = false
+import 'vuetify/styles'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+if (process.env.VUE_APP_PLAUSIBLE_HOST) {
+  let options = {
+    apiHost: process.env.VUE_APP_PLAUSIBLE_HOST,
+    hashMode: true,
+    enableAutoPageviews: false,
+    trackLocalhost: process.env.VUE_APP_PLAUSIBLE_TRACK_LOCALHOST == "true" ? true : false,
+  }
+  if (process.env.VUE_APP_DOMAIN) {
+    options.domain = process.env.VUE_APP_DOMAIN
+  }
+  // Vue.use(VuePlausible, options)
+}
+const app = createApp({
+  extends: App,
+  components,
+  directives,
+  beforeCreate() {
+    window.document.getElementById('app-shell').remove()
+    this.$store.commit('loadCachedState')
+    this.$store.commit('initDb')
+    this.$store.dispatch(
+      'setupSync',
+      {
+        url: this.$store.state.couchDbUrl,
+        username: this.$store.state.couchDbUsername,
+        password: this.$store.state.couchDbPassword,
+      }
+    )
+  }
+})
+app.use(vuetify)
+app.use(router)
+app.use(store)
+
+
+// Vue.config.productionTip = false
 
 
 // three shaking icons to reduce bundle size
@@ -46,7 +85,7 @@ import {
   mdiTrashCan,
 } from '@mdi/js'
 
-Vue.prototype.$icons = {
+app.config.globalProperties.$icons = {
   mdiArrowLeft,
   mdiBook,
   mdiCalendar,
@@ -82,7 +121,7 @@ Vue.prototype.$icons = {
   mdiTrashCan,
 }
 
-Vue.prototype.$theme = {
+app.config.globalProperties.$theme = {
   appBar: {
     color: "pink darken-4",
   },
@@ -110,35 +149,5 @@ Vue.prototype.$theme = {
     color: "pink darken-4",
   },
 }
-if (process.env.VUE_APP_PLAUSIBLE_HOST) {
-  let options = {
-    apiHost: process.env.VUE_APP_PLAUSIBLE_HOST,
-    hashMode: true,
-    enableAutoPageviews: false,
-    trackLocalhost: process.env.VUE_APP_PLAUSIBLE_TRACK_LOCALHOST == "true" ? true : false,
-  }
-  if (process.env.VUE_APP_DOMAIN) {
-    options.domain = process.env.VUE_APP_DOMAIN
-  }
-  Vue.use(VuePlausible, options)
-}
-new Vue({
-  router,
-  store,
-  render: h => h(App),
-  vuetify,
 
-  beforeCreate() {
-    window.document.getElementById('app-shell').remove()
-    this.$store.commit('loadCachedState')
-    this.$store.commit('initDb')
-    this.$store.dispatch(
-      'setupSync',
-      {
-        url: this.$store.state.couchDbUrl,
-        username: this.$store.state.couchDbUsername,
-        password: this.$store.state.couchDbPassword,
-      }
-      )
-  }
-}).$mount('#app')
+app.mount('#app')

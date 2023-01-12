@@ -36,7 +36,7 @@
           class="text-right pb-0"
         >
           <v-btn
-            transition=""
+            transition="fade"
             transparent
             depressed
             icon
@@ -45,10 +45,10 @@
             title="Add subtasks…"
             @click="showSubtasks = !showSubtasks"
           >
-            <v-icon transition="" >{{ $icons.mdiFormatListBulleted }}</v-icon>
+            <v-icon transition="fade" >{{ $icons.mdiFormatListBulleted }}</v-icon>
           </v-btn>
           <v-btn
-            transition=""
+            transition="fade"
             transparent
             depressed
             icon
@@ -56,7 +56,7 @@
             title="Show options…"
             @click="expanded = !expanded"
           >
-            <v-icon transition="" >{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
+            <v-icon transition="fade" >{{ expanded ? $icons.mdiChevronUp : $icons.mdiChevronDown }}</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -79,17 +79,19 @@
           v-model="newTask.category"
           :items="$store.getters['taskCategoryChoices']"
           label="Category"
+          item-title="text"
         ></v-select>
         <v-select
           v-model="newTask.list"
           :items="$store.getters['taskListChoices']"
           label="List"
+          item-title="text"
         ></v-select>
-        <v-btn transition="" small text color="red" @click.prevent="deleteTask">
-         <v-icon left transition="">{{ $icons.mdiDelete }}</v-icon>
+        <v-btn transition="fade" small text color="red" @click.prevent="deleteTask">
+         <v-icon left transition="fade">{{ $icons.mdiDelete }}</v-icon>
           Delete
         </v-btn>
-        <v-btn transition="" type="submit" small text color="primary" class="float-right">
+        <v-btn transition="fade" type="submit" small text color="primary" class="float-right">
           Update
         </v-btn>
       </v-card-text>

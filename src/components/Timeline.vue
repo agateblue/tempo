@@ -1,13 +1,14 @@
 <template>
   <div>
-    <template v-for="row in timelineRows">
+
       <v-lazy
+        v-for="row in timelineRows"
         :key="row.id"
         min-height="50"
         :options="{
           threshold: .5
         }"
-        transition=""
+        transition="fade"
       >
         <v-card
           v-if="row.type === 'entry'"
@@ -28,7 +29,6 @@
           {{ row.repr }}
         </h3>
       </v-lazy>
-    </template>
   </div>
 </template>
 <script>

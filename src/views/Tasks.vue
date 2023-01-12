@@ -21,7 +21,7 @@
             class="float-right"
             @click="isEditing = true" 
             small
-            transition="" 
+            transition="fade" 
             color="secondary">Edit...</v-btn>
         </v-col>
       </v-row>
@@ -33,9 +33,9 @@
           <v-card-title class="px-2 py-0 body-1">
             <v-row class="py-3">
               <v-col cols="10">
-                <v-btn transition="" x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
-                  <v-icon transition="" v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
-                  <v-icon transition="" v-else>{{ $icons.mdiChevronUp }}</v-icon>
+                <v-btn transition="fade" x-small icon @click="lists[idx].expanded = !lists[idx].expanded">
+                  <v-icon transition="fade" v-if="lists[idx].expanded">{{ $icons.mdiChevronDown }}</v-icon>
+                  <v-icon transition="fade" v-else>{{ $icons.mdiChevronUp }}</v-icon>
                 </v-btn>
                 {{ list.label }} · {{ (tasksByList[idx] || []).length }}
               </v-col>
@@ -47,10 +47,10 @@
                   dark
                   x-small
                   @click.prevent="clearDoneDialog = true"
-                  transition=""
+                  transition="fade"
                   title="Clear tasks in column"
                   color="secondary">
-                  <v-icon transition="">{{ $icons.mdiTrashCan }}</v-icon>
+                  <v-icon transition="fade">{{ $icons.mdiTrashCan }}</v-icon>
                 </v-btn>
                 <v-btn
                   v-else
@@ -59,10 +59,10 @@
                   dark
                   x-small
                   @click.prevent="lists[idx].showForm = !lists[idx].showForm"
-                  transition=""
+                  transition="fade"
                   title="Add task"
                   color="secondary">
-                  <v-icon transition="">{{ $icons.mdiPlus }}</v-icon>
+                  <v-icon transition="fade">{{ $icons.mdiPlus }}</v-icon>
                 </v-btn>
                 <v-dialog
                   v-model="clearDoneDialog"
@@ -111,6 +111,7 @@
                   <v-select
                     :items="$store.getters['taskCategoryChoices']"
                     v-model="newTaskCategory"
+                    item-title="text"
                     @keydown.enter="submitTask(idx)"
                     label="Category"
                   ></v-select>
@@ -119,12 +120,12 @@
               <v-card-actions class="py-4 px-0">
                 <v-row>
                   <v-col class="ml-3">
-                    <v-btn transition="" class="float-left" text @click.prevent="lists[idx].showForm = false">
+                    <v-btn transition="fade" class="float-left" text @click.prevent="lists[idx].showForm = false">
                       Cancel
                     </v-btn>
                   </v-col>
                   <v-col class="mr-4">
-                    <v-btn transition="" class="float-right" color="primary" @click.prevent="submitTask(idx)">
+                    <v-btn transition="fade" class="float-right" color="primary" @click.prevent="submitTask(idx)">
                       Add
                     </v-btn>
                   </v-col>
@@ -144,7 +145,7 @@
                 }"
                 :data-id="task._id"
                 min-height="50"
-                transition=""
+                transition="fade"
                 :key="`task-${task._id}`"
                 v-for="task in tasksByList[idx]"
               >
@@ -152,7 +153,7 @@
                   class="mb-2"
                   :task="task"
                   :is-done="idx === $store.getters['boardLists'].length - 1"
-                  transition="" 
+                  transition="fade" 
                   @done="moveCard($event._id, $store.getters['boardLists'].length - 1); trackEvent($store, 'task.completed')"
                   @deleted="deleteTask($event); trackEvent($store, 'task.deleted')"
                   @updated="updateTask($event); trackEvent($store, 'task.updated')"
@@ -176,9 +177,9 @@ export default {
     query: String
   },
   components: {
-    BoardForm:  () => import(/* webpackChunkName: "tasks" */ "@/components/BoardForm"),
-    TaskCard:  () => import(/* webpackChunkName: "tasks" */ "@/components/TaskCard"),
-    draggable:  () => import(/* webpackChunkName: "tasks" */ "vuedraggable"),
+    BoardForm:  () => import(/* webpackChunkName: "TasksChunk" */ "@/components/BoardForm"),
+    TaskCard:  () => import(/* webpackChunkName: "TasksChunk" */ "@/components/TaskCard"),
+    draggable:  () => import(/* webpackChunkName: "TasksChunk" */ "vuedraggable"),
   },
   data () {
     return {

@@ -6,6 +6,7 @@
         v-model="params.selectedBlueprintId"
         :items="blueprintChoices"
         label="Visualization"
+        item-title="text"
       ></v-select>
     </v-card-title>
     <v-card-text :class="$theme.card.textSize">
@@ -75,6 +76,7 @@
             v-model="params.groupByPeriod"
             :items="groupByPeriodOptions"
             label="Group by period"
+            item-title="text"
           ></v-select>
         </v-col>
       </v-row>

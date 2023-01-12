@@ -25,7 +25,8 @@
 <script>
 import isEqual from 'lodash/isEqual'
 
-import { VTextField, VCombobox } from 'vuetify/lib';
+import {VTextField} from 'vuetify/lib/components/VTextField';
+import {VCombobox} from 'vuetify/lib/components/VCombobox';
 
 export default {
   props: {

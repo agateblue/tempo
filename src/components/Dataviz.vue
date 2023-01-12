@@ -16,7 +16,7 @@
 export default {
   props: ['entries', 'tags', 'blueprint', 'params'],
   components: {
-    BlueprintVisualization:  () => import(/* webpackChunkName: "visualization" */ "@/components/BlueprintVisualization"),
+    BlueprintVisualization:  () => import(/* webpackChunkName: "visualizationChunk" */ "@/components/BlueprintVisualization"),
   },
 }
 </script>

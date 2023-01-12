@@ -42,7 +42,7 @@
               :to="{name: 'BlueprintEditor', params: {id: blueprint.id}}"
               title="View"
             >
-              <v-icon v-text="$icons.mdiEye"></v-icon>
+              <v-icon :icon="$icons.mdiEye"></v-icon>
             </v-btn>
             <v-btn
               v-else
@@ -52,7 +52,7 @@
               :to="{name: 'BlueprintEditor', params: {id: blueprint.id}}"
               title="View"
             >
-              <v-icon v-text="$icons.mdiPencil"></v-icon>
+              <v-icon :icon="$icons.mdiPencil"></v-icon>
             </v-btn>
           </v-col>
         </v-row>

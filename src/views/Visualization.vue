@@ -30,8 +30,8 @@ export default {
     defaultGroupByPeriod: {type: String, default: 'date'},
   },
   components: {
-    Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
-    VisualizationConfig:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationConfig"),
+    Dataviz:  () => import(/* webpackChunkName: "visualizationChunk" */ "@/components/Dataviz"),
+    VisualizationConfig:  () => import(/* webpackChunkName: "visualizationChunk" */ "@/components/VisualizationConfig"),
   },
   data () {
     return {

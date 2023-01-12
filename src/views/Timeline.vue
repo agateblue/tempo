@@ -32,7 +32,7 @@
     </v-container>
     <timeline
       ref="timeline"
-      class="mt-0 container narrow px-0"
+      class="mt-0 v-container narrow px-0"
       :entries="shownEntries"
       :entry-id="entryId"
       :key="`timeline-${$store.state.lastSync}`"

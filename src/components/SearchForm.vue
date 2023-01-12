@@ -20,6 +20,7 @@
         v-model="filters"
         :items="filtersChoices"
         label="Filters"
+        item-title="text"
         multiple
         chips
         dense

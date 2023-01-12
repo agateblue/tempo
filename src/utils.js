@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import sub from 'date-fns/sub'
 
 export const groupByPeriodOptions = [
@@ -556,6 +555,7 @@ export function trackEvent(store, event, props = {}, eventData = {}) {
     return
   }
   try {
+    const Vue = {$plausible: () => {}}
     Vue.$plausible.trackEvent(event, {props, callback () {
       console.debug("[telemetry] sent")
     }}, {

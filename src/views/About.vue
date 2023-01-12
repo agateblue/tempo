@@ -106,7 +106,7 @@
         <p>
           The search bar let you filter notes that match your query. The daily mood widget is also updated accordingly. You can find some basic queries below:
         </p>
-        <v-simple-table class="mb-2">
+        <v-table class="mb-2">
           <template v-slot:default>
             <tbody>
 
@@ -191,11 +191,11 @@
               </tr>
             </tbody>
           </template>
-        </v-simple-table>
+        </v-table>
         <p>
           You can mix various parameters to further refine your results. Here are some more advanced queries:
         </p>
-        <v-simple-table>
+        <v-table>
           <template v-slot:default>
             <tbody>
               <tr>
@@ -224,7 +224,7 @@
               </tr>
             </tbody>
           </template>
-        </v-simple-table>
+        </v-table>
       </v-card-text>
     </v-card>
 

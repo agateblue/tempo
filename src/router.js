@@ -1,27 +1,25 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import store from '@/store'
 import {trackEvent, getCleanUrlForTracking} from '@/utils'
 
-Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/diary',
     alias: '/',
-    component: () => import(/* webpackChunkName: "Diary" */ './views/Diary.vue'),
+    component: () => import(/* webpackChunkName: "DiaryChunk" */ './views/Diary.vue'),
     props: (route) => ({ query: route.query.q }),
     children: [
       {
         path: '',
         name: 'Timeline',
-        component: () => import(/* webpackChunkName: "DiaryTimeline" */ './views/Timeline.vue'),
+        component: () => import(/* webpackChunkName: "DiaryTimelineChunk" */ './views/Timeline.vue'),
       },
       {
         path: 'visualization',
         name: 'Visualization',
-        component: () => import(/* webpackChunkName: "DiaryVisualization" */ './views/Visualization.vue'),
+        component: () => import(/* webpackChunkName: "DiaryVisualizationChunk" */ './views/Visualization.vue'),
         props: (route) => ({
           query: route.query.q,
           blueprint: route.query.blueprint,
@@ -33,12 +31,12 @@ const routes = [
       {
         path: 'calendar',
         name: 'Calendar',
-        component: () => import(/* webpackChunkName: "DiaryCalendar" */ './views/Calendar.vue'),
+        component: () => import(/* webpackChunkName: "DiaryCalendarChunk" */ './views/Calendar.vue'),
       },
       {
         path: 'e/:entryId',
         name: 'Entry',
-        component: () => import(/* webpackChunkName: "DiaryTimeline" */ './views/Timeline.vue'),
+        component: () => import(/* webpackChunkName: "DiaryTimelineChunk" */ './views/Timeline.vue'),
         props: true
       },
     ]
@@ -46,27 +44,28 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "About" */ './views/About.vue'),
+    component: () => import(/* webpackChunkName: "AboutChunk" */ './views/About.vue'),
   },
   {
     path: '/tasks',
-    component: () => import(/* webpackChunkName: "Tasks" */ './views/Tasks.vue'),
+    component: () => import(/* webpackChunkName: "TasksChunk" */ './views/Tasks.vue'),
     props: (route) => ({ query: route.query.q }),
   },
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import(/* webpackChunkName: "Settings" */ './views/Settings.vue'),
+    component: () => import(/* webpackChunkName: "SettingsChunk" */ './views/Settings.vue'),
   },
   {
     path: '/blueprint-editor/:id?',
     name: 'BlueprintEditor',
     props: true,
-    component: () => import(/* webpackChunkName: "Blueprints" */ './views/BlueprintEditor.vue'),
+    component: () => import(/* webpackChunkName: "BlueprintsChunk" */ './views/BlueprintEditor.vue'),
   }
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 })
 

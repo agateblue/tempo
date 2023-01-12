@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import Vuex from 'vuex'
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find'
@@ -8,8 +7,6 @@ import sortBy from 'lodash/sortBy'
 
 PouchDB.plugin(PouchDBFind)
 PouchDB.plugin(PouchDBAuthentication)
-
-Vue.use(Vuex)
 
 import {SETTINGS, getSettingValue, getNewEntryData} from '@/utils'
 

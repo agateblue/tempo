@@ -48,21 +48,21 @@
               <v-expansion-panel
                 style="background: transparent" 
               >
-                <v-expansion-panel-header>Fields</v-expansion-panel-header>
-                <v-expansion-panel-content>
+                <v-expansion-panel-title>Fields</v-expansion-panel-title>
+                <v-expansion-panel-text>
                   <div
                     v-for="field in blueprint.fields"
                     :key="field.id"
                   >
                     <blueprint-field :field="field" />
                   </div>
-                </v-expansion-panel-content>
+                </v-expansion-panel-text>
               </v-expansion-panel>
               <v-expansion-panel
                 style="background: transparent"
               >
-                <v-expansion-panel-header>Forms</v-expansion-panel-header>
-                <v-expansion-panel-content>
+                <v-expansion-panel-title>Forms</v-expansion-panel-title>
+                <v-expansion-panel-text>
                   <div
                     v-for="form in blueprint.forms"
                     :key="form.id"
@@ -73,13 +73,13 @@
                       :available-fields="availableFields"
                     />
                   </div>
-                </v-expansion-panel-content>
+                </v-expansion-panel-text>
               </v-expansion-panel>
               <v-expansion-panel
                 style="background: transparent"
               >
-                <v-expansion-panel-header>Visualizations</v-expansion-panel-header>
-                <v-expansion-panel-content
+                <v-expansion-panel-title>Visualizations</v-expansion-panel-title>
+                <v-expansion-panel-text
                   v-if="blueprint.visualizations && blueprint.visualizations.length > 0"
                 >
                   {{ queryableEntries.length }}
@@ -95,7 +95,7 @@
                     :tags="queryableTags"
                     :params="visualizationParams"
                   ></dataviz>
-                </v-expansion-panel-content>
+                </v-expansion-panel-text>
               </v-expansion-panel>
             </v-expansion-panels>
           </v-card-text>
@@ -122,8 +122,8 @@ export default {
     BlueprintEditorForm,
     BlueprintForm,
     BlueprintField,
-    Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
-    VisualizationConfig:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationConfig"),
+    Dataviz:  () => import(/* webpackChunkName: "visualizationChunk" */ "@/components/Dataviz"),
+    VisualizationConfig:  () => import(/* webpackChunkName: "visualizationChunk" */ "@/components/VisualizationConfig"),
   },
   data () {
     return {

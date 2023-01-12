@@ -1,5 +1,5 @@
 <template>
-  <v-simple-table>
+  <v-table>
     <template v-slot:default>
       <tbody>
         <tr v-for="row in rows" :key="row.id">
@@ -12,7 +12,7 @@
         </tr>
       </tbody>
     </template>
-  </v-simple-table>
+  </v-table>
 </template>
 <script>
 export default {
