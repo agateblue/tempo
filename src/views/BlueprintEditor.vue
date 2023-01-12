@@ -87,11 +87,13 @@
                     v-model="visualizationParams"
                     :all-entries="entries"
                     :show-blueprint-selector="false"
+                    :selected-blueprint="blueprint"
                   ></visualization-config>
                   <dataviz 
                     :blueprint="blueprint"      
                     :entries="queryableEntries"
                     :tags="queryableTags"
+                    :params="visualizationParams"
                   ></dataviz>
                 </v-expansion-panel-content>
               </v-expansion-panel>
@@ -130,6 +132,7 @@ export default {
       entries: [],
       visualizationParams: {
         ...getDates(this.defaultStart, this.defaultEnd),
+        groupByPeriod: 'date',
       }
 
     }
