@@ -957,6 +957,11 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
+"@cfworker/json-schema@^1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@cfworker/json-schema/-/json-schema-1.12.5.tgz#8a2b4f335662cbf4fa00d0101cec2a03defbf7d5"
+  integrity sha512-k+ungOs1TxSfNfmfOxkwaiNL2EgRQjhk2SRweMYoKkBJZUYsGsY+XYpe2KpuS9EyjZWjZhq8QvVM+gwi3g1+hQ==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
