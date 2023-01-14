@@ -7,7 +7,7 @@
     >
       This is a built-in blueprint, you cannot edit it.
     </v-alert>
-    <json-editor v-model="localBlueprint" :validator="validator" />
+    <yaml-editor v-model="localBlueprint" :schema="schema" />
     <v-btn
       class="mt-4"
       type="submit"
@@ -61,8 +61,7 @@
 </template>
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import JsonEditor from '@/components/JsonEditor'
-import { createAjvValidator } from 'vanilla-jsoneditor'
+import YamlEditor from '@/components/YamlEditor'
 import {trackEvent} from '@/utils'
 const blueprintSchema = require('@/schemas/blueprint.json')
 
@@ -72,12 +71,12 @@ export default {
     deletable: {default: false}
   },
   components: {
-    JsonEditor,
+    YamlEditor,
   },
   data () {
     return {
       deleteDialog: false,
-      validator: createAjvValidator(blueprintSchema, {}),
+      schema: blueprintSchema,
       localBlueprint: cloneDeep(this.value),   
     }
   },

@@ -581,3 +581,6 @@ export function getDates (start, end) {
 export function yamlToJson(str) {
   return yaml.load(str)
 }
+export function jsonToYaml(data) {
+  return yaml.dump(data)
+}
