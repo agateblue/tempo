@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import sub from 'date-fns/sub'
+const yaml = require('js-yaml');
 
 export const groupByPeriodOptions = [
   {text: 'Date', value: 'date'},
@@ -575,4 +576,8 @@ export function getDates (start, end) {
     start: start.toISOString().slice(0, 10),
     end: end.toISOString().slice(0, 10)
   }
+}
+
+export function yamlToJson(str) {
+  return yaml.load(str)
 }
