@@ -7,12 +7,12 @@
     >
       This is a built-in blueprint, you cannot edit it.
     </v-alert>
-    <yaml-editor v-model="localBlueprint" :schema="schema" />
+    <yaml-editor v-model="localBlueprint" :schema="schema" @error="errors = $event" />
     <v-btn
       class="mt-4"
       type="submit"
       color="primary"
-      :disabled="isBuiltin"
+      :disabled="isBuiltin || errors.length > 0"
     >Save</v-btn>
     <v-btn
       v-if="deletable"
@@ -77,7 +77,8 @@ export default {
     return {
       deleteDialog: false,
       schema: blueprintSchema,
-      localBlueprint: cloneDeep(this.value),   
+      localBlueprint: cloneDeep(this.value), 
+      errors: [],
     }
   },
   computed: {

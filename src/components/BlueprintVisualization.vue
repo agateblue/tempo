@@ -214,7 +214,6 @@ export default {
           groupByPeriod: this.groupByPeriod,
         }
       }
-      console.log('HELLO', options)
       return merge(options, this.config.displayOptions || {})
     },
 
