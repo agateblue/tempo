@@ -64,25 +64,7 @@ export default {
           self.$emit('error', self.errors)
         }
       });
-    });
-    // this.editor = new JSONEditor({
-    //   target: this.$refs["editor"],
-    //   props: {
-    //     content: {
-    //       json: this.value,
-    //     },
-    //     statusBar: false,
-    //     mode: 'text',
-    //     mainMenuBar: false,
-    //     indentationNumber: 2,
-    //     validator: this.validator,
-    //     onChange: (updatedContent, previousContent, { contentErrors }) => {
-    //       if (isEqual(contentErrors, {validationErrors: []})) {
-    //         // no error occured, we can send the update signal
-    //       }
-    //     },
-    //   }
-    // })
+    })
   }
 }
 </script>
