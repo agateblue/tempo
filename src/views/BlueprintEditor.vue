@@ -111,8 +111,9 @@ import cloneDeep from 'lodash/cloneDeep'
 import BlueprintField from '@/components/BlueprintField'
 import BlueprintEditorForm from '@/components/BlueprintEditorForm'
 import BlueprintForm from '@/components/BlueprintForm'
-import {getQueryableEntries, getQueryableTags, getDates, search} from '@/utils'
-const exampleBlueprint = require('@/blueprints/example:pets.json')
+import {getQueryableEntries, getQueryableTags, getDates, search, yamlToJson} from '@/utils'
+import txt from 'raw-loader!@/blueprints/example:pets.yml';
+const exampleBlueprint = yamlToJson(txt)
 
 export default {
   props: {

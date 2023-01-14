@@ -11,12 +11,12 @@ PouchDB.plugin(PouchDBAuthentication)
 
 Vue.use(Vuex)
 
-import {SETTINGS, getSettingValue, getNewEntryData} from '@/utils'
+import {SETTINGS, getSettingValue, getNewEntryData, yamlToJson} from '@/utils'
 
 async function getBuiltinBlueprints () {
   return {
-    "builtin:mood": (await import("@/blueprints/builtin:mood.json")).default,
-    "builtin:tags": (await import("@/blueprints/builtin:tags.json")).default,
+    "builtin:mood": yamlToJson((await import("raw-loader!@/blueprints/builtin:mood.yml")).default),
+    "builtin:tags": yamlToJson((await import("raw-loader!@/blueprints/builtin:tags.yml")).default),
   }
 }
 
