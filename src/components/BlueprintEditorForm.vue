@@ -61,10 +61,10 @@
 </template>
 <script>
 import cloneDeep from 'lodash/cloneDeep'
-import { blueprintSchema } from '@/validation'
 import JsonEditor from '@/components/JsonEditor'
 import { createAjvValidator } from 'vanilla-jsoneditor'
 import {trackEvent} from '@/utils'
+const blueprintSchema = require('@/schemas/blueprint.json')
 
 export default {
   props: {
