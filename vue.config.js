@@ -1,3 +1,6 @@
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const path = require("path");
+
 module.exports = {
   pluginOptions: {
     webpackBundleAnalyzer: {
@@ -15,7 +18,12 @@ module.exports = {
         maxSize: 1000000,
       }
     },
-
+    plugins: [
+      new MonacoWebpackPlugin({
+        languages: ["yaml"],//configure your languages here
+        features: ["coreCommands", "find"],
+      }),
+    ],
   },
   chainWebpack: config => {
     config
@@ -24,6 +32,12 @@ module.exports = {
       args[0].title = 'Tempo - Find your own rythm'
       return args
     })
+    config.resolve.alias.set(
+      "vscode",
+      path.resolve(
+        "./node_modules/monaco-languageclient/lib/vscode-compatibility"
+      )
+    );
   },
   pwa: {
     name: 'Tempo',
