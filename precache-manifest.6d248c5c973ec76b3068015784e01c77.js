@@ -4,7 +4,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/About~31ecd969.42c6a1f1.css"
   },
   {
-    "revision": "2c6767222190f416b0c5",
+    "revision": "677e043b0d9d57dc0b8f",
     "url": "/css/Blueprints~31ecd969.4b346078.css"
   },
   {
@@ -32,7 +32,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/css/Tasks~31ecd969.d02844a9.css"
   },
   {
-    "revision": "38b73fc97b0254c7486b",
+    "revision": "2f1e2805cec908de44d9",
     "url": "/css/app~748942c6.7621a46a.css"
   },
   {
@@ -132,7 +132,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/img/icons/safari-pinned-tab.svg"
   },
   {
-    "revision": "e1212adfe350b62540b9c47b41f3062b",
+    "revision": "e7088d4d752f36c0da9cfca437713c90",
     "url": "/index.html"
   },
   {
@@ -140,8 +140,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/About~31ecd969.1cc3dcaf.js"
   },
   {
-    "revision": "2c6767222190f416b0c5",
-    "url": "/js/Blueprints~31ecd969.36cc5171.js"
+    "revision": "677e043b0d9d57dc0b8f",
+    "url": "/js/Blueprints~31ecd969.97a3b51a.js"
   },
   {
     "revision": "09e6da3b824e2e4b7c90",
@@ -180,8 +180,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/alasql~2a42e354.2bfb585d.js"
   },
   {
-    "revision": "38b73fc97b0254c7486b",
-    "url": "/js/app~748942c6.6b3962f1.js"
+    "revision": "2f1e2805cec908de44d9",
+    "url": "/js/app~748942c6.3a9065b0.js"
   },
   {
     "revision": "c71bdfe8e3a31cd9f77b",
