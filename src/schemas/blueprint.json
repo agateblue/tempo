@@ -83,6 +83,14 @@
               1500
             ]
           },
+          "max": {
+            "type": "number",
+            "description": "For number fields, a maximum value used for validation",
+            "examples": [
+              42,
+              3500
+            ]
+          },
           "step": {
             "anyOf": [
               {"type": "string"},
