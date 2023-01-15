@@ -19,6 +19,7 @@
       persistent-hint
       :items="getSuggestions(field)"
       :step="field.step || 'any'"
+      v-bind="additionalAttrs"
     ></component>
   </div>
 </template>
@@ -45,6 +46,16 @@ export default {
   computed: {
     isRequired () {
       return this.field.required === undefined ? true : this.field.required
+    },
+    additionalAttrs () {
+      let attrs = {}
+      if (this.field.min != undefined) {
+        attrs.min = this.field.min
+      }
+      if (this.field.max != undefined) {
+        attrs.max = this.field.max
+      }
+      return attrs
     }
   },
   methods: {
