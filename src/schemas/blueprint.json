@@ -67,6 +67,14 @@
             "enum": ["text", "number", "boolean", "date"],
             "default": "text"
           },
+          "default": {
+            "anyOf": [
+              {"type": "string"},
+              {"type": "number"},
+              {"type": "boolean"}
+            ],
+            "description": "A default value for the field"
+          },
           "min": {
             "type": "number",
             "description": "For number fields, a minimum value used for validation",

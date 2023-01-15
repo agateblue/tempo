@@ -13,7 +13,7 @@
       v-model="localValue"
       :label="field.label"
       :type="field.type || 'text'"
-      :required="field.required === undefined ? true : field.required"
+      :required="isRequired"
       clearable
       :hint="field.unit"
       persistent-hint
@@ -37,6 +37,16 @@ export default {
       localValue: this.value
     }
   }, 
+  created () {
+    if (this.field.default != undefined && this.isRequired && (this.localValue === null || this.localValue === "")) {
+      this.localValue = this.field.default
+    }
+  },
+  computed: {
+    isRequired () {
+      return this.field.required === undefined ? true : this.field.required
+    }
+  },
   methods: {
     getSuggestions (field) {
       return field.suggestions || []
