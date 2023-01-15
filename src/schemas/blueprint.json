@@ -225,7 +225,8 @@
               "line",
               "pie",
               "bar",
-              "table"
+              "table",
+              "json"
             ]
           },
           "displayOptions": {
