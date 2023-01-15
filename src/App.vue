@@ -172,10 +172,13 @@ html {
 .container.narrow {
   max-width: var(--single-column-width);
 }
-section.v-card, .section.v-card {
+section.v-card:not(.fluid), .section.v-card:not(.fluid) {
   max-width: var(--single-column-width) !important;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+.theme--dark.v-application code {
+  background: #011627;
 }
 .v-timeline-item:last-child {
   margin-bottom: 42px;
@@ -240,6 +243,10 @@ section.v-card, .section.v-card {
     content: none;
   }
 }
+ol, ul, code {
+  margin-bottom: 12px;
+}
+
 #composer {
   max-height: 600px;
   overflow-y: auto;
