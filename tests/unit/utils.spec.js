@@ -405,6 +405,7 @@ describe('utils', () => {
           value: "8.5",
         },
       },
+      tagsCount: 3,
       favorite: false,
       thread: 'foo',
       replies: ['bar'],
