@@ -17,6 +17,7 @@ async function getBuiltinBlueprints () {
   return {
     "builtin:mood": yamlToJson((await import("raw-loader!@/blueprints/builtin:mood.yml")).default),
     "builtin:tags": yamlToJson((await import("raw-loader!@/blueprints/builtin:tags.yml")).default),
+    "builtin:diary": yamlToJson((await import("raw-loader!@/blueprints/builtin:diary.yml")).default),
   }
 }
 

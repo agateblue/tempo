@@ -1,0 +1,41 @@
+id: builtin:diary
+label: Diary
+title: Diary related information and visualizations
+version: '1'
+visualizations:
+  - label: Entries by {{ groupByPeriodLabel }}
+    query: |-
+      SELECT
+        {{ groupByPeriod }},
+        count(CASE WHEN mood > 0 THEN * ELSE 0 END) as `Positive entries`,
+        count(CASE WHEN mood = 0 THEN * ELSE 0 END) as `Neutral entries`,
+        count(CASE WHEN mood < 0 THEN * ELSE 0 END) as `Negative entries`
+      FROM ?
+      GROUP BY {{ groupByPeriod }}
+      ORDER BY {{ groupByPeriod }} DESC
+    displayType: bar
+    displayOptions:
+      colors:
+        - green
+        - light-grey
+        - orange
+      barOptions:
+        stacked: true
+  - label: Average entry length, in characters, by {{ groupByPeriodLabel }}
+    query: |-
+      SELECT
+        {{ groupByPeriod }},
+        AVG(LEN(text)) as Length
+      FROM ?
+      GROUP BY {{ groupByPeriod }}
+      ORDER BY {{ groupByPeriod }} DESC
+    displayType: bar
+  - label: Average tags per entry, by {{ groupByPeriodLabel }}
+    query: |-
+      SELECT
+        {{ groupByPeriod }},
+        AVG(tagsCount) as Tags
+      FROM ?
+      GROUP BY {{ groupByPeriod }}
+      ORDER BY {{ groupByPeriod }} DESC
+    displayType: bar

@@ -284,6 +284,7 @@ export function getCompleteEntry (e) {
     weekNumber: weekNumber,
     yearWeek: `${year}-${String(weekNumber).padStart(2, '0')}`,
     tags: {},
+    tagsCount: e.tags.length,
     data: e.data || null,
     favorite: e.favorite || false,
     thread: e.thread || null,
@@ -510,6 +511,7 @@ export const SETTINGS = [
     return [
       "builtin:mood",
       "builtin:tags",
+      "builtin:diary",
     ]
   }},
 ]
