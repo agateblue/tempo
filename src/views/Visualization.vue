@@ -44,7 +44,11 @@ export default {
   },
   async created () {
     await this.$store.dispatch("loadBlueprints")
-    this.params.selectedBlueprintId = this.blueprint || this.$store.state.loadedBlueprints[0].id
+    this.params.selectedBlueprintId = (
+      this.blueprint ||
+      this.$store.state.uiCache.visualization.blueprint ||
+      this.$store.state.loadedBlueprints[0].id
+    )
   },
   computed: {
     entries () {
@@ -78,6 +82,7 @@ export default {
           end: v.end,
           period: v.groupByPeriod || 'date'
         }
+        this.$store.commit('uiCache', {key: 'visualization', value: {blueprint: query.blueprint}})
         this.$router.push({ path: this.$route.path, query })
       },
       deep: true,

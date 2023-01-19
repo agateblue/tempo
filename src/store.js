@@ -50,6 +50,11 @@ const store = new Vuex.Store({
     settings: {},
     loadedBlueprints: [],
     searchQuery: '',
+    uiCache: {
+      visualization: {
+        blueprint: null,
+      }
+    }
   },
   mutations: {
     handleSync (state, {updateLastSync}) {
@@ -117,6 +122,9 @@ const store = new Vuex.Store({
     },
     searchQuery (state, value) {
       state.searchQuery = value
+    },
+    uiCache (state, {key, value}) {
+      state.uiCache[key] = value
     },
   },
   getters: {
@@ -447,6 +455,7 @@ store.subscribe((mutation, state) => {
 		couchDbPassword: state.couchDbPassword,
 		version: state.version,
     settings: state.settings,
+    uiCache: state.uiCache,
 	};
 
   console.log('Updating localstorage cache…')
