@@ -7,11 +7,16 @@
     >
       This is a built-in blueprint, you cannot edit it.
     </v-alert>
-    <yaml-editor v-model="localBlueprint" :schema="schema" @error="errors = $event" />
+    <yaml-editor
+      v-model="localBlueprint"
+      :schema="schema"
+      @save="save"
+      @error="errors = $event" />
     <v-btn
       class="mt-4"
       type="submit"
       color="primary"
+      :loading="isSaving"
       :disabled="isBuiltin || errors.length > 0"
     >Save</v-btn>
     <v-btn
@@ -79,6 +84,7 @@ export default {
       schema: blueprintSchema,
       localBlueprint: cloneDeep(this.value), 
       errors: [],
+      isSaving: false,
     }
   },
   computed: {
@@ -102,6 +108,7 @@ export default {
         console.log("Cannot update / create a builtin blueprint")
         return
       }
+      this.isSaving = true
       // try to find existing blueprint with id
       let existing = await this.getBlueprintFromDb()
       let doc = {
@@ -118,6 +125,7 @@ export default {
       await this.$store.state.db.put(doc)
       await this.$store.dispatch('loadBlueprints')
       this.$store.dispatch('forceSync', {updateLastSync: false})
+      this.isSaving = false
     },
     async handleDelete () {
       let existing = await this.getBlueprintFromDb()

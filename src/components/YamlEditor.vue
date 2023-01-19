@@ -16,7 +16,6 @@
   </div>
 </template> 
 <script>
-// import isEqual from 'lodash/isEqual'
 import loader from "@monaco-editor/loader";
 import {jsonToYaml, yamlToJson} from '@/utils'
 import { Validator } from '@cfworker/json-schema';
@@ -30,11 +29,11 @@ export default {
     return {
       editor: null,
       errors: [],
+      validator: new Validator(this.schema)
     }
   },
   mounted () {
     let self = this
-    const validator = new Validator(this.schema);
     loader.init().then((monaco) => {
       const editorOptions = {
         language: "yaml",
@@ -44,27 +43,46 @@ export default {
       };
       self.editor = monaco.editor.create(self.$refs.editor, editorOptions);
       self.editor.getModel().onDidChangeContent(() => {
-        let data
-        self.errors = []
-        self.$emit('error', self.errors)
-        try {
-          data = yamlToJson(self.editor.getValue())
-        } catch (e) {
-          self.errors = [e]
-          self.$emit('error', self.errors)
-          return
-        }
-        let result = validator.validate(data)
-        if (result.valid) {
-          self.$emit('input', data)
-        } else {
-          self.errors = result.errors.map((e) => {
-            return `${e.keywordLocation}: ${e.error}`
-          })
-          self.$emit('error', self.errors)
-        }
+        self.save()
       });
+      this.$el.addEventListener("keydown", this.doSave);
     })
+  },
+  beforeDestroy() {
+    this.$el.removeEventListener("keydown", this.doSave);
+  },
+  methods: {
+    doSave (e) {
+      if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        let valid = this.save()
+        if (valid) {
+          this.$emit('save')
+        }
+      }
+    },
+    save () {
+      let data
+      this.errors = []
+      this.$emit('error', this.errors)
+      try {
+        data = yamlToJson(this.editor.getValue())
+      } catch (e) {
+        this.errors = [e]
+        this.$emit('error', this.errors)
+        return
+      }
+      let result = this.validator.validate(data)
+      if (result.valid) {
+        this.$emit('input', data)
+        return true
+      } else {
+        this.errors = result.errors.map((e) => {
+          return `${e.keywordLocation}: ${e.error}`
+        })
+        this.$emit('error', this.errors)
+      }
+    }
   }
 }
 </script>
