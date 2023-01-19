@@ -24,6 +24,14 @@ describe('utils', () => {
     ]
     expect(parseTags(msg)).to.deep.equal(expected)
   })
+  it('can extract annotations from text #45', () => {
+    const msg = '@foo="test" @bar="another"'
+    const expected = [
+      {text: '@foo="test"', id: "foo", type: "annotation", mood: null, sign: '@', value: "test"},
+      {text: '@bar="another"', id: "bar", type: "annotation", mood: null, sign: '@', value: "another"},
+    ]
+    expect(parseTags(msg)).to.deep.equal(expected)
+  })
   it('can extract tags from text edge cases', () => {
     
     let cases = [
