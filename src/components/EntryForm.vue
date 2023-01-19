@@ -92,7 +92,7 @@
                       </v-btn>
                     </v-col>
                     <v-col
-                      v-if="!isEmpty(formData) || currentFormId"
+                      v-if="currentFormId"
                       cols="12"
                       sm="12"
                     >
@@ -137,7 +137,12 @@ function getFormData (entry, formData) {
   let d = entry.data || {}
   d = {
     ...d,
-    ...(formData || {}),
+  }
+  if (entry.form) {
+    d = {
+      ...d,
+      ...formData
+    }
   }
   return isEmpty(d) ? null : d
 }
