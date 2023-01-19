@@ -5,7 +5,7 @@
       dense
       :color="$theme.appBar.color">
       <v-spacer></v-spacer>
-      <v-toolbar-title @click="$router.push('/')" class="mr-4" style="cursor: pointer">
+      <v-toolbar-title @click="$store.commit('searchQuery', ''); $router.push('/')" class="mr-4" style="cursor: pointer">
         Tempo
       </v-toolbar-title>
       <v-spacer></v-spacer>
