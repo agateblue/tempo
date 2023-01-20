@@ -178,6 +178,20 @@ const store = new Vuex.Store({
       })
       return forms
     },
+    pages: (state, getters) => {
+      let allPages = []
+      getters.enabledBlueprints.forEach(l => {
+        allPages = [...allPages, ...(l.pages || [])]
+      })
+      return sortBy(allPages, ['title'])
+    },
+    pagesById: (state, getters) => {
+      let pages = {}
+      getters.pages.forEach(f => {
+        pages[f.id] = f
+      })
+      return pages
+    },
     fields: (state, getters) => {
       let allFields = []
       getters.enabledBlueprints.forEach(l => {

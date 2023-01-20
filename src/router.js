@@ -63,6 +63,12 @@ const routes = [
     name: 'BlueprintEditor',
     props: true,
     component: () => import(/* webpackChunkName: "Blueprints" */ './views/BlueprintEditor.vue'),
+  },
+  {
+    path: '/pages/:id?',
+    name: 'Page',
+    props: true,
+    component: () => import(/* webpackChunkName: "Page" */ './views/Page.vue'),
   }
 ]
 

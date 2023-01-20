@@ -240,6 +240,116 @@
           }
         }
       }
+    },
+    "pages": {
+      "type": "array",
+      "default": [],
+      "description": "A list of pages exposed by this blueprint",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "sections"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique id for the page",
+            "examples": [
+              "agate:current-medication",
+              "bob:best-purchase-places"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "A human readable title for the page",
+            "examples": [
+              "Current medication",
+              "Best purchase places"
+            ]
+          },
+          "counters": {
+            "type": "array",
+            "default": [],
+            "description": "A list counters that can be incremented through questions",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "label"
+              ],
+              "id": {
+                "type": "string",
+                "description": "A unique id for the counter",
+                "examples": [
+                  "anxiety"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "description": "A human readable label for the counter",
+                "examples": [
+                  "Anxiety"
+                ]
+              },
+              "color": {
+                "type": "string",
+                "description": "A color for the counter. Used to display in progress bar. Check https://vuetifyjs.com/en/styles/colors/#material-colors for all the choices.",
+                "examples": [
+                  "deep-orange"
+                ]
+              },
+              "examples": [
+                {"id": "anxiety", "label": "Anxiety"}
+              ]
+            }
+          },
+          "sections": {
+            "type": "array",
+            "description": "A list of content sections to be displayed on the page",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "description": "Configuration of each section of this page. Only the section content is required, but additional options may be provided.",
+              "additionalProperties": true,
+              "required": [
+                "content"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The type of section",
+                  "enum": ["markdown", "question", "counters"],
+                  "default": "markdown"
+                },
+                "content": {
+                  "type": "string",
+                  "description": "Markdown content for the section or label for the question",
+                  "examples": [
+                    "My current medication is **XXX**."
+                  ]
+                },
+                "increment": {
+                  "type": "object",
+                  "description": "Which counters to increment when the box is checked",
+                  "examples": [
+                    {"anxiety": 2}
+                  ]
+                },
+                "conditions": {
+                  "type": "object",
+                  "description": "When to display this question, based on current counter values. If one counter match, the question is displayed",
+                  "default": null,
+                  "examples": [
+                    {"anxiety": 2, "exhaustion": 1}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -13,6 +13,7 @@ Vue.config.productionTip = false
 import {
   mdiArrowLeft,
   mdiBook,
+  mdiBookOpenPageVariantOutline,
   mdiCalendar,
   mdiChartTimelineVariant,
   mdiCheck,
@@ -49,6 +50,7 @@ import {
 Vue.prototype.$icons = {
   mdiArrowLeft,
   mdiBook,
+  mdiBookOpenPageVariantOutline,
   mdiCalendar,
   mdiChartTimelineVariant,
   mdiCheck,

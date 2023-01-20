@@ -222,6 +222,25 @@
                   ></dataviz>
                 </v-expansion-panel-content>
               </v-expansion-panel>
+              <v-expansion-panel
+                style="background: transparent"
+              >
+                <v-expansion-panel-header>Pages ({{ (blueprint.pages || []).length }})</v-expansion-panel-header>
+                <v-expansion-panel-content
+                  v-if="blueprint.pages && blueprint.pages.length > 0"
+                >
+                  <v-select
+                    v-model="page"
+                    :items="blueprintPages"
+                    label="Page"
+                  ></v-select>
+                  <blueprint-page 
+                    v-if="page"
+                    :key="JSON.stringify(blueprint.pages)"
+                    :page="blueprintPagesById[page]"
+                  ></blueprint-page>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
             </v-expansion-panels>
           </v-card-text>
         </v-card>
@@ -236,6 +255,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import BlueprintField from '@/components/BlueprintField'
 import BlueprintEditorForm from '@/components/BlueprintEditorForm'
 import BlueprintForm from '@/components/BlueprintForm'
+import BlueprintPage from '@/components/BlueprintPage'
 import CodeSnippet from '@/components/CodeSnippet'
 import {getQueryableEntries, getQueryableTags, getDates, search, yamlToJson} from '@/utils'
 import txt from 'raw-loader!@/blueprints/example:simple.yml'
@@ -444,6 +464,7 @@ export default {
     BlueprintEditorForm,
     BlueprintForm,
     BlueprintField,
+    BlueprintPage,
     Dataviz:  () => import(/* webpackChunkName: "visualization" */ "@/components/Dataviz"),
     VisualizationConfig:  () => import(/* webpackChunkName: "visualization" */ "@/components/VisualizationConfig"),
   },
@@ -452,6 +473,7 @@ export default {
       snippets: SNIPPETS,
       panels: [],
       blueprint: null,
+      page: null,
       entries: [],
       visualizationParams: {
         ...getDates(this.defaultStart, this.defaultEnd),
@@ -501,8 +523,28 @@ export default {
     queryableTags () {
       return getQueryableTags(this.queryableEntries)
     },
+    blueprintPages () {
+      return this.blueprint.pages.map(p => {
+        return {text: p.title, value: p.id}
+      })
+    },
+    blueprintPagesById () {
+      let pages = {}
+      this.blueprint.pages.forEach(p => {
+        pages[p.id] = p
+      })
+      return pages
+    }
   },
   watch: {
+    'blueprint.pages': {
+      deep: true,
+      handler (v) {
+        if (v && v.length > 0 && !this.page) {
+          this.page = v[0].id
+        }
+      }
+    },
     '$store.state.searchQuery': async function () {
       await this.search()
     },

@@ -30,6 +30,16 @@
           <span>Syncing…</span>
         </template>
       </v-btn>
+      <v-btn
+        v-if="$store.getters.pages.length > 0"
+        small
+        icon
+        class="ml-3"
+        to="/pages"
+        title="Custom pages"
+      >
+        <v-icon v-text="$icons.mdiBookOpenPageVariantOutline"></v-icon>
+      </v-btn>
       <v-btn small icon class="ml-3" to="/about" title="About">
         <v-icon v-text="$icons.mdiHelpCircleOutline"></v-icon>
       </v-btn>
