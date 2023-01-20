@@ -45,6 +45,7 @@ export default {
       self.editor.getModel().onDidChangeContent(() => {
         self.save()
       });
+      self.editor.getModel().updateOptions({ tabSize: 2 })
       this.$el.addEventListener("keydown", this.doSave);
     })
   },
