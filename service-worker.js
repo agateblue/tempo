@@ -1,4 +1,4 @@
-importScripts("/precache-manifest.e3c56b032f6d78837f5c32f9a3ac9805.js", "/workbox-v4.3.1/workbox-sw.js");
+importScripts("/precache-manifest.b13ff8a598b611ae8db9c8f3ef62797b.js", "/workbox-v4.3.1/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "/workbox-v4.3.1"});
 // This is the code piece that GenerateSW mode can't provide for us.
 // This code listens for the user's confirmation to update the app.
