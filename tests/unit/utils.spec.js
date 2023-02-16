@@ -126,7 +126,7 @@ describe('utils', () => {
     expect(result).to.deep.equal(expected)
   })
   it('parse query', () => {
-    const query = 'is:fav is:thread is:reply is:form form:noop:form hello #world + - ---games date:2020 t:mytag $dreams'
+    const query = 'is:fav is:thread is:reply is:form form:noop:form hello #world + - ---games date:2020 t:mytag $dreams not:something'
     const expected = [
       {favorite: true},
       {thread: true},
@@ -141,6 +141,7 @@ describe('utils', () => {
       {date: '2020'},
       {tagName: 'mytag'},
       {alias: 'dreams'},
+      {text: 'something', not: true},
     ]
     const result = parseQuery(query)
     expect(result).to.deep.equal(expected)
@@ -181,6 +182,20 @@ describe('utils', () => {
     }
     const result = matchTokens(entry, tokens)
     expect(result).equal(true)
+  })
+  it('match tokens not', () => {
+    let query = 'not:games'
+    let tokens = parseQuery(query)
+    const entryMatching = {
+      text: 'Played chess',
+    }
+    const entryNotMatching = {
+      text: 'Played board games',
+    }
+    let result = matchTokens(entryMatching, tokens)
+    expect(result).equal(true)
+    result = matchTokens(entryNotMatching, tokens)
+    expect(result).equal(false)
   })
   it('match tokens date true', () => {
     const tokens = [

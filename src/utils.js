@@ -158,6 +158,9 @@ export function parseQuery(query) {
       tokens.push({categoryName: stripped.split(/:(.+)/)[1]})
     } else if (stripped.startsWith('$')) {
       tokens.push({alias: stripped.slice(1)})
+    } else if (stripped.startsWith('not:')) {
+      let subTokens = parseQuery(stripped.slice(4))
+      tokens.push({...subTokens[0], not: true})
     } else {
       tokens.push({text: stripped})
     }
@@ -190,67 +193,78 @@ export function objectValuesAndKeys (object) {
 export function matchTokens(entry, tokens, aliasesById = {}) {
   for (let index = 0; index < tokens.length; index++) {
     const token = tokens[index];
-     if (token.alias && aliasesById[token.alias]) {
-      let match = matchOrTokens(entry, parseFullQuery(aliasesById[token.alias]))
-      if (!match) {
-        return false
-      }
+    let result = matchToken(entry, token, aliasesById)
+    if (token.not) {
+      result = !result
     }
-    if (token.tag) {
-      let matching = entry.tags.filter((t) => {
-        return matchString(token.tag.text, t.text)
-      })
-      if (matching.length === 0) {
-        return false
-      }
-    }
-    else if (token.text) {
-      let additionalContent = objectValuesAndKeys(entry.data)
-      if (entry.form) {
-        additionalContent.push(entry.form)
-      }
-      let haystack = `${entry.text} ${additionalContent.join(' ')}`
-      if (!haystack.toLowerCase().includes(token.text.toLowerCase())) {
-        return matchString(token.text, haystack)
-      }
-    }
-    if (token.favorite && !entry.favorite) {
+    if (result === false) {
       return false
     }
-    if (token.form && !entry.form) {
+  }
+  return true
+}
+
+export function matchToken(entry, token, aliasesById) {
+  if (token.alias && aliasesById[token.alias]) {
+    let match = matchOrTokens(entry, parseFullQuery(aliasesById[token.alias]))
+    if (!match) {
       return false
     }
-    if (token.formId && entry.form != token.formId) {
+  }
+  if (token.tag) {
+    let matching = entry.tags.filter((t) => {
+      return matchString(token.tag.text, t.text)
+    })
+    if (matching.length === 0) {
       return false
     }
-    if (token.thread && (entry.replies || []).length === 0) {
+  }
+  else if (token.text) {
+    let additionalContent = objectValuesAndKeys(entry.data)
+    if (entry.form) {
+      additionalContent.push(entry.form)
+    }
+    let haystack = `${entry.text} ${additionalContent.join(' ')}`
+    if (!haystack.toLowerCase().includes(token.text.toLowerCase())) {
+      return matchString(token.text, haystack)
+    }
+  }
+  if (token.favorite && !entry.favorite) {
+    return false
+  }
+  if (token.form && !entry.form) {
+    return false
+  }
+  if (token.formId && entry.form != token.formId) {
+    return false
+  }
+  if (token.thread && (entry.replies || []).length === 0) {
+    return false
+  }
+  if (token.reply && !entry.thread) {
+    return false
+  }
+  if (token.tagName) {
+    let matching = entry.tags.filter((t) => {
+      return matchString(token.tagName, t.id)
+    })
+    if (matching.length === 0) {
       return false
     }
-    if (token.reply && !entry.thread) {
+  }
+  if (token.categoryName) {
+    return matchString(token.categoryName, entry.category)
+  }
+  if (token.sign) {
+    let matching = entry.tags.filter((t) => {
+      return t.sign === token.sign
+    })
+    if (matching.length === 0) {
       return false
     }
-    if (token.tagName) {
-      let matching = entry.tags.filter((t) => {
-        return matchString(token.tagName, t.id)
-      })
-      if (matching.length === 0) {
-        return false
-      }
-    }
-    if (token.categoryName) {
-      return matchString(token.categoryName, entry.category)
-    }
-    if (token.sign) {
-      let matching = entry.tags.filter((t) => {
-        return t.sign === token.sign
-      })
-      if (matching.length === 0) {
-        return false
-      }
-    }
-    if (token.date && !entry._id.startsWith(token.date)) {
-      return false
-    }
+  }
+  if (token.date && !entry._id.startsWith(token.date)) {
+    return false
   }
   return true
 }
