@@ -86,6 +86,7 @@ Tempo includes a search bar and a powerful query language you can use to quickly
     - `is:favorite` gives you all favorited entries
     - `is:thread` gives you all first entries of a thread
     - `is:reply` gives you all replies thread
+    - `not:guitar` gives you all entries not containing `guitar`. `not:` can be used before other operators, such as `not:is:reply` or `not:date:2021`
 
 All these operators can be combined to further refine your search:
 

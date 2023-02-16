@@ -181,12 +181,21 @@
                 <td>
                   Find first entry of a thread
                 </td>
-              </tr><tr>
+              </tr>
+              <tr>
                 <td>
                   <code>is:reply</code>
                 </td>
                 <td>
                   Find replies to an entry
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <code>not:sport</code>
+                </td>
+                <td>
+                  Find entries that do not contain the word "sport". <code>not:</code> can be used in front of other operators, such as <code>not:date:2021</code>.
                 </td>
               </tr>
             </tbody>
