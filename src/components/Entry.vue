@@ -291,7 +291,11 @@ export default {
       await this.$store.state.db.remove(this.row.rawEntry)
       await this.$store.dispatch('rebuildThread', threadId)
       await this.$store.dispatch('forceSync', {updateLastSync: false})
-      await this.$store.dispatch('triggerWebhook')
+      let webhookPayload = {
+        event: 'entry.deleted',
+        entry: this.row.rawEntry,
+      }
+      await this.$store.dispatch('triggerWebhook', {payload: webhookPayload})
     },
   }
 }

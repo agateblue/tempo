@@ -213,7 +213,11 @@ export default {
         e = await this.addNew()
       }
       this.$emit('submitted', e)
-      await this.$store.dispatch('triggerWebhook')
+      let webhookPayload = {
+        event: this.entry ? 'entry.updated' : 'entry.created',
+        entry: e,
+      }
+      await this.$store.dispatch('triggerWebhook', {payload: webhookPayload})
     },
     async addNew () {
       let date = this.date ? new Date(this.date) : new Date()
