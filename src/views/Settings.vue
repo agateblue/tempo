@@ -292,6 +292,7 @@
 import AliasForm from '@/components/AliasForm'
 
 import {
+  getNewEntryData,
   search,
   getBlueprints,
   getTasks,
@@ -462,7 +463,11 @@ export default {
     },
     async triggerWebhook (url) {
       await this.$store.dispatch("forceSync", {updateLastSync: true})
-      await this.$store.dispatch('triggerWebhook', url)
+      let payload = {
+        event: 'entry.created',
+        entry: getNewEntryData('Hello there, this is a #test')
+      }
+      await this.$store.dispatch('triggerWebhook', {url, payload})
     },
     async importData () {
       this.importLogs = []

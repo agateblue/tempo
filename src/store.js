@@ -341,7 +341,7 @@ const store = new Vuex.Store({
     async setWebhook ({dispatch}, {url}) {
       await dispatch("setSetting", {name: "webhook", value: {url}})
     },
-    async triggerWebhook ({state}, url) {
+    async triggerWebhook ({state}, {url, payload}) {
       url = url || state.settings.webhook.url
       if (!url) {
         console.log("No webhook configured, skipping", state.settings.webhook.url)
@@ -350,7 +350,10 @@ const store = new Vuex.Store({
       console.log("Sending webhook to", url)
       return await fetch(url, {
         method: "POST",
-        body: ""
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload || {})
       })
     },
     async addChart ({state, dispatch}, config) {
