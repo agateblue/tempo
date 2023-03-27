@@ -9,6 +9,7 @@
     </v-container>
     <v-container class="mt-4 py-0 px-0" v-if="selectedBlueprint">
       <dataviz 
+        :key="JSON.stringify(params)"
         :blueprint="selectedBlueprint"      
         :entries="queryableEntries"
         :tags="queryableTags"
