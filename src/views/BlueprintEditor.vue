@@ -214,7 +214,7 @@
                     :selected-blueprint="blueprint"
                   ></visualization-config>
                   <dataviz 
-                    :key="JSON.stringify(blueprint.visualizations)"
+                    :key="JSON.stringify(blueprint.visualizations) + JSON.stringify(visualizationParams)"
                     :blueprint="blueprint"      
                     :entries="queryableEntries"
                     :tags="queryableTags"
