@@ -273,6 +273,8 @@ export function getCompleteEntry (e) {
     _id: e._id,
     _rev: e._rev,
     mood: e.mood,
+    positiveMood: 0,
+    negativeMood: 0,
     fullDate: fullDate,
     date: fullDate.toISOString().split('T')[0],
     year: year,
@@ -295,6 +297,12 @@ export function getCompleteEntry (e) {
     entry.tags[t.id] = {
       ...t,
       present: true
+    }
+    if (t.mood > 0) {
+      entry.positiveMood += t.mood
+    }
+    if (t.mood < 0) {
+      entry.negativeMood += t.mood
     }
   })
   if (entry.data) {
