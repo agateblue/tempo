@@ -377,6 +377,7 @@ describe('utils', () => {
       tags: [
         {text: "+++happy", id: "happy", type: "feeling", mood: 3, sign: '+'},
         {text: "~tired", id: "tired", type: "feeling", mood: 0, sign: '~'},
+        {text: "-sad", id: "sad", type: "feeling", mood: -1, sign: '-'},
         {text: "@work:duration=8.5", id: "work:duration", type: "annotation", mood: null, sign: '@', value: "8.5"},
       ],
       data: {
@@ -388,6 +389,8 @@ describe('utils', () => {
     }
     const expected = {
       ...entry,
+      positiveMood: 3,
+      negativeMood: -1,
       data: {
         'work:duration': 8.5,
       },
@@ -418,6 +421,14 @@ describe('utils', () => {
           text: "~tired",
           type: "feeling",
         },
+        "sad": {
+          id: "sad",
+          mood: -1,
+          present: true,
+          sign: "-",
+          text: "-sad",
+          type: "feeling",
+        },
         "work:duration": {
           id: "work:duration",
           mood: null,
@@ -428,7 +439,7 @@ describe('utils', () => {
           value: "8.5",
         },
       },
-      tagsCount: 3,
+      tagsCount: 4,
       favorite: false,
       thread: 'foo',
       replies: ['bar'],
