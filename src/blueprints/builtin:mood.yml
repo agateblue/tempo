@@ -6,8 +6,8 @@ visualizations:
   - label: 'Mood by period: {{ groupByPeriodLabel }}'
     help: Higher is better
     query: >-
-      SELECT {{ groupByPeriod }}, sum(CASE WHEN mood > 0 THEN mood ELSE 0 END)
-      as Positive, sum(CASE WHEN mood < 0 THEN mood ELSE 0 END) as Negative FROM
+      SELECT {{ groupByPeriod }}, sum(positiveMood)
+      as Positive, sum(negativeMood) as Negative FROM
       ? GROUP BY {{ groupByPeriod }} ORDER BY {{ groupByPeriod }} DESC
     displayType: bar
     displayOptions:
