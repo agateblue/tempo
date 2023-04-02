@@ -306,6 +306,8 @@ fields:
       - Home
       - Lola
       - Doctor
+    # If a new value, not in suggestions is inputed, it will show up in suggestions
+    autosuggest: "form"
   # The second one is a boolean (yes/no) field
   # that defaults to true
   - id: onDiet

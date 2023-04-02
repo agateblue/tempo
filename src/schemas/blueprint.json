@@ -118,6 +118,12 @@
             "examples": [
               ["Paracetamol", "D Vitamin", "B12 Vitamin"]
             ]
+          },
+          "autosuggest": {
+            "type": "string",
+            "enum": ["form", "field", null],
+            "description": "If not null, will also include already inputed values in suggestions. If 'form' is used, then only values for matching form are included. If 'field' is used, all values are included, regardless of the form",
+            "default": null
           }
         }
       }

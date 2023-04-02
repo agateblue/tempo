@@ -9,7 +9,7 @@
     />
     <component
       v-else
-      v-bind:is="getComponent(field)"
+      v-bind:is="getComponent()"
       v-model="localValue"
       :label="field.label"
       :type="field.type || 'text'"
@@ -17,31 +17,56 @@
       clearable
       :hint="field.unit"
       persistent-hint
-      :items="getSuggestions(field)"
+      :items="suggestions"
       :step="field.step || 'any'"
       v-bind="additionalAttrs"
+      @blur="onBlur"
+      ref="input"
     ></component>
   </div>
 </template>
 <script>
 import isEqual from 'lodash/isEqual'
+import uniq from 'lodash/uniq'
 
+import {getEntries} from '@/utils'
 import { VTextField, VCombobox } from 'vuetify/lib';
 
+function getValues(entries, form, field) {
+  let candidates = entries.filter(r => {
+    if (!r.data) {
+      return false
+    }
+    if (form && form != r.form) {
+      return false
+    }
+    if (r.data[field] === undefined || r.data[field] === null) {
+      return false
+    }
+    return true
+  }).map(r => {
+    return r.data[field]
+  })
+  return uniq(candidates)
+
+}
 export default {
   props: {
     field: {},
     value: {default: null},
+    formId: {default: null},
   },
   data () {
     return {
-      localValue: this.value
+      localValue: this.value,
+      suggestions: null,
     }
   }, 
-  created () {
+  async created () {
     if (this.field.default != undefined && this.isRequired && (this.localValue === null || this.localValue === "")) {
       this.localValue = this.field.default
     }
+    this.suggestions = await this.getSuggestions(this.field)
   },
   computed: {
     isRequired () {
@@ -59,14 +84,29 @@ export default {
     }
   },
   methods: {
-    getSuggestions (field) {
-      return field.suggestions || []
+    async getSuggestions (field) {
+      let suggestions = field.suggestions || []
+      if (field.autosuggest) {
+        let entries = await getEntries(this.$store, false)
+        suggestions = uniq([
+          ...suggestions,
+          ...getValues(entries, field.autosuggest === 'form' ? this.formId : null, field.id)
+        ])
+        suggestions.sort()
+      }
+      return suggestions
     },
-    getComponent(field) {
-      if (this.getSuggestions(field).length > 0) {
+    getComponent() {
+      if (this.suggestions && this.suggestions.length > 0) {
         return VCombobox
       }
       return VTextField
+    },
+    onBlur () {
+      if (this.$refs.input.updateSelf) {
+        this.$refs.input.updateSelf()
+
+      }
     }
   },
   watch: {

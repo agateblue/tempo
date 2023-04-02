@@ -1,5 +1,5 @@
 <template>
-  <div v-if="fields.length > 0">
+  <div v-if="fields.length > 0" :key="formConfig.id">
     <p v-if="formConfig.help">{{ formConfig.help }}</p>
     <v-row>
       <v-col
@@ -8,7 +8,7 @@
         cols="12"
         sm="6"
       >
-        <blueprint-field v-model="values[field.id]" :field="field" />
+        <blueprint-field v-model="values[field.id]" :field="field" :form-id="formConfig.id" />
       </v-col>
     </v-row>
   </div>
