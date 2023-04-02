@@ -88,13 +88,18 @@ export default {
       let suggestions = field.suggestions || []
       if (field.autosuggest) {
         let entries = await getEntries(this.$store, false)
-        suggestions = uniq([
+        suggestions = [
           ...suggestions,
           ...getValues(entries, field.autosuggest === 'form' ? this.formId : null, field.id)
-        ])
+        ]
         suggestions.sort()
       }
-      return suggestions
+      return uniq(suggestions.map(s => {
+        if (s.trim) {
+          return s.trim()
+        }
+        return s
+      }))
     },
     getComponent() {
       if (this.suggestions && this.suggestions.length > 0) {
