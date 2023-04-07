@@ -61,23 +61,23 @@ module.exports = {
       categories: ["notes", "note",, "diary", "log", "health", "mood tracker"],
       icons: [
         {
-          'src': 'favicon.png',
+          'src': 'icon.png',
           'sizes': '192x192',
           'type': 'image/png'
         },
         {
-          'src': 'favicon.png',
+          'src': 'icon.png',
           'sizes': '512x512',
           'type': 'image/png'
         },
       ]
     },
     iconPaths: {
-      favicon32: 'favicon.png',
-      favicon16: 'favicon.png',
-      appleTouchIcon: 'favicon.png',
-      maskIcon: 'favicon.png',
-      msTileImage: 'favicon.png'
+      favicon32: 'icon.png',
+      favicon16: 'icon.png',
+      appleTouchIcon: 'icon.png',
+      maskIcon: 'icon.png',
+      msTileImage: 'icon.png'
     }
   },
   "transpileDependencies": [
