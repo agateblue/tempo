@@ -56,10 +56,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/editor.worker.js"
   },
   {
-    "revision": "4fd64079f48ffb20502f7b65add0b61e",
-    "url": "/favicon.png"
-  },
-  {
     "revision": "35b07eb2f8711ae08d1f58c043880930",
     "url": "/fonts/Roboto-Regular.35b07eb2.woff"
   },
@@ -68,75 +64,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/fonts/Roboto-Regular.73f0a88b.woff2"
   },
   {
-    "revision": "590cb89a221ce2593ed142ee087bbaca",
-    "url": "/img/icons/android-chrome-192x192.png"
+    "revision": "0febbcfb40f7072dbb0ce93a4515ed4d",
+    "url": "/icon.png"
   },
   {
-    "revision": "72ce56fb49907bd6a40adcf5d8476490",
-    "url": "/img/icons/android-chrome-384x384.png"
-  },
-  {
-    "revision": "d7b428fa4448c113a842eaeddaca59e5",
-    "url": "/img/icons/apple-touch-icon-114x114.png"
-  },
-  {
-    "revision": "b3d70d173253f0c27919e3380e56617d",
-    "url": "/img/icons/apple-touch-icon-120x120.png"
-  },
-  {
-    "revision": "10b19461880b14a13e2973295ce17c23",
-    "url": "/img/icons/apple-touch-icon-144x144.png"
-  },
-  {
-    "revision": "dfde450660719687325e7438d729c242",
-    "url": "/img/icons/apple-touch-icon-152x152.png"
-  },
-  {
-    "revision": "19ed62be9e7f8165a484d8e300e461f3",
-    "url": "/img/icons/apple-touch-icon-180x180.png"
-  },
-  {
-    "revision": "a007b74ea6ecb8ad981f70fd86799777",
-    "url": "/img/icons/apple-touch-icon-57x57.png"
-  },
-  {
-    "revision": "0025e3dfb6f33ac3808fe25f81e7754c",
-    "url": "/img/icons/apple-touch-icon-60x60.png"
-  },
-  {
-    "revision": "51aa1d8bb7e31f3329ee77d14f4f86b2",
-    "url": "/img/icons/apple-touch-icon-72x72.png"
-  },
-  {
-    "revision": "ad86b2d64314574918e0ca905290de78",
-    "url": "/img/icons/apple-touch-icon-76x76.png"
-  },
-  {
-    "revision": "19ed62be9e7f8165a484d8e300e461f3",
-    "url": "/img/icons/apple-touch-icon.png"
-  },
-  {
-    "revision": "c31520645451949205c2be4bc6127ebb",
-    "url": "/img/icons/favicon-16x16.png"
-  },
-  {
-    "revision": "649c9597a5ffd814d82633d42d85ed08",
-    "url": "/img/icons/favicon-32x32.png"
-  },
-  {
-    "revision": "a4f8cab216659a1c5a0220be56c6f40e",
-    "url": "/img/icons/favicon.ico"
-  },
-  {
-    "revision": "289a02fd827229b7a152d8b400b32cbd",
-    "url": "/img/icons/mstile-150x150.png"
-  },
-  {
-    "revision": "c356beb7bfee10ff0784c0197dc03916",
-    "url": "/img/icons/safari-pinned-tab.svg"
-  },
-  {
-    "revision": "e333c4740af1ca849e5b95164dad37ec",
+    "revision": "b08c856f4a98ce5701bab038fa0b70c2",
     "url": "/index.html"
   },
   {
@@ -232,7 +164,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/js/visualization~31ecd969.1a5ff517.js"
   },
   {
-    "revision": "7f069032a52a8226ca9cca080941d5b0",
+    "revision": "acadbc99255e86a2dab98778b35d9332",
     "url": "/manifest.json"
   },
   {
