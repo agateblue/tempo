@@ -334,3 +334,14 @@ Then:
 - go to http://localhost:5984/_utils/#/_config and enable CORS.
 - Create a user and a database
 - Setup sync in Tempo's web UI
+
+### Deploying using Docker
+
+If you want to deploy Tempo using Docker, you can use our Dockerfile:
+
+```shell
+docker build -t tempo .
+docker run --rm -p 8097:80 tempo
+```
+
+The image includes an Nginx server and a compiled bundle of Tempo assets.
