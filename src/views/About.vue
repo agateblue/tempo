@@ -7,6 +7,9 @@
         <p>
           Tempo is a personnal log and mood tracker. You can use it to track what's going on in your life and how different events affect your well-being.
         </p>
+        <p>
+          Current version: <span  class="text-decoration-underline">{{ $store.state.buildId.slice(0, 12) }}</span>
+        </p>
       </v-card-text>
     </v-card>
     <v-card tag="section" class="mb-8" :color="$theme.card.color">

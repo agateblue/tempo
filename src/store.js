@@ -26,6 +26,7 @@ const version = 1
 
 const store = new Vuex.Store({
   state: {
+    buildId: process.env.VUE_APP_BUILD_ID || 'dev',
     db: null,
     remoteDb: null,
     pageSize: 30,
