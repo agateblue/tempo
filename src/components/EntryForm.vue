@@ -220,14 +220,15 @@ export default {
       await this.$store.dispatch('triggerWebhook', {payload: webhookPayload})
     },
     async addNew () {
-      let date = this.date ? new Date(this.date) : new Date()
+      let now = new Date ()
+      let date = this.date ? new Date(this.date) : now
       let data = {
         ...getNewEntryData(this.text, {thread: this.thread}),
         date: date.toISOString(),
         form: this.currentFormId,
       }
       data.data = getFormData(data, this.formData)
-      data._id = data.date
+      data._id = now
       let e = await this.$store.dispatch('addEntry', data)
       this.$emit('created', e)
       this.text = ''
