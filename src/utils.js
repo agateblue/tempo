@@ -405,11 +405,25 @@ export async function getEntries (store, sortDesc) {
   console.time('getEntries')
   let options = {
     include_docs: true,
-    descending: sortDesc
   }
   let result = await store.state.db.allDocs(options)
   let entries = result.rows.flatMap(r => r.doc.type === 'entry' ? [r.doc] : [])
+  entries.forEach(e => {
+    e.date = e.date || e._id
+  })
+  sortEntries(entries, sortDesc)
   console.timeEnd('getEntries')
+  
+  return entries
+}
+
+export function sortEntries (entries, sortDesc) {
+  entries.sort((a, b) => {
+    return new Date(a.date) - new Date(b.date)
+  })
+  if (sortDesc) {
+    entries.reverse()
+  }
   return entries
 }
 

@@ -149,7 +149,7 @@ function getFormData (entry, formData) {
 
 function toLocal(date) {
   var local = new Date(date)
-  local.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+  local.setMinutes(local.getMinutes() - local.getTimezoneOffset())
   return local.toJSON().slice(0, 16)
 }
 
@@ -258,6 +258,9 @@ export default {
         if (!v) {
           this.textDate = null
         } else {
+          if (this.textDate && toLocal(this.textDate) === toLocal(v)) {
+            return
+          }
           this.textDate = toLocal(v)
         }
       },
@@ -265,8 +268,13 @@ export default {
     },
     textDate: {
       handler (v) {
-        if (v && toLocal != toLocal(this.date)) {
-          this.date = new Date(v)
+        // if no seconds, we add them manually and random microseconds
+        if (v && v.length <=16) {
+          v = v.slice(0, 16)
+          v = `${v}:00`
+        }
+        if (v && toLocal(this.date) != toLocal(v)) {
+          this.date = new Date(toLocal(v))
         }
       },
       immediate: true,
