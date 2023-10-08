@@ -33,8 +33,8 @@ export default {
   },
   methods: {    
     
-    async handleCreated (entry) {
-      this.entries.push(entry)
+    async handleCreated () {
+      await this.search()
       trackEvent(this.$store, "entry.created")
     },
     async handleDelete (entry) {
