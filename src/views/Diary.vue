@@ -62,6 +62,7 @@ export default {
           Object.assign(e, entry)
         }
       })
+      await this.search()
       trackEvent(this.$store, "entry.updated")
     },
     async search () {
