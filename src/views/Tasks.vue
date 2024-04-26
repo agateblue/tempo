@@ -114,6 +114,11 @@
                     @keydown.enter="submitTask(idx)"
                     label="Category"
                   ></v-select>
+                  <v-text-field
+                    label="Deadline"
+                    v-model="newTaskDeadline"
+                    type="date"
+                  ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions class="py-4 px-0">
@@ -198,6 +203,7 @@ export default {
       tasks: [],
       newTaskText: '',
       newTaskCategory: null,
+      newTaskDeadLine: null,
       trackEvent,
       clearDoneDialog: false,
     }
@@ -234,6 +240,7 @@ export default {
         text: this.newTaskText,
         list: idx,
         category: this.newTaskCategory,
+        deadline: this.newTaskDeadline,
         subtasks: [],
       }
       let result = await this.$store.state.db.put(task)
@@ -241,6 +248,7 @@ export default {
       this.tasks.push(task)
       this.newTaskText = null
       this.newTaskCategory = null
+      this.newTaskDeadline = null
       trackEvent(this.$store, "task.created")
       await this.$store.dispatch('forceSync', {updateLastSync: false})
     },
